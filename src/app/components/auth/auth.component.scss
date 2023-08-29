@@ -1,0 +1,61 @@
+:host {
+  height: 100%;
+  display: grid;
+  place-content: center;
+}
+
+.container {
+  background-color: rgba(215, 215, 239, 0.5);
+  padding: 2rem 3rem 3rem 3rem;
+  border-radius: 1rem;
+  display: grid;
+  gap: 2rem;
+  box-shadow: 0.5rem 1rem 1.5rem rgba(gray, 0.1);
+  border: 2px solid rgba(108, 112, 151, 0.458);
+
+
+  h1 {
+    text-align: center;
+  }
+
+  form {
+    display: grid;
+    gap: 2rem;
+
+    div {
+      mat-form-field {
+        width: 100%;
+      }
+    }
+
+    .btn-container {
+
+      button {
+        display: block;
+        margin-left: auto;
+      }
+    }
+
+
+  }
+
+  .error-container {
+    background-color: rgba(red, 0.2);
+    min-height: 2rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    text-transform: capitalize;
+    display: flex;
+
+    >* {
+      &:first-child {
+        flex-grow: 1;
+        font-weight: 500;
+      }
+    }
+
+    .close-btn {
+      color: rgb(239, 0, 0);
+    }
+  }
+}
