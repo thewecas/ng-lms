@@ -1,0 +1,17 @@
+{
+  "hosting": [
+    {
+      "target": "lms",
+      "source": ".",
+      "frameworksBackend": {}
+    },
+    {
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "http://localhost:4200"
+        }
+      ]
+    }
+  ]
+}

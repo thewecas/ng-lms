@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "lms-vikas": {
+      "hosting": {
+        "lms": [
+          "lms-vikas"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "lms-vikas"
+  }
+}

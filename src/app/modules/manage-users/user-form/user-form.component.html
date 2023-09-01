@@ -1,0 +1,130 @@
+<div class="container">
+  <h2>{{ title }}</h2>
+  <mat-dialog-content>
+    <form action="" [formGroup]="userForm">
+      <mat-form-field appearance="outline">
+        <mat-label>Id</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="employeeId"
+          placeholder="PWS##"
+        />
+        <mat-error *ngIf="userForm.get('employeeId')?.hasError('required')"
+          >Id cannot be empty</mat-error
+        >
+        <mat-error *ngIf="userForm.get('employeeId')?.hasError('pattern')"
+          >Match the pattern PWS##</mat-error
+        >
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput type="text" formControlName="name" />
+        <mat-error *ngIf="userForm.get('name')?.hasError('required')"
+          >Name cannot be empty</mat-error
+        >
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput type="text" formControlName="email" />
+        <mat-error *ngIf="userForm.get('email')?.hasError('required')"
+          >Email cannot be empty</mat-error
+        >
+        <mat-error *ngIf="userForm.get('email')?.hasError('email')"
+          >Invalid Email</mat-error
+        >
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Designation</mat-label>
+        <input matInput type="text" formControlName="designation" />
+        <mat-error *ngIf="userForm.get('designation')?.hasError('required')"
+          >Designation cannot be empty</mat-error
+        >
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" *ngIf="!user">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          (focusout)="setPattern(userForm.get('password')?.value)"
+          [type]="hidePassword ? 'password' : 'text'"
+          formControlName="password"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="hidePassword = !hidePassword"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hidePassword"
+        >
+          <mat-icon>
+            {{ hidePassword ? "visibility_off" : "visibility" }}
+          </mat-icon>
+        </button>
+        <mat-error
+          *ngIf="
+            userForm.get('password')?.hasError('pattern') &&
+            (userForm.get('password')?.value.length < 6 ||
+              userForm.get('password')?.value.length < 6)
+          "
+          >Length should be between 6-16</mat-error
+        >
+        <mat-error *ngIf="userForm.get('password')?.hasError('required')"
+          >Password cannot be empty</mat-error
+        >
+      </mat-form-field>
+      <mat-form-field appearance="outline" *ngIf="!user">
+        <mat-label>Confirm Password</mat-label>
+        <input
+          matInput
+          [type]="hideConfirmPassword ? 'password' : 'text'"
+          formControlName="confirmPassword"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="hideConfirmPassword = !hideConfirmPassword"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hideConfirmPassword"
+        >
+          <mat-icon>{{
+            hideConfirmPassword ? "visibility_off" : "visibility"
+          }}</mat-icon>
+        </button>
+        <mat-error
+          *ngIf="userForm.get('confirmPassword')?.hasError('passwordMatch')"
+          >Password mismatch</mat-error
+        >
+        <mat-error *ngIf="userForm.get('confirmPassword')?.hasError('required')"
+          >ConfirmPassword cannot be empty</mat-error
+        >
+      </mat-form-field>
+      <div>
+        <label for="">Select Role*</label>
+        <mat-radio-group
+          aria-label="Select an option"
+          color="primary"
+          formControlName="role"
+        >
+          <mat-radio-button value="admin">Admin</mat-radio-button>
+          <mat-radio-button value="employee">Employee</mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button [mat-dialog-close]="false">Cancel</button>
+    <button
+      mat-button
+      [mat-dialog-close]="true"
+      cdkFocusInitial
+      color="primary"
+      [disabled]="userForm.invalid"
+      (click)="onSubmit()"
+    >
+      Save
+    </button>
+  </mat-dialog-actions>
+</div>

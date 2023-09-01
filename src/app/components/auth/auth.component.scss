@@ -1,0 +1,140 @@
+:host {
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  background-image: url(../../../assets/images/bg.jpg);
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+
+
+}
+
+
+
+.header {
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  flex-grow: 1;
+  backdrop-filter: blur(10px);
+  padding: 2rem 1rem;
+
+  h1 {
+    font-size: min(3rem, 10vw);
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    word-spacing: 10px;
+
+    &::first-letter {
+      font-size: min(5rem, 15vw);
+      color: rgb(202, 169, 232);
+      color: #3f51b5;
+    }
+  }
+
+  p {
+    font-size: min(2rem, 6vw);
+    color: rgba(255, 255, 255, 0.6);
+    letter-spacing: 2px;
+  }
+}
+
+@media screen and (width<600px) {
+  .container {
+    flex-direction: column;
+    justify-content: flex-start;
+    // height: auto !important;
+  }
+
+  .header {
+    flex-grow: 0;
+    background-color: rgba(white, 0.9);
+
+    p,
+    h1 {
+      color: black !important;
+
+    }
+  }
+
+  .login-container {
+    width: 100% !important;
+    flex-grow: 1;
+    height: max-content !important;
+    background-color: rgba(white, 0.9) !important;
+    backdrop-filter: blur(10px);
+
+    >div {
+      text-align: center;
+    }
+
+    form,
+    .error-container {
+      width: min(300px, 100%);
+      margin-inline: auto;
+    }
+  }
+
+
+}
+
+.login-container {
+  padding: 3rem;
+  height: 100%;
+  padding-bottom: 5%;
+  width: min(500px, 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3rem;
+  background-color: rgba(white, 0.8);
+  backdrop-filter: blur(10px);
+  border-left: 2px solid rgba(108, 112, 151, 0.458);
+
+  form {
+    display: grid;
+    gap: 1rem;
+
+    div {
+      mat-form-field {
+        width: 100%;
+      }
+    }
+
+    .btn-container {
+
+      button {
+        display: block;
+        margin-left: auto;
+      }
+    }
+
+
+  }
+
+  .error-container {
+    background-color: rgba(red, 0.2);
+    min-height: 2rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    text-transform: capitalize;
+    display: flex;
+
+    >* {
+      &:first-child {
+        flex-grow: 1;
+        font-weight: 500;
+      }
+    }
+
+    .close-btn {
+      color: rgb(239, 0, 0);
+    }
+  }
+}

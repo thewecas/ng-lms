@@ -1,1 +1,77 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  font-size: min(14px, 5vw);
+}
+
+html,
+body {
+  // background-color: rgb(234, 233, 233);
+  font-size: 1rem;
+  height: 100%;
+  min-height: 100svh;
+  margin: 0;
+  color: #333;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* :not(mat-icon) {
+  font-family: roboto, sans-serif !important;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+//reset font size
+*:not(h1, h2, h3, h4, h5, h6) {
+  font-size: 1rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 8px 0;
+}
+
+p {
+  margin: 0;
+}
+
+
+
+//custom scrollbar styling
+::-webkit-scrollbar {
+  height: 0.75rem;
+  width: 0.75rem;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 30px;
+  background-color: rgba(#4758b8, 0.8);
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgba(#c6cfdc, 0.5);
+  border-radius: 20px;
+}
+
+
+
+a,
+a:visited,
+a:hover {
+  color: #1976d2;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #125699;
+}
+
+.btn {
+  &:hover {
+    cursor: pointer;
+  }
+}

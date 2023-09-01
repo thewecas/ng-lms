@@ -1,0 +1,36 @@
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  flex-grow: 1;
+  width: 100%;
+  // display: inline-flex;
+  display: flex;
+}
+
+.outlet-container {
+  max-width: 1024px;
+  margin-inline: auto;
+  padding: 1rem 2rem;
+  flex-grow: 1;
+  position: relative;
+  flex-basis: 100%;
+
+
+  >:nth-child(2) {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  @media screen and (width<600px) {
+    padding: 1rem;
+
+    >:nth-child(2) {
+      gap: 1rem;
+    }
+  }
+}
