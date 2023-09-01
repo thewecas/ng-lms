@@ -16,12 +16,20 @@ export class FirebaseService {
     return this.http.get(`${this.dbUrl}/users.json`);
   }
 
+  signInUser(userCredentilas: { email: string, password: string; }) {
+    return this.http.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${this.apiKey}`, {
+      ...userCredentilas,
+      returnSecureToken: true
+    });
+  }
+
   signUpUser(userCredentilas: { email: string, password: string; }) {
     return this.http.post(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${this.apiKey}`, {
       ...userCredentilas,
       returnSecureToken: true
     });
   }
+
 
   updateUser(id: string, user: User) {
     return this.http.put(`${this.dbUrl}/users/${id}.json`, user);
@@ -30,6 +38,12 @@ export class FirebaseService {
   setUserDeleted(id: string) {
     return this.http.patch(`${this.dbUrl}/users/${id}.json`, {
       isDeleted: true
+    });
+  }
+
+  lookupUser(idToken: string) {
+    return this.http.post(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${this.apiKey}`, {
+      idToken
     });
   }
 }

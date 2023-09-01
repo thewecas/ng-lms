@@ -10,6 +10,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { AuthComponent } from './components/auth/auth.component';
 import { HeaderComponent } from './components/header/header.component';
 import { HomeComponent } from './components/home/home.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
@@ -26,6 +27,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     SidebarComponent,
     HeaderComponent,
     HomeComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -36,7 +38,10 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     MatToolbarModule,
     BrowserAnimationsModule,
     MatSidenavModule,
-    MatIconModule
+    MatIconModule,
+    AuthComponent
+
+
 
   ],
   providers: [],

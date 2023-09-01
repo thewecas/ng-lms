@@ -2,6 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, Input, OnChanges, SimpleChanges, ViewChild, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 
 @Component({
@@ -25,4 +26,12 @@ export class SidebarComponent implements OnChanges {
     this.drawer?.toggle();
   }
 
+
+  constructor(private authService: AuthService) {
+
+  }
+
+  onSingout() {
+    this.authService.logout();
+  }
 }

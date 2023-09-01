@@ -1,8 +1,12 @@
-<app-header (sideBarToggle)="isSidebarOpen = !isSidebarOpen"></app-header>
+<app-auth *ngIf="!(isAuthnticated$ | async)"></app-auth>
 
-<div class="container">
-  <app-sidebar [isSidebarOpen]="isSidebarOpen"></app-sidebar>
-  <div class="outlet-container">
-    <router-outlet></router-outlet>
+<div class="main" *ngIf="isAuthnticated$ | async">
+  <app-header (sideBarToggle)="isSidebarOpen = !isSidebarOpen"></app-header>
+
+  <div class="container">
+    <app-sidebar [isSidebarOpen]="isSidebarOpen"></app-sidebar>
+    <div class="outlet-container">
+      <router-outlet></router-outlet>
+    </div>
   </div>
 </div>

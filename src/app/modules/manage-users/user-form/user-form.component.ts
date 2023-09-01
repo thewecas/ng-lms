@@ -11,7 +11,7 @@ import { UserService } from 'src/app/services/user/user.service';
 export class UserFormComponent {
   hidePassword = true;
   hideConfirmPassword = true;
-  title = 'Update User';
+  title!: string;
 
   userForm!: FormGroup;
   constructor(private fb: FormBuilder, private userService: UserService, @Inject(MAT_DIALOG_DATA) public user: any | null) {
@@ -21,11 +21,11 @@ export class UserFormComponent {
 
   ngOnInit() {
     this.userForm = this.fb.group({
-      employeeId: [this.user?.employeeId ?? '', [Validators.required, Validators.pattern(/PWS\d{1,3}/i)]],
-      name: [this.user?.name ?? '', Validators.required],
-      email: [this.user?.email ?? '', [Validators.required, Validators.email]],
-      designation: [this.user?.designation ?? '', Validators.required],
-      role: [this.user?.role ?? 'employee', Validators.required],
+      employeeId: ['', [Validators.required, Validators.pattern(/PWS\d{1,3}/i)]],
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      designation: ['', Validators.required],
+      role: ['employee', Validators.required],
     }
     );
 
@@ -33,6 +33,17 @@ export class UserFormComponent {
       this.title = 'Add New User ';
       this.userForm.addControl('password', this.fb.control('', [Validators.required, Validators.pattern('[a-zA-Z0-9]{6,16}')]));
       this.userForm.addControl('confirmPassword', this.fb.control('', [Validators.required, this.passwordMatch]));
+    }
+
+    if (this.user) {
+      this.title = "Update User";
+      this.userForm.setValue({
+        employeeId: this.user.employeeId,
+        name: this.user.name,
+        email: this.user.email,
+        designation: this.user.designation,
+        role: this.user.role
+      });
     }
 
   }

@@ -41,10 +41,9 @@ export class UserService {
     return this.firebase
       .signUpUser({ email: user.email, password: user.password })
       .pipe(
-        tap(res => console.log(res)),
+        tap((res: any) => console.log(res)),
         exhaustMap(res => {
-          const uid = JSON.parse(JSON.stringify(res)).localId;
-          return this.updateUser(uid, user);
+          return this.updateUser(res.localId, user);
         }));
   }
 

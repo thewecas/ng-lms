@@ -10,8 +10,9 @@ import { AuthService } from './services/auth/auth.service';
 export class AppComponent {
   title = 'lms';
   isSidebarOpen = false;
-  isAuthenticated$: BehaviorSubject<boolean>;
+  isAuthnticated$: BehaviorSubject<boolean>;
   constructor(private authService: AuthService) {
-    this.isAuthenticated$ = authService.isAuthenticated$;
+    this.isAuthnticated$ = authService.isAuthenticated$;
+    this.authService.checkIsAuthenticUser();
   }
 }
