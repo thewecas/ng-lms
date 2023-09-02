@@ -1,0 +1,23 @@
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+
+  button.action-btn {
+    border-radius: 0.4rem;
+    height: 3rem;
+  }
+
+
+
+  @media screen and (width<600px) {
+    button.action-btn {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      border-radius: 24px;
+
+    }
+  }
+
+}

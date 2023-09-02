@@ -8,11 +8,11 @@ import { UserService } from 'src/app/services/user/user.service';
 import { UserFormComponent } from '../user-form/user-form.component';
 
 @Component({
-  selector: 'app-view-users',
-  templateUrl: './view-users.component.html',
-  styleUrls: ['./view-users.component.scss']
+  selector: 'app-users-view',
+  templateUrl: './users-view.component.html',
+  styleUrls: ['./users-view.component.scss']
 })
-export class ViewUsersComponent {
+export class UsersViewComponent {
   displayedColumns: string[] = ['employeeId', 'name', 'email', 'designation', 'role', 'action'];
   dataSource!: MatTableDataSource<any>;
   isFilterCleared = true;
@@ -22,14 +22,12 @@ export class ViewUsersComponent {
 
   constructor(private userService: UserService, public dialog: MatDialog) {
     console.log("User view Component loaded");
-
   }
 
   ngOnInit() {
     this.userService.getUserData().subscribe(
       res => {
         console.log("Users \n", res);
-
         this.dataSource = new MatTableDataSource(res);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -40,7 +38,6 @@ export class ViewUsersComponent {
   applyFilter(filterInput: HTMLInputElement) {
     const filterValue = filterInput.value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
@@ -53,7 +50,6 @@ export class ViewUsersComponent {
 
   onAddNewUser() {
     console.log("clicked");
-
     const dialogRef = this.dialog.open(UserFormComponent, {
       data: null
     });
@@ -63,8 +59,16 @@ export class ViewUsersComponent {
     });
   }
 
-  onDeleteUser(id: string, employeeId: string) {
+  onEditUser(user: any) {
+    const dialogRef = this.dialog.open(UserFormComponent, {
+      data: user
+    });
+    dialogRef.afterClosed().subscribe(res => {
+      console.log("Dialog res : ", res);
+    });
+  }
 
+  onDeleteUser(id: string, employeeId: string) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
         title: "Delete User",
@@ -74,6 +78,7 @@ export class ViewUsersComponent {
         btnColor: 'warn'
       }
     });
+
     dialogRef.afterClosed().subscribe(res => {
       if (res) {
         this.userService.deleteUser(id).subscribe({
@@ -85,19 +90,8 @@ export class ViewUsersComponent {
         });
       }
     });
-
   }
 
-  onEditUser(user: any) {
-    const dialogRef = this.dialog.open(UserFormComponent, {
-      data: user
-    });
-    dialogRef.afterClosed().subscribe(res => {
-      console.log("Dialog res : ", res);
-
-    });
-
-  }
 
 
 }

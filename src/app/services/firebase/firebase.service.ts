@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Holiday } from 'src/app/models/holiday';
 import { User } from 'src/app/models/user';
 import { environment } from 'src/environments/environment';
 
@@ -44,6 +45,27 @@ export class FirebaseService {
   lookupUser(idToken: string) {
     return this.http.post(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${this.apiKey}`, {
       idToken
+    });
+  }
+
+
+  addHoliday(holiday: Holiday) {
+    return this.http.post(`${this.dbUrl}/holidays.json`, {
+      ...holiday
+    });
+  }
+
+  fetchAllHolidays() {
+    return this.http.get(`${this.dbUrl}/holidays.json`);
+  }
+
+  deleteHoliday(id: string) {
+    return this.http.delete(`${this.dbUrl}/holidays/${id}.json`);
+  }
+
+  updateHoliday(id: string, holiday: Holiday) {
+    return this.http.patch(`${this.dbUrl}/holidays/${id}.json`, {
+      ...holiday
     });
   }
 }

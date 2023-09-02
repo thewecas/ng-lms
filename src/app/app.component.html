@@ -1,8 +1,8 @@
-<app-auth *ngIf="!(isAuthnticated$ | async)"></app-auth>
+<app-loader *ngIf="(isAuthnticated$ | async) == null"></app-loader>
+<app-auth *ngIf="(isAuthnticated$ | async) == false"></app-auth>
 
-<div class="main" *ngIf="isAuthnticated$ | async">
+<div class="main" *ngIf="(isAuthnticated$ | async) == true">
   <app-header (sideBarToggle)="isSidebarOpen = !isSidebarOpen"></app-header>
-
   <div class="container">
     <app-sidebar [isSidebarOpen]="isSidebarOpen"></app-sidebar>
     <div class="outlet-container">

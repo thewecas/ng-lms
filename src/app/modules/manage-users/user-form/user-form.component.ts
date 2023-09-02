@@ -35,7 +35,7 @@ export class UserFormComponent {
       this.userForm.addControl('confirmPassword', this.fb.control('', [Validators.required, this.passwordMatch]));
     }
 
-    if (this.user) {
+    else {
       this.title = "Update User";
       this.userForm.setValue({
         employeeId: this.user.employeeId,

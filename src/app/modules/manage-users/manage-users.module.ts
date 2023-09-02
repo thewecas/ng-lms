@@ -13,12 +13,12 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { ManageUsersRoutingModule } from './manage-users-routing.module';
 import { UserFormComponent } from './user-form/user-form.component';
-import { ViewUsersComponent } from './view-users/view-users.component';
+import { UsersViewComponent } from './users-view/users-view.component';
 
 
 @NgModule({
   declarations: [
-    ViewUsersComponent,
+    UsersViewComponent,
     UserFormComponent
   ],
   imports: [

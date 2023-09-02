@@ -7,7 +7,7 @@ import { FirebaseService } from '../firebase/firebase.service';
   providedIn: 'root'
 })
 export class AuthService {
-  isAuthenticated$ = new BehaviorSubject<boolean>(false);
+  isAuthenticated$ = new BehaviorSubject<boolean | null>(null);
   private currentUser!: any;
   expirationTime: number = 3600 * 60;
 
@@ -34,6 +34,7 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem('lms-userIdToken');
+    this.router.navigate(['/']);
     this.isAuthenticated$.next(false);
   }
 
@@ -42,18 +43,27 @@ export class AuthService {
     if (!!idToken) {
       this.firebase.lookupUser(idToken).subscribe({
         next: (res: any) => {
-          let lastLoginAt = res.users[0].lastLoginAt;
-          let isValid = (new Date().getTime() - lastLoginAt) < this.expirationTime;
-          if (isValid) {
-            this.isAuthenticated$.next(true);
-            console.log("Valid session");
-          }
-          else {
-            console.log("navigating");
-            this.isAuthenticated$.next(false);
-            console.log("Session expired");
-          }
+          /*  let lastLoginAt = res.users[0].lastLoginAt;
+           let isValid = (new Date().getTime() - lastLoginAt) < this.expirationTime;
+           if (isValid) {
+             this.isAuthenticated$.next(true);
+             console.log("Valid session");
+           }
+           else {
+             console.log("navigating");
+             this.isAuthenticated$.next(false);
+             console.log("Session expired");
+             this.router.navigate(['/']);
+           } */
+          this.isAuthenticated$.next(true);
+
         },
+        error: (err) => {
+          this.isAuthenticated$.next(false);
+          this.router.navigate(['/']);
+          console.log("Session Expired");
+
+        }
       });
     }
     else {

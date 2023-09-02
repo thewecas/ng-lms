@@ -7,8 +7,8 @@ const routes: Routes = [
     loadChildren: () => import('./modules/manage-users/manage-users.module').then(m => m.ManageUsersModule)
   },
   {
-    path: 'auth',
-    loadComponent: () => import('./components/auth/auth.component').then(c => c.AuthComponent)
+    path: 'holidays',
+    loadChildren: () => import('./modules/manage-holidays/manage-holidays.module').then(m => m.ManageHolidaysModule)
   }
 ];
 

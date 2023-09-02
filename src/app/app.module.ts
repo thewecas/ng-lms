@@ -14,6 +14,7 @@ import { AuthComponent } from './components/auth/auth.component';
 import { HeaderComponent } from './components/header/header.component';
 import { HomeComponent } from './components/home/home.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { LoaderComponent } from './components/loader/loader.component';
 
 
 
@@ -27,6 +28,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     SidebarComponent,
     HeaderComponent,
     HomeComponent,
+    LoaderComponent,
 
   ],
   imports: [
