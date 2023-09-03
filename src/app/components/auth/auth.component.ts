@@ -40,7 +40,6 @@ export class AuthComponent implements OnInit {
   errorSubscription!: Subscription;
   isLoading!: boolean;
   constructor(private fb: FormBuilder, private authService: AuthService, private _snackBar: MatSnackBar) {
-    console.log("Auth Component");
   }
 
   ngOnInit() {

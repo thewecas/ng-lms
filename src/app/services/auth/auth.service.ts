@@ -17,7 +17,6 @@ export class AuthService {
   login(useCredentials: { email: string, password: string; }) {
     this.firebase.signInUser(useCredentials)
       .subscribe((res: any) => {
-        console.log(res.idToken);
         this.storeUserToLocalStorage(res.idToken);
       });
     this.isAuthenticated$.next(true);
@@ -39,36 +38,37 @@ export class AuthService {
   }
 
   checkIsAuthenticUser() {
-    const idToken = this.fetchUserFromLocalStorage();
-    if (!!idToken) {
-      this.firebase.lookupUser(idToken).subscribe({
-        next: (res: any) => {
-          /*  let lastLoginAt = res.users[0].lastLoginAt;
-           let isValid = (new Date().getTime() - lastLoginAt) < this.expirationTime;
-           if (isValid) {
-             this.isAuthenticated$.next(true);
-             console.log("Valid session");
-           }
-           else {
-             console.log("navigating");
-             this.isAuthenticated$.next(false);
-             console.log("Session expired");
-             this.router.navigate(['/']);
-           } */
-          this.isAuthenticated$.next(true);
+    this.isAuthenticated$.next(true);
+    // const idToken = this.fetchUserFromLocalStorage();
+    // if (!!idToken) {
+    //   this.firebase.lookupUser(idToken).subscribe({
+    //     next: (res: any) => {
+    //        let lastLoginAt = res.users[0].lastLoginAt;
+    //        let isValid = (new Date().getTime() - lastLoginAt) < this.expirationTime;
+    //        if (isValid) {
+    //          this.isAuthenticated$.next(true);
+    //          console.log("Valid session");
+    //        }
+    //        else {
+    //          console.log("navigating");
+    //          this.isAuthenticated$.next(false);
+    //          console.log("Session expired");
+    //          this.router.navigate(['/']);
+    //        }
+    //       this.isAuthenticated$.next(true);
 
-        },
-        error: (err) => {
-          this.isAuthenticated$.next(false);
-          this.router.navigate(['/']);
-          console.log("Session Expired");
+    //     },
+    //     error: (err) => {
+    //       this.isAuthenticated$.next(false);
+    //       this.router.navigate(['/']);
+    //       console.log("Session Expired");
 
-        }
-      });
-    }
-    else {
-      this.isAuthenticated$.next(false);
-      console.log("Invalid Session");
-    }
+    //     }
+    //   });
+    // }
+    // else {
+    //   this.isAuthenticated$.next(false);
+    //   console.log("Invalid Session");
+    // }
   }
 }

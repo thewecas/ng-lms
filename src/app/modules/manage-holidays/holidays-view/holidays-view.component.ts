@@ -72,7 +72,7 @@ export class HolidaysViewComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
         title: 'Delete Holiday',
-        bodyText: 'Are you sure?',
+        bodyText: `${title} will be deleted. Are you sure?`,
         primaryAction: 'Confirm',
         secondaryAction: 'Cancel',
         btnColor: 'warn'

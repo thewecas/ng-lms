@@ -21,9 +21,9 @@ export class HolidaysFormComponent implements OnInit {
 
   ngOnInit() {
     this.holidayForm = this.fb.group({
-      title: ['', Validators.required],
+      title: ['', [Validators.required, Validators.maxLength(30)]],
       date: ['', Validators.required],
-      description: ['', Validators.required],
+      description: ['', [Validators.required, Validators.maxLength(180)]],
       type: ['', Validators.required]
     });
     if (!this.holiday) {
@@ -34,13 +34,14 @@ export class HolidaysFormComponent implements OnInit {
       this.holidayForm.setValue({
         title: this.holiday.title,
         description: this.holiday.description,
-        date: this.holiday.date,
+        date: new Date(this.holiday.date),
         type: this.holiday.type
       });
     }
   }
 
   onSubmit() {
+    console.log(this.holidayForm);
 
     if (!this.holiday)
       this.holidayService.addHoliday(this.holidayForm.value).subscribe({

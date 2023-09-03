@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -12,7 +12,7 @@ import { UserFormComponent } from '../user-form/user-form.component';
   templateUrl: './users-view.component.html',
   styleUrls: ['./users-view.component.scss']
 })
-export class UsersViewComponent {
+export class UsersViewComponent implements AfterViewInit {
   displayedColumns: string[] = ['employeeId', 'name', 'email', 'designation', 'role', 'action'];
   dataSource!: MatTableDataSource<any>;
   isFilterCleared = true;
@@ -34,6 +34,13 @@ export class UsersViewComponent {
       }
     );
   }
+
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
 
   applyFilter(filterInput: HTMLInputElement) {
     const filterValue = filterInput.value;

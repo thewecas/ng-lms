@@ -9,6 +9,10 @@ const routes: Routes = [
   {
     path: 'holidays',
     loadChildren: () => import('./modules/manage-holidays/manage-holidays.module').then(m => m.ManageHolidaysModule)
+  },
+  {
+    path: 'leave-list',
+    loadChildren: () => import('./modules/manage-leave-list/manage-leave-list.module').then(m => m.ManageLeaveListModule)
   }
 ];
 

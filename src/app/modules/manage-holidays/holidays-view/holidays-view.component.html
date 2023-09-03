@@ -23,42 +23,61 @@
     <table mat-table [dataSource]="dataSource" matSort>
       <ng-container matColumnDef="title">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
-        <td mat-cell *matCellDef="let row">{{ row.title }}</td>
+        <td
+          mat-cell
+          *matCellDef="let row"
+          [class]="row.type"
+          [attr.type]="row.type.substring(0, 1)"
+        >
+          {{ row.title }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="description">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
-        <td mat-cell *matCellDef="let row">{{ row.description }}</td>
+        <td mat-cell *matCellDef="let row">
+          {{ row.description }}
+        </td>
       </ng-container>
-
       <ng-container matColumnDef="date">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
-        <td mat-cell *matCellDef="let row">{{ row.date }}</td>
+        <td mat-cell *matCellDef="let row">
+          <div class="date">
+            <p>{{ row.date | date : "EEE" }}</p>
+            <p>{{ row.date | date : "dd" }}</p>
+            <p>{{ row.date | date : "MMM '''yy" }}</p>
+          </div>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="type">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Holiday Type</th>
-        <td mat-cell *matCellDef="let row">{{ row.type }}</td>
+        <td mat-cell *matCellDef="let row">
+          <div [class]="row.type">{{ row.type }} Holiday</div>
+        </td>
       </ng-container>
+
       <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef>Action</th>
         <td mat-cell *matCellDef="let row">
-          <div class="btn-container">
-            <button
-              mat-icon-button
-              color="primary"
-              (click)="onEditHoliday(row)"
-            >
-              <mat-icon>edit</mat-icon>
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="menu"
+            aria-label="Example icon-button with a menu"
+          >
+            <mat-icon>more_vert</mat-icon>
+          </button>
+
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="onEditHoliday(row)">
+              <span>Edit</span>
+              <mat-icon color="primary">edit</mat-icon>
             </button>
-            <button
-              mat-icon-button
-              color="warn"
-              (click)="onDeleteHoliday(row.id, row.title)"
-            >
-              <mat-icon>delete</mat-icon>
+            <button mat-menu-item (click)="onDeleteHoliday(row.id, row.title)">
+              <span>Delete</span>
+              <mat-icon color="warn">delete</mat-icon>
             </button>
-          </div>
+          </mat-menu>
         </td>
       </ng-container>
 
