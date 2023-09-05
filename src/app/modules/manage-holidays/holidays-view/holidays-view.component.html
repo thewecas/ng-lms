@@ -15,11 +15,12 @@
       class="action-btn"
       (click)="onAddHoliday()"
     >
-      Add new Holiday
+      <mat-icon>add</mat-icon>
+      Add Holiday
     </button>
   </div>
 
-  <div class="mat-elevation-z8">
+  <div class="mat-elevation-z8 table-container">
     <table mat-table [dataSource]="dataSource" matSort>
       <ng-container matColumnDef="title">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>

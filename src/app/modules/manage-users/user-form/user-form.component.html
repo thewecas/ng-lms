@@ -1,5 +1,5 @@
-<div class="container">
-  <h2>{{ title }}</h2>
+<div class="form_container">
+  <h2 class="header">{{ title }}</h2>
   <mat-dialog-content>
     <form action="" [formGroup]="userForm">
       <mat-form-field appearance="outline">
@@ -9,6 +9,7 @@
           type="text"
           formControlName="employeeId"
           placeholder="PWS##"
+          [readonly]="!!user"
         />
         <mat-error *ngIf="userForm.get('employeeId')?.hasError('required')"
           >Id cannot be empty</mat-error

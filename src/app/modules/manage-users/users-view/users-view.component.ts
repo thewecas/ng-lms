@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Subscription } from 'rxjs/internal/Subscription';
 import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
 import { UserService } from 'src/app/services/user/user.service';
 import { UserFormComponent } from '../user-form/user-form.component';
@@ -24,8 +25,10 @@ export class UsersViewComponent implements AfterViewInit {
     console.log("User view Component loaded");
   }
 
+  userDataSubscription!: Subscription;
+  isUpdatedSubscription!: Subscription;
   ngOnInit() {
-    this.userService.getUserData().subscribe(
+    this.userDataSubscription = this.userService.getUserData().subscribe(
       res => {
         console.log("Users \n", res);
         this.dataSource = new MatTableDataSource(res);
@@ -33,6 +36,10 @@ export class UsersViewComponent implements AfterViewInit {
         this.dataSource.sort = this.sort;
       }
     );
+
+    this.isUpdatedSubscription = this.userService.isUpdated$.subscribe(res => {
+      this.userService.gethAllUsers();
+    });
   }
 
 
@@ -99,6 +106,11 @@ export class UsersViewComponent implements AfterViewInit {
     });
   }
 
+
+  ngDestroy() {
+    this.userDataSubscription.unsubscribe();
+    this.isUpdatedSubscription.unsubscribe();
+  }
 
 
 }

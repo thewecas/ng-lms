@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { AuthService } from './services/auth/auth.service';
 
 @Component({
@@ -10,9 +10,10 @@ import { AuthService } from './services/auth/auth.service';
 export class AppComponent {
   title = 'lms';
   isSidebarOpen = false;
-  isAuthnticated$: BehaviorSubject<boolean | null>;
+  isLoading$: Subject<boolean>;
   constructor(private authService: AuthService) {
-    this.isAuthnticated$ = authService.isAuthenticated$;
+    this.isLoading$ = authService.isLoading$;
     this.authService.checkIsAuthenticUser();
+
   }
 }

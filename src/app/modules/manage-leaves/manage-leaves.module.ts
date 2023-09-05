@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
@@ -10,42 +9,42 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { HolidaysFormComponent } from './holidays-form/holidays-form.component';
-import { HolidaysViewComponent } from './holidays-view/holidays-view.component';
-import { ManageHolidaysRoutingModule } from './manage-holidays-routing.module';
-console.log("Holidays");
+import { LeaveFormComponent } from './leave-form/leave-form.component';
+import { LeaveListViewComponent } from './leave-list-view/leave-list-view.component';
+import { LeaveRequestComponent } from './leave-request/leave-request.component';
+import { ManageLeavesRoutingModule } from './manage-leaves-routing.module';
+
+console.log("Leaves");
+
 
 @NgModule({
   declarations: [
-    HolidaysViewComponent,
-    HolidaysFormComponent
+    LeaveListViewComponent,
+    LeaveFormComponent,
+    LeaveRequestComponent
   ],
   imports: [
     CommonModule,
-    ManageHolidaysRoutingModule,
-    MatButtonModule,
-    MatChipsModule,
-    MatTooltipModule,
-    MatDialogModule,
-    MatTableModule,
+    ManageLeavesRoutingModule,
     MatIconModule,
-    MatSortModule,
+    MatButtonModule,
     MatPaginatorModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatMenuModule,
-    MatRadioModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatTooltipModule,
+    ReactiveFormsModule,
+    MatChipsModule,
+    MatDialogModule,
+    MatSortModule,
+    MatTableModule,
+    MatFormFieldModule,
     MatInputModule,
-    ReactiveFormsModule
+    MatSelectModule,
   ]
 })
-export class ManageHolidaysModule { }
+export class ManageLeavesModule { }

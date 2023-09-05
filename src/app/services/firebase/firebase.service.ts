@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Holiday } from 'src/app/models/holiday';
+import { Leave } from 'src/app/models/leave';
 import { User } from 'src/app/models/user';
 import { environment } from 'src/environments/environment';
 
@@ -42,6 +43,10 @@ export class FirebaseService {
     });
   }
 
+  getUserData(uid: string) {
+    return this.http.get(`${this.dbUrl}/users/${uid}.json`);
+  }
+
   lookupUser(idToken: string) {
     return this.http.post(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${this.apiKey}`, {
       idToken
@@ -68,4 +73,35 @@ export class FirebaseService {
       ...holiday
     });
   }
+
+  fetchAllLeaves() {
+    return this.http.get(`${this.dbUrl}/leaves.json`);
+  }
+
+  fetchLeavesByUser(uid: string) {
+    return this.http.get(`${this.dbUrl}/leaves/${uid}.json`);
+  }
+
+  addLeave(uid: string, leave: Leave) {
+    return this.http.post(`${this, this.dbUrl}/leaves/${uid}.json`, {
+      ...leave
+    });
+  }
+
+  editLeave(uid: string, leaveId: string, leave: Leave) {
+    return this.http.patch(`${this.dbUrl}/leaves/${uid}/${leaveId}.json`, {
+      ...leave
+    });
+  }
+
+  updateStatus(uid: string, leaveId: string, status: string) {
+    return this.http.patch(`${this.dbUrl}/leaves/${uid}/${leaveId}.json`, {
+      status: status
+    });
+  }
+
+  deleteLeave(uid: string, leaveId: string,) {
+    return this.http.delete(`${this.dbUrl}/leaves/${uid}/${leaveId}.json`);
+  }
+
 }

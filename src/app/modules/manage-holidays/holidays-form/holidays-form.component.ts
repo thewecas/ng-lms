@@ -27,7 +27,7 @@ export class HolidaysFormComponent implements OnInit {
       type: ['', Validators.required]
     });
     if (!this.holiday) {
-      this.title = "Add New Holiday";
+      this.title = "New Holiday";
     }
     else {
       this.title = "Update Holiday";

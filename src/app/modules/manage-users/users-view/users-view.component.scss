@@ -5,36 +5,13 @@
   gap: 0.5rem;
 
   button {
-
     &:hover {
       cursor: pointer !important;
     }
   }
 }
 
-.header-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
 
-  button.action-btn {
-    border-radius: 0.4rem;
-    height: 3rem;
-  }
-
-
-
-  @media screen and (width<600px) {
-    button.action-btn {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      border-radius: 24px;
-
-    }
-  }
-
-}
 
 .mat-elevation-z8 {
   overflow-x: scroll;
@@ -44,6 +21,7 @@ tr {
   td {
     &:nth-child(1) {
       text-transform: uppercase;
+      min-width: 5ch;
     }
 
     &:nth-child(5) {
@@ -60,7 +38,8 @@ tr {
 
   th {
     &:nth-child(5) {
-      padding-left: 1.5rem
+      text-align: center;
+
     }
 
     &:last-child {
@@ -72,6 +51,7 @@ tr {
 
   td,
   th {
+
     &:last-child {
       width: auto !important;
       padding: 1rem;

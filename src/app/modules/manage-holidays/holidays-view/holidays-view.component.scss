@@ -2,12 +2,13 @@
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+  position: relative;
+  z-index: 1;
 
   button.action-btn {
     border-radius: 0.4rem;
     height: 3rem;
     position: relative;
-    z-index: 9999;
   }
 
 
@@ -22,6 +23,11 @@
     }
   }
 
+}
+
+.table-container {
+  position: relative;
+  z-index: 0;
 }
 
 

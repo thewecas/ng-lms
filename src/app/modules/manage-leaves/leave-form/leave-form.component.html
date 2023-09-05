@@ -1,0 +1,77 @@
+<div class="container">
+  <h2>{{ title }}</h2>
+  <mat-dialog-content>
+    <form action="" [formGroup]="leaveForm">
+      <mat-form-field appearance="outline">
+        <mat-label>From</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker"
+          formControlName="fromDate"
+          placeholder="Choose a date"
+        />
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="leaveForm.get('fromDate')?.hasError('required')"
+          >Cannot be empty</mat-error
+        >
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>To</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker2"
+          formControlName="toDate"
+          placeholder="Choose a date"
+        />
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker2"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+        <mat-error *ngIf="leaveForm.get('toDate')?.hasError('required')"
+          >Cannot be empty</mat-error
+        >
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Reason</mat-label>
+        <input matInput type="text" formControlName="reason" />
+        <mat-error *ngIf="leaveForm.get('reason')?.hasError('required')"
+          >Cannot be empty</mat-error
+        >
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Leave Type</mat-label>
+        <mat-select formControlName="type">
+          <mat-option value="Casual">Casual Leave</mat-option>
+          <mat-option value="Sick">Sick Leave</mat-option>
+          <mat-option value="PayOff">PayOff Leave</mat-option>
+          <mat-option value="Paternity">Paternity Leave</mat-option>
+        </mat-select>
+        <mat-error *ngIf="leaveForm.get('type')?.hasError('required')"
+          >Cannot be empty</mat-error
+        >
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button [mat-dialog-close]="false">Cancel</button>
+    <button
+      mat-button
+      [mat-dialog-close]="true"
+      cdkFocusInitial
+      color="primary"
+      [disabled]="leaveForm.invalid"
+      (click)="onSubmit()"
+    >
+      Save
+    </button>
+  </mat-dialog-actions>
+</div>

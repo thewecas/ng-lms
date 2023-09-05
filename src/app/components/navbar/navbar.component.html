@@ -1,0 +1,76 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    fixedInViewport
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="(isHandset$ | async) === false"
+  >
+    <mat-toolbar class="sidebar">Menu</mat-toolbar>
+    <mat-nav-list class="sidebar">
+      <a
+        mat-list-item
+        class="nav-link"
+        routerLinkActive="active-nav-link"
+        routerLink="/users"
+      >
+        <div>
+          <mat-icon>group</mat-icon>
+          Users
+        </div>
+      </a>
+      <a
+        mat-list-item
+        class="nav-link"
+        routerLinkActive="active-nav-link"
+        routerLink="/holidays"
+      >
+        <div>
+          <mat-icon>event</mat-icon>
+          Holidays
+        </div>
+      </a>
+      <a
+        mat-list-item
+        class="nav-link"
+        routerLinkActive="active-nav-link"
+        routerLink="/leaves"
+      >
+        <div>
+          <mat-icon>free_cancellation</mat-icon>
+          Leaves
+        </div>
+      </a>
+      <a
+        mat-list-item
+        class="nav-link"
+        routerLinkActive="active-nav-link"
+        routerLink="/login"
+      >
+        <div>
+          <mat-icon>logout</mat-icon>
+          Sign Out
+        </div>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()"
+        *ngIf="isHandset$ | async"
+      >
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <span class="header">LMS</span>
+    </mat-toolbar>
+
+    <div class="outlet-container">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

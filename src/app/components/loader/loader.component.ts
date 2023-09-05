@@ -14,6 +14,7 @@ import { Component } from '@angular/core';
       display:grid;
       place-content:Center;
       position:fixed;
+      z-index:999999999;
       top:0;
       left:0;
       background-color:rgba(white,0.8);
@@ -85,4 +86,8 @@ import { Component } from '@angular/core';
 })
 export class LoaderComponent {
 
+  constructor() {
+    console.log("loading...");
+
+  }
 }

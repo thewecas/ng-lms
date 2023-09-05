@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SidebarComponent } from './sidebar.component';
+import { LeaveFormComponent } from './leave-form.component';
 
-describe('SidebarComponent', () => {
-  let component: SidebarComponent;
-  let fixture: ComponentFixture<SidebarComponent>;
+describe('LeaveFormComponent', () => {
+  let component: LeaveFormComponent;
+  let fixture: ComponentFixture<LeaveFormComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [SidebarComponent]
+      declarations: [LeaveFormComponent]
     });
-    fixture = TestBed.createComponent(SidebarComponent);
+    fixture = TestBed.createComponent(LeaveFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

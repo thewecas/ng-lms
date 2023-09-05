@@ -1,25 +1,43 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { User } from 'src/app/models/user';
 import { FirebaseService } from '../firebase/firebase.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  isAuthenticated$ = new BehaviorSubject<boolean | null>(null);
-  private currentUser!: any;
-  expirationTime: number = 3600 * 60;
+  isAuthenticated$ = new Subject<boolean>();
+  private currentUser!: User;
+  expirationTime: number = 60 * 60 * 60 * 60;
+  isLoading$ = new BehaviorSubject<boolean>(false);
 
 
   constructor(private router: Router, private firebase: FirebaseService) { }
 
   login(useCredentials: { email: string, password: string; }) {
+    this.isLoading$.next(true);
     this.firebase.signInUser(useCredentials)
-      .subscribe((res: any) => {
-        this.storeUserToLocalStorage(res.idToken);
+      .subscribe({
+        next: (res: any) => {
+          this.storeUserToLocalStorage(res.idToken);
+          this.getCurrentUser(res.localId).subscribe({
+            next: (res: any) => {
+              this.currentUser = { ...this.currentUser, ...res };
+              this.isAuthenticated$.next(true);
+              this.router.navigate(['/']);
+              console.log(this.currentUser);
+              this.isLoading$.next(false);
+            }
+          });
+        },
+        error: err => {
+          this.isAuthenticated$.next(false);
+          this.isLoading$.next(false);
+
+        }
       });
-    this.isAuthenticated$.next(true);
   }
 
 
@@ -33,42 +51,77 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem('lms-userIdToken');
-    this.router.navigate(['/']);
+    this.router.navigate(['/login']);
     this.isAuthenticated$.next(false);
   }
 
   checkIsAuthenticUser() {
-    this.isAuthenticated$.next(true);
-    // const idToken = this.fetchUserFromLocalStorage();
-    // if (!!idToken) {
-    //   this.firebase.lookupUser(idToken).subscribe({
-    //     next: (res: any) => {
-    //        let lastLoginAt = res.users[0].lastLoginAt;
-    //        let isValid = (new Date().getTime() - lastLoginAt) < this.expirationTime;
-    //        if (isValid) {
-    //          this.isAuthenticated$.next(true);
-    //          console.log("Valid session");
-    //        }
-    //        else {
-    //          console.log("navigating");
-    //          this.isAuthenticated$.next(false);
-    //          console.log("Session expired");
-    //          this.router.navigate(['/']);
-    //        }
-    //       this.isAuthenticated$.next(true);
+    this.isLoading$.next(true);
 
-    //     },
-    //     error: (err) => {
-    //       this.isAuthenticated$.next(false);
-    //       this.router.navigate(['/']);
-    //       console.log("Session Expired");
+    const idToken = this.fetchUserFromLocalStorage();
+    if (!!idToken) {
+      this.firebase.lookupUser(idToken).subscribe({
+        next: (res: any) => {
+          console.log(res);
 
-    //     }
-    //   });
-    // }
-    // else {
-    //   this.isAuthenticated$.next(false);
-    //   console.log("Invalid Session");
-    // }
+          let lastLoginAt = res.users[0].lastLoginAt;
+          let isValid = (new Date().getTime() - lastLoginAt) < this.expirationTime;
+
+          console.log("Session  ", (new Date().getTime() - lastLoginAt), "<", this.expirationTime);
+
+          if (isValid) {
+            console.log("LastLoginAt, ", new Date(Number(lastLoginAt)));
+            const uid = res.users[0].localId;
+            this.currentUser = { ...this.currentUser, uid: uid };
+            this.getCurrentUser(uid).subscribe({
+              next: (res: any) => {
+                this.router.navigate(['/']);
+                this.isLoading$.next(false);
+
+                this.currentUser = { ...this.currentUser, ...res };
+                this.isAuthenticated$.next(true);
+                console.log(this.currentUser);
+
+              }
+            });
+            console.log("Valid session");
+          }
+          else {
+            console.log("navigating");
+            this.isAuthenticated$.next(false);
+            console.log("Session expired");
+            this.router.navigate(['/login']);
+            this.isLoading$.next(false);
+
+          }
+          this.isAuthenticated$.next(true);
+        },
+        error: (err) => {
+          this.isAuthenticated$.next(false);
+          this.router.navigate(['/login']);
+          console.log("Session Expired");
+          this.isLoading$.next(false);
+
+        }
+      });
+    }
+    else {
+      this.isAuthenticated$.next(false);
+      console.log("Invalid Session");
+      this.isLoading$.next(false);
+
+    }
+  }
+
+  getCurrentUser(uid: string) {
+    return this.firebase.getUserData(uid);
+  }
+
+  getUserId() {
+    return String(this.currentUser?.uid);
+  }
+
+  getEmployeeId() {
+    return String(this.currentUser?.employeeId);
   }
 }

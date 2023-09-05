@@ -1,5 +1,13 @@
+:host {
+  width: 500px;
+  max-width: 100%;
+  box-sizing: border-box;
+  display: block;
+}
+
 .container {
   padding: 1rem;
+
 
   h2 {
     padding-inline: 1.5rem;
@@ -8,16 +16,10 @@
 
 form {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5rem 1rem;
+  gap: 1rem;
 
   .mat-mdc-form-field {
-    min-width: min(250px, 100%);
-    display: unset;
-  }
-
-  @media screen and (width<600px) {
-    grid-template-columns: 1fr;
+    display: block;
   }
 }
 
@@ -30,6 +32,7 @@ form {
     align-items: center;
   }
 }
+
 
 .mat-mdc-radio-button~.mat-mdc-radio-button {
   margin-left: 16px;

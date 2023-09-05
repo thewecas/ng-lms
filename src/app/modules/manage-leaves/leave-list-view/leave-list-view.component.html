@@ -1,0 +1,82 @@
+<h2>Leaves</h2>
+<div class="container">
+  <div class="header-container">
+    <button
+      mat-fab
+      extended
+      color="primary"
+      class="action-btn"
+      (click)="onApplyLeave()"
+    >
+      <mat-icon>add</mat-icon>
+      Apply Leave
+    </button>
+  </div>
+
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="fromDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>From</th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.fromDate | date : "dd-MMM-yyy" }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="toDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>To</th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.toDate | date : "dd-MMM-yyy" }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="reason">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Reason</th>
+        <td mat-cell *matCellDef="let row">{{ row.reason }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Leave Type</th>
+        <td mat-cell *matCellDef="let row">
+          <mat-chip class="role">{{ row.type }} Leave</mat-chip>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <td mat-cell *matCellDef="let row">
+          <mat-chip class="role">{{ row.status }}</mat-chip>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>Action</th>
+        <td mat-cell *matCellDef="let row">
+          <div class="btn-container">
+            <button
+              mat-icon-button
+              color="primary"
+              [disabled]="row.status != 'Pending'"
+              (click)="onEditLeave(row)"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              color="warn"
+              [disabled]="row.status != 'Pending'"
+              (click)="onDeleteLeave(row.uid, row.leaveId, row.fromDate)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      aria-label="Select page of users"
+    ></mat-paginator>
+  </div>
+</div>

@@ -30,7 +30,7 @@ export class UserFormComponent {
     );
 
     if (!this.user) {
-      this.title = 'Add New User ';
+      this.title = 'New User ';
       this.userForm.addControl('password', this.fb.control('', [Validators.required, Validators.pattern('[a-zA-Z0-9]{6,16}')]));
       this.userForm.addControl('confirmPassword', this.fb.control('', [Validators.required, this.passwordMatch]));
     }

@@ -8,13 +8,11 @@ import { FirebaseService } from '../firebase/firebase.service';
 })
 export class UserService {
 
-  private users: any = null;
+  private users: {} = [];
   private users$ = new BehaviorSubject<any>(this.users);
   isUpdated$ = new BehaviorSubject<boolean>(true);
   constructor(private firebase: FirebaseService) {
-    this.isUpdated$.subscribe(res => {
-      this.gethAllUsers();
-    });
+
   }
 
   getUserData() {
@@ -23,7 +21,7 @@ export class UserService {
     return this.users$.asObservable();
   }
 
-  private gethAllUsers() {
+  gethAllUsers() {
     return this.firebase.fethcAllUsers().subscribe(res => {
       this.users = res;
       const userData = Object.entries(res).map(([key, val]) => {
