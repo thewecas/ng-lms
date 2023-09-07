@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -11,7 +11,8 @@ import { UserFormComponent } from '../user-form/user-form.component';
 @Component({
   selector: 'app-users-view',
   templateUrl: './users-view.component.html',
-  styleUrls: ['./users-view.component.scss']
+  styleUrls: ['./users-view.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UsersViewComponent implements AfterViewInit {
   displayedColumns: string[] = ['employeeId', 'name', 'email', 'designation', 'role', 'action'];
@@ -22,7 +23,7 @@ export class UsersViewComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(private userService: UserService, public dialog: MatDialog) {
-    console.log("User view Component loaded");
+
   }
 
   userDataSubscription!: Subscription;
@@ -30,8 +31,8 @@ export class UsersViewComponent implements AfterViewInit {
   ngOnInit() {
     this.userDataSubscription = this.userService.getUserData().subscribe(
       res => {
-        console.log("Users \n", res);
         this.dataSource = new MatTableDataSource(res);
+        console.log(this.dataSource);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       }
@@ -44,8 +45,11 @@ export class UsersViewComponent implements AfterViewInit {
 
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    try {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    } catch (error) {
+    }
   }
 
 

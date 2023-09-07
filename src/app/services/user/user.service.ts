@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, exhaustMap, tap } from 'rxjs';
+import { BehaviorSubject, Subject, exhaustMap, skipWhile, tap } from 'rxjs';
 import { User } from 'src/app/models/user';
 import { FirebaseService } from '../firebase/firebase.service';
 
@@ -8,17 +8,21 @@ import { FirebaseService } from '../firebase/firebase.service';
 })
 export class UserService {
 
-  private users: {} = [];
-  private users$ = new BehaviorSubject<any>(this.users);
-  isUpdated$ = new BehaviorSubject<boolean>(true);
+  private users: any = null;
+  private users$ = new BehaviorSubject<any>([]);
+  isUpdated$ = new Subject<boolean>();
   constructor(private firebase: FirebaseService) {
+
 
   }
 
   getUserData() {
+    console.log("checking", this.users);
     if (!this.users)
       this.gethAllUsers();
-    return this.users$.asObservable();
+    return this.users$
+      .asObservable()
+      .pipe(skipWhile(res => res.length == 0));
   }
 
   gethAllUsers() {
@@ -26,7 +30,7 @@ export class UserService {
       this.users = res;
       const userData = Object.entries(res).map(([key, val]) => {
         return { ...val, uid: key };
-      }).filter(user => !user.isDeleted);
+      });
       this.users$.next(userData);
     });
 

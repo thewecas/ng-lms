@@ -43,8 +43,8 @@ p {
 
 //custom scrollbar styling
 ::-webkit-scrollbar {
-  height: 0.75rem;
-  width: 0.75rem;
+  height: 0.5rem;
+  width: 0.5rem;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -175,4 +175,10 @@ a:hover {
 
 .mat-mdc-menu-content {
   box-shadow: 0 0 20px rgba(rgb(0, 0, 0), 9);
+}
+
+.mat-mdc-paginator {
+  @media screen and (width<768px) {
+    padding-bottom: 2rem;
+  }
 }

@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -20,7 +21,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { HolidaysFormComponent } from './holidays-form/holidays-form.component';
 import { HolidaysViewComponent } from './holidays-view/holidays-view.component';
 import { ManageHolidaysRoutingModule } from './manage-holidays-routing.module';
-console.log("Holidays");
 
 @NgModule({
   declarations: [
@@ -32,6 +32,7 @@ console.log("Holidays");
     ManageHolidaysRoutingModule,
     MatButtonModule,
     MatChipsModule,
+    MatButtonToggleModule,
     MatTooltipModule,
     MatDialogModule,
     MatTableModule,

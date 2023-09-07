@@ -41,22 +41,24 @@ export class HolidaysFormComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.holidayForm);
 
     if (!this.holiday)
-      this.holidayService.addHoliday(this.holidayForm.value).subscribe({
+      this.holidayService.addHoliday({
+        ...this.holidayForm.value,
+        date: new Date(this.holidayForm.value.date).getTime()
+      }).subscribe({
         next: res => {
-          console.log(res);
           this.holidayService.isUpdated$.next(true);
         },
         error: err => console.log(err)
       });
     else {
-      this.holidayService.updateHoliday(this.holiday.id, this.holidayForm.value).subscribe({
-        next: res => {
-          console.log(res);
+      this.holidayService.updateHoliday(this.holiday.id, {
+        ...this.holidayForm.value,
+        date: new Date(this.holidayForm.value.date).getTime()
 
-          console.log("Holiday updated ");
+      }).subscribe({
+        next: res => {
           this.holidayService.isUpdated$.next(true);
         },
         error: err => {

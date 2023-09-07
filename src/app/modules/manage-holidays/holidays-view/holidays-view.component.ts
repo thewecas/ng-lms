@@ -1,8 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatButtonToggleGroup } from '@angular/material/button-toggle';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Subscription } from 'rxjs';
 import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
 import { Holiday } from 'src/app/models/holiday';
 import { HolidayService } from 'src/app/services/holiday/holiday.service';
@@ -11,30 +13,65 @@ import { HolidaysFormComponent } from '../holidays-form/holidays-form.component'
 @Component({
   selector: 'app-holidays-view',
   templateUrl: './holidays-view.component.html',
-  styleUrls: ['./holidays-view.component.scss']
+  styleUrls: ['./holidays-view.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HolidaysViewComponent implements OnInit {
-  data!: any;
-
+export class HolidaysViewComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['title', 'description', 'date', 'type', 'action'];
   dataSource!: MatTableDataSource<any>;
   isFilterCleared = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild('toggleHolidays') holidayToggle!: MatButtonToggleGroup;
 
-  constructor(private dialog: MatDialog, private holidayService: HolidayService) {
-  }
+  constructor(private dialog: MatDialog, private holidayService: HolidayService) { }
+
+  holidayDataSubscription!: Subscription;
+  isUpdatedSubscription!: Subscription;
+  data!: any[];
 
   ngOnInit() {
-    this.holidayService.getHolidayData().subscribe({
+    this.holidayDataSubscription = this.holidayService.getHolidayData().subscribe({
       next: res => {
-        console.log("Holidays \n", res);
+        this.data = res;
+        console.log("Holiday ", res);
+
         this.dataSource = new MatTableDataSource(res);
+        console.log(this.dataSource.sortData);
+        this.dataSource.sort = new MatSort();
+        this.dataSource.sort.active = 'date';
+
+
         this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
       }
     });
+
+    this.isUpdatedSubscription = this.holidayService.isUpdated$.subscribe(
+      res => {
+        console.log("Holidays update triggered \n", res);
+
+        this.holidayService.getAllHolidays();
+      }
+    );
+
+  }
+  ngAfterViewInit() {
+    try {
+      this.dataSource.paginator = this.paginator;
+    } catch (error) {
+
+    }
+  }
+
+  toggleHolidayType() {
+    if (this.holidayToggle.value == 'upcoming')
+      this.dataSource = new MatTableDataSource(this.getUpcomingHolidays(this.data));
+    else if (this.holidayToggle.value == 'recent')
+      this.dataSource = new MatTableDataSource(this.getRecentHolidays(this.data));
+    else
+      this.dataSource = new MatTableDataSource(this.data);
+    this.ngAfterViewInit();
   }
 
   applyFilter(filterInput: HTMLInputElement) {
@@ -82,7 +119,6 @@ export class HolidaysViewComponent implements OnInit {
       if (res) {
         this.holidayService.deleteHoliday(id).subscribe({
           next: res => {
-            console.log(res);
             this.holidayService.isUpdated$.next(true);
           },
           error: err => console.error(err)
@@ -90,4 +126,35 @@ export class HolidaysViewComponent implements OnInit {
       }
     });
   }
+
+  logData() {
+    console.log(this.dataSource._pageData(this.dataSource.filteredData));
+
+  }
+
+  trackById(index: number, item: any) {
+    return item.id;
+  }
+
+  getUpcomingHolidays(holidays: Holiday[]): any[] {
+    const arr = holidays.filter(holiday => {
+      return new Date().getTime() <= holiday.date;
+    });
+    return arr;
+  }
+
+  getRecentHolidays(holidays: Holiday[]): any[] {
+    const arr = holidays.filter(holiday => {
+      return new Date().getTime() > holiday.date;
+    });
+    return arr;
+  }
+
+
+  ngOnDestroy() {
+    this.holidayDataSubscription.unsubscribe();
+    this.isUpdatedSubscription.unsubscribe();
+  }
+
+
 }

@@ -2,6 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -17,4 +18,12 @@ export class NavbarComponent {
       map(result => result.matches),
       shareReplay()
     );
+
+  constructor(private authService: AuthService) {
+
+  }
+
+  onLogout() {
+    this.authService.logout();
+  }
 }

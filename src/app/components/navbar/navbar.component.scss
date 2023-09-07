@@ -58,11 +58,23 @@
 .mat-toolbar.mat-primary {
   position: sticky;
   top: 0;
-  z-index: 1;
+  z-index: 9999;
+}
+
+.mat-sidenav-content {
+
+  height: 100svh;
+  overflow: auto;
+  scrollbar-gutter: stable;
 }
 
 .outlet-container {
   padding: 1rem;
-  width: min(1024px, 100%);
+  width: min(1240px, 100%);
+  height: auto;
   margin-inline: auto;
+
+  @media screen and (width<600px) {
+    padding-bottom: 5rem;
+  }
 }

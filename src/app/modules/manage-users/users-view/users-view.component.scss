@@ -14,7 +14,8 @@
 
 
 .mat-elevation-z8 {
-  overflow-x: scroll;
+  overflow-x: auto;
+  scrollbar-gutter: stable;
 }
 
 tr {

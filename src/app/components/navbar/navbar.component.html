@@ -7,7 +7,7 @@
     [mode]="(isHandset$ | async) ? 'over' : 'side'"
     [opened]="(isHandset$ | async) === false"
   >
-    <mat-toolbar class="sidebar">Menu</mat-toolbar>
+    <mat-toolbar class="sidebar">LMS</mat-toolbar>
     <mat-nav-list class="sidebar">
       <a
         mat-list-item
@@ -47,6 +47,7 @@
         class="nav-link"
         routerLinkActive="active-nav-link"
         routerLink="/login"
+        (click)="onLogout()"
       >
         <div>
           <mat-icon>logout</mat-icon>
@@ -56,13 +57,12 @@
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <mat-toolbar color="primary">
+    <mat-toolbar color="primary" *ngIf="isHandset$ | async">
       <button
         type="button"
         aria-label="Toggle sidenav"
         mat-icon-button
         (click)="drawer.toggle()"
-        *ngIf="isHandset$ | async"
       >
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>

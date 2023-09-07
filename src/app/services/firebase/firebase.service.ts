@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { tap } from 'rxjs';
 import { Holiday } from 'src/app/models/holiday';
 import { Leave } from 'src/app/models/leave';
 import { User } from 'src/app/models/user';
@@ -15,7 +16,10 @@ export class FirebaseService {
   constructor(private http: HttpClient) { }
 
   fethcAllUsers() {
-    return this.http.get(`${this.dbUrl}/users.json`);
+    return this.http.get(`${this.dbUrl}/users.json?&orderBy="isDeleted"&equalTo=false`).pipe(tap(res => {
+      console.log("firebase query response \n", res);
+
+    }));;
   }
 
   signInUser(userCredentilas: { email: string, password: string; }) {

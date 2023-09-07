@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Subject, catchError } from 'rxjs';
 import { User } from 'src/app/models/user';
 import { FirebaseService } from '../firebase/firebase.service';
 
@@ -9,19 +10,45 @@ import { FirebaseService } from '../firebase/firebase.service';
 })
 export class AuthService {
   isAuthenticated$ = new Subject<boolean>();
-  private currentUser!: User;
+  private currentUser: User | null = null;
   expirationTime: number = 60 * 60 * 60 * 60;
   isLoading$ = new BehaviorSubject<boolean>(false);
 
 
-  constructor(private router: Router, private firebase: FirebaseService) { }
+  constructor(private router: Router, private firebase: FirebaseService, private snakbar: MatSnackBar) { }
 
+  /**
+   * Store the idtoken of user to local storage
+   * @param idToken - access token of the current user
+   */
+  storeUserToLocalStorage(idToken: string) {
+    localStorage.setItem('lms-userIdToken', idToken);
+  }
+
+  /**
+   * @returns - idtokne from the local storage
+   */
+  fetchUserFromLocalStorage() {
+    return localStorage.getItem('lms-userIdToken');
+  }
+
+  /**
+   * Login user into the lms webapp
+   * Call the siginin method of firebase authentication
+   * store the idtoken to localstorage
+   * Get the user information from the realtime database
+   * Navigate user based on his role
+   * @param useCredentials - contains email & password
+   */
   login(useCredentials: { email: string, password: string; }) {
     this.isLoading$.next(true);
+
     this.firebase.signInUser(useCredentials)
       .subscribe({
         next: (res: any) => {
-          this.storeUserToLocalStorage(res.idToken);
+          const idToken = res.idToken;
+          this.currentUser = { ...Object(this.currentUser), idToken: idToken };
+          this.storeUserToLocalStorage(idToken);
           this.getCurrentUser(res.localId).subscribe({
             next: (res: any) => {
               this.currentUser = { ...this.currentUser, ...res };
@@ -34,25 +61,54 @@ export class AuthService {
         },
         error: err => {
           this.isAuthenticated$.next(false);
+          console.log(err);
+
           this.isLoading$.next(false);
+          this.snakbar.open(this.formatError(err.error.error.message), 'OK');
 
         }
       });
   }
 
 
-  storeUserToLocalStorage(idToken: string) {
-    localStorage.setItem('lms-userIdToken', idToken);
-  }
 
-  fetchUserFromLocalStorage() {
-    return localStorage.getItem('lms-userIdToken');
-  }
-
+  /**
+   * Logout the current user
+   * remove the lms-useridToken from the localstorage
+   * set current user to null
+   * 
+   */
   logout() {
     localStorage.removeItem('lms-userIdToken');
     this.router.navigate(['/login']);
+    this.currentUser = null;
     this.isAuthenticated$.next(false);
+  }
+
+  checkIsAuthenticated() {
+    /** If current user not null means user is logged in  */
+    if (!!this.currentUser && this.currentUser.idToken) {
+      /**Check session validity */
+      this.checkSessionValidity(this.currentUser.idToken);
+    }
+    /**try to fetch the idToken from localStorage */
+    else {
+      const idToken = this.fetchUserFromLocalStorage();
+      /**if id exist then check session validity */
+      if (idToken)
+        this.checkSessionValidity(idToken);
+      else {
+        /**not a valid session */
+        return false;
+      }
+    }
+
+  }
+
+  checkSessionValidity(idToken: string) {
+    return this.firebase
+      .lookupUser(idToken);
+
   }
 
   checkIsAuthenticUser() {
@@ -72,7 +128,7 @@ export class AuthService {
           if (isValid) {
             console.log("LastLoginAt, ", new Date(Number(lastLoginAt)));
             const uid = res.users[0].localId;
-            this.currentUser = { ...this.currentUser, uid: uid };
+            this.currentUser = { ...Object(this.currentUser), uid: uid, idToken: idToken };
             this.getCurrentUser(uid).subscribe({
               next: (res: any) => {
                 this.router.navigate(['/']);
@@ -123,5 +179,20 @@ export class AuthService {
 
   getEmployeeId() {
     return String(this.currentUser?.employeeId);
+  }
+
+  getIdToken(): string | null {
+    return this.currentUser?.idToken ?? null;
+  }
+
+
+
+
+  formatError(err: string) {
+    const op = err.split("_").map(str =>
+      str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase()
+    );
+    return op.join(' ');
+
   }
 }
