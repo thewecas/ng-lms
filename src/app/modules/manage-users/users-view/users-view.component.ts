@@ -23,6 +23,7 @@ export class UsersViewComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(private userService: UserService, public dialog: MatDialog) {
+    console.log("User View");
 
   }
 

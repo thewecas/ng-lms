@@ -13,7 +13,7 @@ export class AppComponent {
   isLoading$: Subject<boolean>;
   constructor(private authService: AuthService) {
     this.isLoading$ = authService.isLoading$;
-    this.authService.checkIsAuthenticUser();
+    // this.authService.checkIsAuthenticUser();
 
   }
 }

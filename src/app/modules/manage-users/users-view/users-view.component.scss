@@ -19,45 +19,50 @@
 }
 
 tr {
-  td {
-    &:nth-child(1) {
-      text-transform: uppercase;
-      min-width: 5ch;
-    }
-
-    &:nth-child(5) {
-      text-transform: capitalize;
-      text-align: left;
-
-      .role {
-        display: block;
-        width: 13ch;
-        text-align: center;
-      }
-    }
-  }
-
-  th {
-    &:nth-child(5) {
-      text-align: center;
-
-    }
-
-    &:last-child {
-      text-align: center;
-    }
-
-
-  }
 
   td,
   th {
 
+    &:nth-child(1) {
+      min-width: 8ch;
+      text-transform: uppercase;
+    }
+
+    &:nth-child(2) {
+      min-width: 15ch;
+    }
+
+    &:nth-child(3) {
+      min-width: 20ch;
+    }
+
+    &:nth-child(4) {
+      min-width: 15ch;
+    }
+
+    &:nth-child(5) {
+      &:not(td) {
+        text-align: center;
+      }
+
+      &:not(th) {
+        text-transform: capitalize;
+
+        .role {
+          display: block;
+          width: 13ch;
+          margin-inline: auto;
+          text-align: center;
+        }
+      }
+    }
+
     &:last-child {
-      width: auto !important;
       padding: 1rem;
 
-
+      &:not(td) {
+        text-align: center;
+      }
     }
   }
 }

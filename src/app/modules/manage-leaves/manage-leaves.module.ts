@@ -16,7 +16,6 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { LeaveFormComponent } from './leave-form/leave-form.component';
 import { LeaveListViewComponent } from './leave-list-view/leave-list-view.component';
-import { LeaveRequestComponent } from './leave-request/leave-request.component';
 import { ManageLeavesRoutingModule } from './manage-leaves-routing.module';
 
 console.log("Leaves");
@@ -26,7 +25,6 @@ console.log("Leaves");
   declarations: [
     LeaveListViewComponent,
     LeaveFormComponent,
-    LeaveRequestComponent
   ],
   imports: [
     CommonModule,
