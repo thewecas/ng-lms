@@ -1,23 +1,28 @@
-.header-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
+tr {
 
-  button.action-btn {
-    border-radius: 0.4rem;
-    height: 3rem;
-  }
+  td,
+  th {
+
+    &:nth-child(1),
+    &:nth-child(2) {
+      min-width: 10ch;
+
+    }
+
+    &:nth-child(3) {
+      min-width: 20ch;
+    }
+
+    &:nth-child(4) {
+      // min-width: 5ch;
 
 
+    }
 
-  @media screen and (width<600px) {
-    button.action-btn {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      border-radius: 24px;
+    &:nth-child(5) {
+      min-width: 5ch;
+
 
     }
   }
-
 }

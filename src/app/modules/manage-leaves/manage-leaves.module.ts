@@ -9,6 +9,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
@@ -18,7 +19,6 @@ import { LeaveFormComponent } from './leave-form/leave-form.component';
 import { LeaveListViewComponent } from './leave-list-view/leave-list-view.component';
 import { ManageLeavesRoutingModule } from './manage-leaves-routing.module';
 
-console.log("Leaves");
 
 
 @NgModule({
@@ -33,6 +33,7 @@ console.log("Leaves");
     MatButtonModule,
     MatPaginatorModule,
     MatDatepickerModule,
+    MatMenuModule,
     MatNativeDateModule,
     MatTooltipModule,
     ReactiveFormsModule,

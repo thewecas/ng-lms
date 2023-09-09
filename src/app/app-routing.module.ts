@@ -14,34 +14,36 @@ const routes: Routes = [
     path: '',
     component: NavbarComponent,
     canActivate: [isAuthenticatedGuard],
-
     children: [
       {
         path: 'users',
         loadChildren: () => import('./modules/manage-users/manage-users.module').then(m => m.ManageUsersModule),
         canActivate: [isAdminGuard]
-
-
       },
       {
         path: 'holidays',
         loadChildren: () => import('./modules/manage-holidays/manage-holidays.module').then(m => m.ManageHolidaysModule),
         canActivate: [isAdminGuard]
-
-
-
       },
       {
         path: 'leave-request',
         loadChildren: () => import('./modules/manage-leave-request/manage-leave-request.module').then(m => m.ManageLeaveRequestModule),
         canActivate: [isAdminGuard]
-
       },
       {
         path: 'leaves',
         loadChildren: () => import('./modules/manage-leaves/manage-leaves.module').then(m => m.ManageLeavesModule),
+      },
+      {
+        path: '',
+        redirectTo: 'leaves',
+        pathMatch: 'full'
       }
     ]
+  },
+  {
+    path: '**',
+    redirectTo: 'leaves',
   }
 
 ];

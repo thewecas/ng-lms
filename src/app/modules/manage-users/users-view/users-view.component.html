@@ -43,7 +43,7 @@
         <td mat-cell *matCellDef="let row">{{ row.designation }}</td>
       </ng-container>
       <ng-container matColumnDef="role">
-        <th mat-header-cell *matHeaderCellDef>Role</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Role</th>
         <td mat-cell *matCellDef="let row">
           <mat-chip class="role">{{ row.role }}</mat-chip>
         </td>

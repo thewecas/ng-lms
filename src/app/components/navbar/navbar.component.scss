@@ -7,13 +7,26 @@
 }
 
 .header {
-  font-size: 2.5rem !important;
+  font-size: 1.5rem !important;
   letter-spacing: 3px;
   font-weight: 400;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-  @media screen and (width<600px) {
-    font-size: 2rem !important;
+  a {
+    padding-top: 0.75rem;
+
+    * {
+      color: white;
+      vertical-align: center;
+    }
   }
+
+  /* @media screen and (width<600px) {
+    font-size: rem !important;
+  } */
 }
 
 .mat-mdc-nav-list {
@@ -35,7 +48,7 @@
   }
 
   .active-nav-link {
-    background-color: #3f51b5;
+    background-color: #3b55e2;
 
     * {
       color: white;

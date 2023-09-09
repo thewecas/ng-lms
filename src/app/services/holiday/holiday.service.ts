@@ -16,10 +16,6 @@ export class HolidayService {
 
   }
 
-  addHoliday(holiday: Holiday) {
-    return this.firebase.addHoliday(holiday);
-  }
-
   getHolidayData() {
     if (!this.holidays) {
       this.getAllHolidays();
@@ -43,6 +39,11 @@ export class HolidayService {
     }
     );
   }
+
+  addHoliday(holiday: Holiday) {
+    return this.firebase.addHoliday(holiday);
+  }
+
 
   deleteHoliday(id: string) {
     return this.firebase.deleteHoliday(id);

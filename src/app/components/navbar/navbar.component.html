@@ -6,8 +6,10 @@
     [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
     [mode]="(isHandset$ | async) ? 'over' : 'side'"
     [opened]="(isHandset$ | async) === false"
+    *ngIf="isAdmin$ | async"
   >
     <mat-toolbar class="sidebar">LMS</mat-toolbar>
+
     <mat-nav-list class="sidebar">
       <a
         mat-list-item
@@ -27,7 +29,7 @@
         routerLink="/holidays"
       >
         <div>
-          <mat-icon>event</mat-icon>
+          <mat-icon>weekend</mat-icon>
           Holidays
         </div>
       </a>
@@ -49,7 +51,7 @@
         routerLink="/leaves"
       >
         <div>
-          <mat-icon>free_cancellation</mat-icon>
+          <mat-icon>surfing</mat-icon>
           Leaves
         </div>
       </a>
@@ -68,16 +70,30 @@
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <mat-toolbar color="primary" *ngIf="isHandset$ | async">
+    <mat-toolbar
+      color="primary"
+      *ngIf="(isHandset$ | async) || !(isAdmin$ | async)"
+    >
       <button
         type="button"
         aria-label="Toggle sidenav"
         mat-icon-button
-        (click)="drawer.toggle()"
+        *ngIf="isAdmin$ | async"
+        (click)="toggleSidebar()"
       >
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span class="header">LMS</span>
+      <div class="header">
+        <h1>LMS</h1>
+        <a
+          class="nav-link"
+          routerLinkActive="active-nav-link"
+          routerLink="/login"
+          (click)="onLogout()"
+        >
+          <mat-icon>logout</mat-icon>
+        </a>
+      </div>
     </mat-toolbar>
 
     <div class="outlet-container">

@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, ViewChild, inject } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
@@ -11,6 +11,9 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 
 })
 export class NavbarComponent {
+
+  @ViewChild('drawer') sidebar: any;
+
   private breakpointObserver = inject(BreakpointObserver);
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
@@ -19,8 +22,13 @@ export class NavbarComponent {
       shareReplay()
     );
 
+  isAdmin$!: BehaviorSubject<boolean>;
   constructor(private authService: AuthService) {
+    this.isAdmin$ = authService.isAdmin$;
+  }
 
+  toggleSidebar() {
+    this.sidebar.toggle();
   }
 
   onLogout() {

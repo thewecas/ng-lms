@@ -1,27 +1,8 @@
-.btn-container {
-  white-space: nowrap;
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-
-  button {
-    &:hover {
-      cursor: pointer !important;
-    }
-  }
-}
-
-
-
-.mat-elevation-z8 {
-  overflow-x: auto;
-  scrollbar-gutter: stable;
-}
-
 tr {
 
   td,
   th {
+    padding: 1rem;
 
     &:nth-child(1) {
       min-width: 8ch;
@@ -42,7 +23,7 @@ tr {
 
     &:nth-child(5) {
       &:not(td) {
-        text-align: center;
+        padding-left: 5vw;
       }
 
       &:not(th) {
@@ -57,13 +38,6 @@ tr {
       }
     }
 
-    &:last-child {
-      padding: 1rem;
-
-      &:not(td) {
-        text-align: center;
-      }
-    }
   }
 }
 

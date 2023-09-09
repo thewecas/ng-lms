@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, catchError, tap } from 'rxjs';
+import { BehaviorSubject, Observable, catchError } from 'rxjs';
 import { User } from 'src/app/models/user';
 import { FirebaseService } from '../firebase/firebase.service';
 
@@ -14,6 +14,24 @@ export class AuthService {
   public currentUser: User | null = null;
   expirationTime: number = 60 * 60 * 60 * 60;
   isLoading$ = new BehaviorSubject<boolean>(false);
+
+  constructor(private router: Router, private firebase: FirebaseService, private snakbar: MatSnackBar) { }
+
+
+  /**
+ * Store the idtoken of user to local storage
+ * @param idToken - access token of the current user
+ */
+  storeUserToLocalStorage(idToken: string) {
+    localStorage.setItem('lms-userIdToken', idToken);
+  }
+
+  /**
+   * @returns - idtokne from the local storage
+   */
+  fetchUserFromLocalStorage() {
+    return localStorage.getItem('lms-userIdToken');
+  }
 
 
   checkIsAuthenticated() {
@@ -32,16 +50,17 @@ export class AuthService {
           this.checkSessionValidity(idToken).subscribe({
             next: res => {
               this.currentUser = { ...Object(this.currentUser), idToken: idToken };
-              this.getCurrentUser(Object(res).users[0].localId).subscribe({
+              const uid = Object(res).users[0].localId;
+              this.getCurrentUser(uid).subscribe({
                 next: res => {
-
-                  console.log("fetching user data");
-
-                  this.currentUser = { ...this.currentUser, ...Object(res) };
-                  console.log("Current User ", this.currentUser);
+                  this.currentUser = { ...this.currentUser, ...Object(res), uid: uid };
+                  if (this.currentUser?.role == 'admin')
+                    this.isAdmin$.next(true);
                   observer.next(true);
                   observer.complete();
                   this.isAuthenticated$.next(true);
+                  console.log("Current User : ", this.currentUser);
+
                 }, error: err => {
                   this.isAuthenticated$.next(false);
                   observer.next(false);
@@ -51,7 +70,6 @@ export class AuthService {
 
             },
             error: err => {
-              console.log("next");
               observer.next(false);
               observer.complete();
 
@@ -59,7 +77,6 @@ export class AuthService {
           });
         else {
           /**not a valid session */
-          console.log("next");
           observer.next(false);
           observer.complete();
 
@@ -72,12 +89,8 @@ export class AuthService {
     return this.firebase
       .lookupUser(idToken).pipe(catchError(err => {
         this.notify(err);
-        console.log("Validation erro ", err);
         throw "Validation error";
       }),
-        tap(res => {
-          console.log("Validation res ", res);
-        })
       );
   }
 
@@ -97,25 +110,12 @@ export class AuthService {
     this.router.navigate(['/login']);
     this.currentUser = null;
     this.isAuthenticated$.next(false);
+    this.isAdmin$.next(false);
   }
 
 
-  constructor(private router: Router, private firebase: FirebaseService, private snakbar: MatSnackBar) { }
 
-  /**
-   * Store the idtoken of user to local storage
-   * @param idToken - access token of the current user
-   */
-  storeUserToLocalStorage(idToken: string) {
-    localStorage.setItem('lms-userIdToken', idToken);
-  }
 
-  /**
-   * @returns - idtokne from the local storage
-   */
-  fetchUserFromLocalStorage() {
-    return localStorage.getItem('lms-userIdToken');
-  }
 
   /**
    * Login user into the lms webapp
@@ -134,12 +134,15 @@ export class AuthService {
           const idToken = res.idToken;
           this.currentUser = { ...Object(this.currentUser), idToken: idToken };
           this.storeUserToLocalStorage(idToken);
-          this.getCurrentUser(res.localId).subscribe({
+          const uid = res.localId;
+          this.getCurrentUser(uid).subscribe({
             next: (res: any) => {
-              this.currentUser = { ...this.currentUser, ...res };
+              this.currentUser = { ...this.currentUser, ...res, uid: uid };
+              if (this.currentUser?.role == 'admin')
+                this.isAdmin$.next(true);
+              console.log("Current User : ", this.currentUser);
               this.isAuthenticated$.next(true);
               this.router.navigate(['/leaves']);
-              console.log(this.currentUser);
               this.isLoading$.next(false);
             }
           });
@@ -154,6 +157,8 @@ export class AuthService {
         }
       });
   }
+
+
   getUserId() {
     return String(this.currentUser?.uid);
   }

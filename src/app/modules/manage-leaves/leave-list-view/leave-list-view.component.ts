@@ -1,8 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { } from '@angular/compiler';
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Subscription } from 'rxjs';
 import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
 import { Leave } from 'src/app/models/leave';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -12,7 +14,8 @@ import { LeaveFormComponent } from '../leave-form/leave-form.component';
 @Component({
   selector: 'app-leave-list-view',
   templateUrl: './leave-list-view.component.html',
-  styleUrls: ['./leave-list-view.component.scss']
+  styleUrls: ['./leave-list-view.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LeaveListViewComponent implements OnInit {
   displayedColumns: string[] = ['fromDate', 'toDate', 'reason', 'type', 'status', 'action'];
@@ -21,28 +24,50 @@ export class LeaveListViewComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
   uid!: string;
   constructor(private leaveService: LeaveService, private dialog: MatDialog, private authService: AuthService) {
-    this.uid = authService.getUserId();
-    console.log("uid?? : ", this.uid);
-
   }
+
+  leaveDataSubscription!: Subscription;
+  isUpdatedSubscription!: Subscription;
+
   ngOnInit() {
-    this.leaveService.getLeavesByUser(this.uid).subscribe({
+    this.uid = this.authService.getUserId();
+    this.leaveDataSubscription = this.leaveService.getLeavesByUser(this.uid).subscribe({
       next: (res: any) => {
-
         console.log(res);
-
-
         this.dataSource = new MatTableDataSource(res);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       },
     });
+    this.leaveService.isUpdated$.subscribe(res => {
+      console.log("Leaves update triggered \n", res);
+      this.leaveService.getAllLeaves();
+    });
   }
 
   ngAfterViewInit() {
-    // this.dataSource.paginator = this.paginator;
-    // this.dataSource.sort = this.sort;
+    try {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    } catch (error) {
+
+    }
   }
+
+
+  applyFilter(filterInput: HTMLInputElement) {
+    const filterValue = filterInput.value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  clearFilter(filterInput: HTMLInputElement) {
+    filterInput.value = '';
+    this.applyFilter(filterInput);
+  }
+
 
   onApplyLeave() {
     const dialogRef = this.dialog.open(LeaveFormComponent);
@@ -75,6 +100,8 @@ export class LeaveListViewComponent implements OnInit {
           this.leaveService.deleteLeave(uid, leaveId).subscribe(
             res => {
               console.log(res);
+              this.leaveService.isUpdated$.next(true);
+
             });
 
         }

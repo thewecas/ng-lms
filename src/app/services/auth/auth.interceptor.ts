@@ -17,7 +17,6 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const idToken = this.authService.getIdToken();
-    console.log(request);
 
 
     if (!!idToken && !request.url.includes('identitytoolkit.googleapis.com')) {
@@ -26,7 +25,7 @@ export class AuthInterceptor implements HttpInterceptor {
         headers: new HttpHeaders().set('Access-Control-Allow-Origin', '*')
 
       });
-      console.log("Request Tapped & Modified : \n", modifiedReq);
+      console.log("Request Tapped");
       return next.handle(modifiedReq);
     }
     else

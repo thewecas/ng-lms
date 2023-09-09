@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map } from 'rxjs';
+import { BehaviorSubject, Subject, skipWhile } from 'rxjs';
 import { Leave } from 'src/app/models/leave';
 import { AuthService } from '../auth/auth.service';
 import { FirebaseService } from '../firebase/firebase.service';
@@ -9,90 +9,39 @@ import { FirebaseService } from '../firebase/firebase.service';
 })
 export class LeaveService {
 
-  private leaves !: {};
-  private leaves$ = new BehaviorSubject<{}>([]);
-  isUpdated$ = new BehaviorSubject<boolean>(true);
-
-
-
-  dum = [
-
-    {
-      fromDate: new Date().getTime(),
-      toDate: new Date().getTime(),
-      reason: "Pooja celebration",
-      type: "Loss of Pay",
-      employeeId: 'pws1',
-      status: "Pending"
-    },
-    {
-      fromDate: new Date().getTime(),
-      toDate: new Date().getTime(),
-      reason: "Wedding Aniversart celebration",
-      type: "Casual Leave",
-      employeeId: 'pws2',
-
-      status: "Pending"
-    },
-    {
-      fromDate: new Date().getTime(),
-      toDate: new Date().getTime(),
-      reason: "Goa trip",
-      type: "Sick Leave",
-      employeeId: 'pws1',
-
-      status: "Pending"
-    },
-    {
-      fromDate: new Date().getTime(),
-      toDate: new Date().getTime(),
-      reason: "BirthDay celebration",
-      type: "Paternity Leave",
-      employeeId: 'pws2',
-      status: "Pending"
-    },
-  ];
+  private userLeaves: any = null;
+  private allLeaves: any = null;
+  private allLeaves$ = new BehaviorSubject<any>([]);
+  private userLeaves$ = new BehaviorSubject<any>([]);
+  isUpdated$ = new Subject<boolean>();
 
   constructor(private firebase: FirebaseService, private authService: AuthService) {
-
-
-    this.isUpdated$.subscribe();
-    /*    for (let i = 0; i < this.dum.length; i++) {
-         if (i % 2 == 0)
-           this.addLeave("eredfdsfsfd", this.dum[i]).subscribe();
-         else
-           this.addLeave("sddfdsdfdsfs", this.dum[i]).subscribe();
-       }
-       this.getAllLeaves();
-       
-    */
   }
 
-  ngOnInit() {
-    console.log("Leave service");
-
-  }
 
   getLeavesData() {
-    if (!this.leaves)
+    if (!this.allLeaves)
       this.getAllLeaves();
-    return this.leaves$.asObservable();
+    return this.allLeaves$
+      .asObservable()
+      .pipe(skipWhile(res => res.length == 0));
   }
 
-  private getAllLeaves() {
-    return this.firebase.fetchAllLeaves().subscribe(res => {
-      this.leaves = res;
-      console.log(res);
-
-      const leavesArr: Leave[] = [];
-      Object.entries(res).forEach(([uid, val]) => {
-        Object.entries(val).forEach(([leaveId, leave]) => {
-          leavesArr.push({ ...Object(leave), leaveId: leaveId, uid: uid });
+  getAllLeaves() {
+    return this.firebase.fetchAllLeaves().subscribe({
+      next: res => {
+        this.allLeaves = res;
+        const leavesArr: Leave[] = [];
+        Object.entries(res).forEach(([uid, val]) => {
+          Object.entries(val).forEach(([leaveId, leave]) => {
+            leavesArr.push({ ...Object(leave), leaveId: leaveId, uid: uid });
+          });
         });
-      });
-      console.log("Arr, \n", leavesArr);
-
-      this.leaves$.next(leavesArr);
+        this.allLeaves$.next(leavesArr);
+      },
+      error: err => {
+        console.log(err);
+      }
     });
   };
 
@@ -106,21 +55,30 @@ export class LeaveService {
   }
 
   getLeavesByUser(uid: string) {
-    if (!this.leaves) {
-      this.firebase.fetchLeavesByUser(uid).pipe(
-        map((res: any) => {
+    if (!this.userLeaves) {
+      this.fetchLeavesByUser(uid);
+    }
+    return this.userLeaves$
+      .asObservable()
+      .pipe(skipWhile(res => res.length == 0));
+  }
+
+  fetchLeavesByUser(uid: string) {
+    this.firebase.fetchLeavesByUser(uid).subscribe(
+      {
+        next: (res: any) => {
           let data: Leave[] = [];
           if (res) {
             data = Object.entries(res).map(([key, val]) => {
               return { ...Object(val), leaveId: key, uid: uid };
             });
           }
-          this.leaves$.next(data);
-          return data;
-        })
-      ).subscribe();
-    }
-    return this.leaves$.asObservable();
+          this.userLeaves$.next(data);
+        },
+        error: err => {
+          console.log(err);
+        }
+      });
   }
 
 

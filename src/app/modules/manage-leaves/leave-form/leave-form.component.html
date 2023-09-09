@@ -19,6 +19,14 @@
         <mat-error *ngIf="leaveForm.get('fromDate')?.hasError('required')"
           >Cannot be empty</mat-error
         >
+        <mat-error
+          *ngIf="
+            !leaveForm.get('fromDate')?.pristine &&
+            leaveForm.get('fromDate')?.hasError('invalidFromDate')
+          "
+        >
+          Date should be in the future
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -35,8 +43,15 @@
           [for]="picker2"
         ></mat-datepicker-toggle>
         <mat-datepicker #picker2></mat-datepicker>
-        <mat-error *ngIf="leaveForm.get('toDate')?.hasError('required')"
-          >Cannot be empty</mat-error
+        <mat-error *ngIf="leaveForm.get('toDate')?.hasError('required')">
+          Cannot be empty
+        </mat-error>
+        <mat-error
+          *ngIf="
+            !leaveForm.get('toDate')?.pristine &&
+            leaveForm.get('toDate')?.hasError('invalidToDate')
+          "
+          >Date should be in future and greater than From Date</mat-error
         >
       </mat-form-field>
       <mat-form-field appearance="outline">
@@ -68,7 +83,6 @@
       [mat-dialog-close]="true"
       cdkFocusInitial
       color="primary"
-      [disabled]="leaveForm.invalid"
       (click)="onSubmit()"
     >
       Save
