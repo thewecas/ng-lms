@@ -41,7 +41,6 @@ export class HolidaysViewComponent implements OnInit, OnDestroy {
       next: res => {
         this.data = res;
         this.dataSource = new MatTableDataSource(this.data);
-        console.log(this.dataSource.sortData);
         this.dataSource.paginator = this.paginator;
       }
     });

@@ -16,7 +16,6 @@ export class HolidaysFormComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private holidayService: HolidayService, private toast: ToastService, @Inject(MAT_DIALOG_DATA) public holiday: any | null) {
 
-    console.log("Received holiday : ", holiday);
 
   }
 

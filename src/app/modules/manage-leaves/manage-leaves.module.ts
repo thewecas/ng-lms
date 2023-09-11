@@ -18,6 +18,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { LeaveFormComponent } from './leave-form/leave-form.component';
 import { LeaveListViewComponent } from './leave-list-view/leave-list-view.component';
 import { ManageLeavesRoutingModule } from './manage-leaves-routing.module';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 
 
@@ -34,6 +35,7 @@ import { ManageLeavesRoutingModule } from './manage-leaves-routing.module';
     MatPaginatorModule,
     MatDatepickerModule,
     MatMenuModule,
+    MatButtonToggleModule,
     MatNativeDateModule,
     MatTooltipModule,
     ReactiveFormsModule,

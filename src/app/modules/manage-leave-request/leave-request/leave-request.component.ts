@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { MatButtonToggleGroup } from '@angular/material/button-toggle';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -15,10 +16,12 @@ export class LeaveRequestComponent {
   displayedColumns: string[] = ['employeeId', 'fromDate', 'toDate', 'reason', 'type', 'status', 'action'];
   dataSource!: MatTableDataSource<any>;
   isFilterCleared = true;
+  data!: any[];
 
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild('toggleLeaves') leaveToggle!: MatButtonToggleGroup;
 
   constructor(private leaveService: LeaveService, private toast: ToastService) {
 
@@ -29,7 +32,8 @@ export class LeaveRequestComponent {
   ngOnInit() {
     this.leaveDataSubscription = this.leaveService.getLeavesData().subscribe(
       (res: any) => {
-        this.dataSource = new MatTableDataSource(res);
+        this.data = res;
+        this.toggleLeaveType(true);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       }
@@ -50,6 +54,22 @@ export class LeaveRequestComponent {
     }
   }
 
+  toggleLeaveType(flag = false) {
+    if (flag || this.leaveToggle.value == 'pending') {
+      this.dataSource = new MatTableDataSource(
+        this.data.filter(
+          leave => leave.status == 'Pending'
+        ));
+    }
+    else {
+      this.dataSource = new MatTableDataSource(
+        this.data.filter(
+          leave => leave.status != 'Pending'
+        ));
+    }
+    this.ngAfterViewInit();
+  }
+
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
     if (this.dataSource.paginator) {
@@ -60,7 +80,6 @@ export class LeaveRequestComponent {
   onUpdateStatus(uid: string, leaveId: string, status: 'Approved' | 'Rejected') {
     this.leaveService.updateStatus(uid, leaveId, status).subscribe({
       next: res => {
-        console.log(res);
         this.toast.show(`Leave ${status} successfuly`, 'success');
       },
       error: err => this.toast.show(err.error.error.message, 'error', true)

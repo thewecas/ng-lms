@@ -1,10 +1,11 @@
 import { } from '@angular/compiler';
 import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
+import { MatButtonToggleGroup } from '@angular/material/button-toggle';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Subscription } from 'rxjs';
+import { Subscription } from 'rxjs/internal/Subscription';
 import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
 import { Leave } from 'src/app/models/leave';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -23,7 +24,10 @@ export class LeaveListViewComponent implements OnInit {
   dataSource!: MatTableDataSource<Leave>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild('toggleLeaves') leaveToggle!: MatButtonToggleGroup;
+
   uid!: string;
+  data!: any[];
   constructor(private leaveService: LeaveService, private dialog: MatDialog, private authService: AuthService, private toast: ToastService) {
   }
 
@@ -34,14 +38,13 @@ export class LeaveListViewComponent implements OnInit {
     this.uid = this.authService.getUserId();
     this.leaveDataSubscription = this.leaveService.getLeavesByUser(this.uid).subscribe({
       next: (res: any) => {
-        console.log(res);
-        this.dataSource = new MatTableDataSource(res);
+        this.data = res;
+        this.toggleLeaveType(true);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       },
     });
     this.isUpdatedSubscription = this.leaveService.isUpdated$.subscribe(res => {
-      console.log("Leaves update triggered \n", res);
       this.leaveService.getAllLeaves();
     });
   }
@@ -53,6 +56,22 @@ export class LeaveListViewComponent implements OnInit {
     } catch (error) {
 
     }
+  }
+
+  toggleLeaveType(flag = false) {
+    if (flag || this.leaveToggle.value == 'pending') {
+      this.dataSource = new MatTableDataSource(
+        this.data.filter(
+          leave => leave.status == 'Pending'
+        ));
+    }
+    else {
+      this.dataSource = new MatTableDataSource(
+        this.data.filter(
+          leave => leave.status != 'Pending'
+        ));
+    }
+    this.ngAfterViewInit();
   }
 
 
@@ -91,7 +110,6 @@ export class LeaveListViewComponent implements OnInit {
         if (res) {
           this.leaveService.deleteLeave(uid, leaveId).subscribe(
             res => {
-              console.log(res);
               this.leaveService.isUpdated$.next(true);
               this.toast.show('Leave Deleted successfuly', 'success');
             });

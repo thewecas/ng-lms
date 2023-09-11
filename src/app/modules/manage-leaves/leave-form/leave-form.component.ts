@@ -19,7 +19,6 @@ export class LeaveFormComponent {
   employeeId!: string;
   uid!: string;
   constructor(private fb: FormBuilder, private leaveService: LeaveService, private authService: AuthService, private toast: ToastService, @Inject(MAT_DIALOG_DATA) public leave: any | null) {
-    console.log("Received leave  : ", leave);
     this.employeeId = authService.getEmployeeId();
     this.uid = authService.getUserId();
   }
@@ -57,7 +56,6 @@ export class LeaveFormComponent {
     }
     else {
       this.leaveService.editLeave(this.leave.uid, this.leave.leaveId, { ...this.leaveForm.value, status: 'Pending', date: new Date(this.leaveForm.value.date).getTime() }).subscribe(res => {
-        console.log(res);
         this.leaveService.isUpdated$.next(true);
         this.toast.show('Leave Updated successfuly', 'success');
       });

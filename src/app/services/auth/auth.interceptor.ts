@@ -25,7 +25,6 @@ export class AuthInterceptor implements HttpInterceptor {
         headers: new HttpHeaders().set('Access-Control-Allow-Origin', '*')
 
       });
-      console.log("Request Tapped");
       return next.handle(modifiedReq);
     }
     else

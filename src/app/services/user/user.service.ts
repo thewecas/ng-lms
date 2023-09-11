@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject, exhaustMap, skipWhile, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Subject, exhaustMap, skipWhile, throwError } from 'rxjs';
 import { User } from 'src/app/models/user';
 import { FirebaseService } from '../firebase/firebase.service';
 
@@ -17,7 +17,6 @@ export class UserService {
   }
 
   getUserData() {
-    console.log("checking", this.users);
     if (!this.users)
       this.getAllUsers();
     return this.users$
@@ -40,15 +39,12 @@ export class UserService {
     return this.firebase
       .signUpUser({ email: user.email, password: user.password })
       .pipe(
-        tap((res: any) => console.log(res)),
-        exhaustMap(res => {
+        exhaustMap((res: any) => {
           return this.updateUser(res.localId, user);
         }));
   }
 
   deleteUser(id: string) {
-    console.log("deleting : ", id);
-
     return this.firebase.setUserDeleted(id);
   }
 

@@ -43,11 +43,11 @@ export class AuthService {
               this.router.navigate(['/leaves']);
               this.isAuthenticated$.next(true);
               this.isLoading$.next(false);
+              this.toast.show('Logged in', 'info');
             }
           });
         },
         error: err => {
-          console.log(err);
           this.toast.show(err?.error?.error?.message, 'error', true);
           this.isAuthenticated$.next(false);
           this.isLoading$.next(false);
@@ -67,6 +67,8 @@ export class AuthService {
     this.currentUser = null;
     this.isAuthenticated$.next(false);
     this.isAdmin$.next(false);
+    this.toast.show('Logged out', 'info');
+
   }
 
   /**
@@ -101,7 +103,6 @@ export class AuthService {
                   observer.complete();
                   this.isAuthenticated$.next(true);
                   this.isLoading$.next(false);
-                  console.log("Current User : ", this.currentUser);
 
                 }, error: err => {
                   this.isAuthenticated$.next(false);

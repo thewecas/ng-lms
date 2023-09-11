@@ -34,7 +34,6 @@ export class HolidayService {
         });
         this.holidays$.next(holidayData);
       },
-      error: err => console.log(err)
 
     }
     );

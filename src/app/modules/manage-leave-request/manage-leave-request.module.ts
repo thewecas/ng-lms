@@ -12,6 +12,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { LeaveRequestComponent } from './leave-request/leave-request.component';
 import { ManageLeaveRequestRoutingModule } from './manage-leave-request-routing.module';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import { ManageLeaveRequestRoutingModule } from './manage-leave-request-routing.
     MatPaginatorModule,
     MatMenuModule,
     MatTableModule,
+    MatButtonToggleModule,
     MatTooltipModule,
     MatInputModule,
     MatButtonModule
