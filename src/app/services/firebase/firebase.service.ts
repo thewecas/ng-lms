@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { tap } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Holiday } from 'src/app/models/holiday';
 import { Leave } from 'src/app/models/leave';
 import { User } from 'src/app/models/user';
@@ -13,13 +13,10 @@ export class FirebaseService {
   private dbUrl = environment.firebase.databaseURL;
   private apiKey = environment.firebase.apiKey;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private snakbar: MatSnackBar) { }
 
   fethcAllUsers() {
-    return this.http.get(`${this.dbUrl}/users.json?&orderBy="isDeleted"&equalTo=false`).pipe(tap(res => {
-      console.log("firebase query response \n", res);
-
-    }));;
+    return this.http.get(`${this.dbUrl}/users.json?orderBy="isDeleted"&equalTo=false`);;
   }
 
   signInUser(userCredentilas: { email: string, password: string; }) {
@@ -57,6 +54,13 @@ export class FirebaseService {
     });
   }
 
+  getUserByEmployeeId(employeeId: string) {
+    return this.http.get(`${this.dbUrl}/users.json?orderBy="employeeId"&equalTo="${employeeId}"`);
+  }
+
+  getUserByEmail(email: string) {
+    return this.http.get(`${this.dbUrl}/users.json?orderBy="email"&equalTo="${email}"`);
+  }
 
   addHoliday(holiday: Holiday) {
     return this.http.post(`${this.dbUrl}/holidays.json`, {
@@ -107,5 +111,6 @@ export class FirebaseService {
   deleteLeave(uid: string, leaveId: string,) {
     return this.http.delete(`${this.dbUrl}/leaves/${uid}/${leaveId}.json`);
   }
+
 
 }

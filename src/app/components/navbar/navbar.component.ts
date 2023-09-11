@@ -22,15 +22,24 @@ export class NavbarComponent {
       shareReplay()
     );
 
+  /** 
+   *  display sidebar only when the isAdmin$ value is true
+   */
   isAdmin$!: BehaviorSubject<boolean>;
   constructor(private authService: AuthService) {
     this.isAdmin$ = authService.isAdmin$;
   }
 
+  /**
+   * toggle sidebar
+   */
   toggleSidebar() {
     this.sidebar.toggle();
   }
 
+  /**
+   * Call the logout fn from auth service
+   */
   onLogout() {
     this.authService.logout();
   }

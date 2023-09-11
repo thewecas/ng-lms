@@ -55,15 +55,15 @@
       </div>
 
       <div class="btn-container">
-        <button mat-raised-button color="primary" type="submit">Sign In</button>
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="signInForm.invalid"
+        >
+          Sign In
+        </button>
       </div>
     </form>
-
-    <div class="error-container" *ngIf="!!errorMessage">
-      <mat-error>{{ errorMessage | authError }} </mat-error>
-      <mat-icon class="close-btn btn" (click)="errorMessage = ''"
-        >close</mat-icon
-      >
-    </div>
   </div>
 </div>

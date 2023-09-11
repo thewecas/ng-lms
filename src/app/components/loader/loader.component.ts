@@ -13,7 +13,7 @@ import { Component } from '@angular/core';
       height:100%;
       display:grid;
       place-content:Center;
-      position:fixed;
+      position:absolute;
       z-index:999999999;
       top:0;
       left:0;

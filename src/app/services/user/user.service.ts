@@ -1,5 +1,6 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject, exhaustMap, skipWhile, tap } from 'rxjs';
+import { BehaviorSubject, Subject, exhaustMap, skipWhile, tap, throwError } from 'rxjs';
 import { User } from 'src/app/models/user';
 import { FirebaseService } from '../firebase/firebase.service';
 
@@ -13,29 +14,25 @@ export class UserService {
   isUpdated$ = new Subject<boolean>();
   constructor(private firebase: FirebaseService) {
 
-
   }
 
   getUserData() {
     console.log("checking", this.users);
     if (!this.users)
-      this.gethAllUsers();
+      this.getAllUsers();
     return this.users$
       .asObservable()
       .pipe(skipWhile(res => res.length == 0));
   }
 
-  gethAllUsers() {
-    return this.firebase.fethcAllUsers().subscribe(res => {
+  getAllUsers() {
+    this.firebase.fethcAllUsers().subscribe((res) => {
       this.users = res;
       const userData = Object.entries(res).map(([key, val]) => {
-        return { ...val, uid: key };
+        return { ...Object(val), uid: key };
       });
       this.users$.next(userData);
     });
-
-    /*  Object.values(res).filter(user => !user.isDeleted).
-       this.users$.next(); */
 
   }
 
@@ -65,6 +62,20 @@ export class UserService {
       role: user.role,
       isDeleted: false
     });
+  }
+
+
+  checkEmployeeIdTaken(employeeId: string) {
+    return this.firebase.getUserByEmployeeId(employeeId);
+  }
+
+  checkEmailTaken(email: string) {
+    return this.firebase.getUserByEmail(email);
+  }
+
+  handleError(err: HttpErrorResponse) {
+
+    return throwError(() => "");
   }
 
 }

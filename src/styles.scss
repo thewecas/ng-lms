@@ -222,3 +222,79 @@ tr {
 .mat-mdc-mini-fab.mat-primary {
   background-color: #3b55e2 !important;
 }
+
+
+
+//styling for toast / snakbar
+.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  max-width: unset !important;
+  min-width: 220px !important;
+}
+
+.toast {
+  border-radius: 0.25rem;
+  padding-left: 1rem;
+
+  .mdc-snackbar__surface {
+    background-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .mdc-snackbar__label {
+    padding-left: 8px !important;
+  }
+
+  &::before {
+    font-family: 'Material Icons';
+    font-size: 1.5rem;
+    width: 1.5ch;
+  }
+
+  *,
+  &::before {
+    color: #ffffff !important;
+  }
+
+  .mat-mdc-button.mat-mdc-snack-bar-action {
+    min-width: 0px !important;
+  }
+
+  .mdc-button__label::after {
+    content: 'close';
+    font-family: 'Material Icons';
+    font-size: 1.5rem;
+  }
+}
+
+
+.error {
+  background-color: #bd2626 !important;
+
+  &::before {
+    content: "error";
+  }
+}
+
+.success {
+  background-color: #26bd2b !important;
+
+  &::before {
+    content: 'check_circle';
+  }
+}
+
+.warn {
+  background-color: #babd26 !important;
+
+  &::before {
+    content: 'warning';
+  }
+}
+
+.info {
+  background-color: #265dbd !important;
+
+  &::before {
+    content: 'info';
+  }
+}

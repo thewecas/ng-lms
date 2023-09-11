@@ -19,14 +19,13 @@ import { AuthInterceptor } from './services/auth/auth.interceptor';
   declarations: [
     AppComponent,
     LoaderComponent,
-    NavbarComponent
+    NavbarComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-
     MatSnackBarModule,
     MatToolbarModule,
     MatButtonModule,

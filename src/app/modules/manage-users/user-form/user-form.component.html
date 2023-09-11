@@ -17,6 +17,10 @@
         <mat-error *ngIf="userForm.get('employeeId')?.hasError('pattern')"
           >Match the pattern PWS##</mat-error
         >
+        <mat-error
+          *ngIf="userForm.get('employeeId')?.hasError('employeeIdTaken')"
+          >Employee Id already exist</mat-error
+        >
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Name</mat-label>
@@ -33,6 +37,9 @@
         >
         <mat-error *ngIf="userForm.get('email')?.hasError('email')"
           >Invalid Email</mat-error
+        >
+        <mat-error *ngIf="userForm.get('email')?.hasError('emailTaken')"
+          >Email Id already exist</mat-error
         >
       </mat-form-field>
       <mat-form-field appearance="outline">
@@ -122,7 +129,6 @@
       [mat-dialog-close]="true"
       cdkFocusInitial
       color="primary"
-      [disabled]="userForm.invalid"
       (click)="onSubmit()"
     >
       Save

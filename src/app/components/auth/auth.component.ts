@@ -7,9 +7,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { Subscription } from 'rxjs';
 import { AuthErrorPipe } from 'src/app/pipes/auth-error.pipe';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
@@ -36,12 +35,13 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 export class AuthComponent implements OnInit {
   isPasswordHidden: boolean = true;
   signInForm!: FormGroup;
-  errorMessage: string = '';
-  errorSubscription!: Subscription;
-  isLoading!: boolean;
-  constructor(private fb: FormBuilder, private authService: AuthService, private _snackBar: MatSnackBar) {
+
+  constructor(private fb: FormBuilder, private authService: AuthService) {
   }
 
+  /**
+   * initlaize the signInForm
+   */
   ngOnInit() {
     this.signInForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -49,14 +49,11 @@ export class AuthComponent implements OnInit {
     });
   }
 
+  /**
+   * login the user using the form values
+   */
   onSubmit() {
     this.authService.login(this.signInForm.value);
-
   }
-
-  ngOnDestroy() {
-  }
-
-
 
 }

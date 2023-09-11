@@ -13,7 +13,7 @@ const routes: Routes = [
   {
     path: '',
     component: NavbarComponent,
-    canActivate: [isAuthenticatedGuard],
+    canActivateChild: [isAuthenticatedGuard],
     children: [
       {
         path: 'users',
