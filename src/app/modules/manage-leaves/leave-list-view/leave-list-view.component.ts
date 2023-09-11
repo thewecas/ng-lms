@@ -9,6 +9,7 @@ import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confir
 import { Leave } from 'src/app/models/leave';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { LeaveService } from 'src/app/services/leave/leave.service';
+import { ToastService } from 'src/app/services/toast/toast.service';
 import { LeaveFormComponent } from '../leave-form/leave-form.component';
 
 @Component({
@@ -23,7 +24,7 @@ export class LeaveListViewComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   uid!: string;
-  constructor(private leaveService: LeaveService, private dialog: MatDialog, private authService: AuthService) {
+  constructor(private leaveService: LeaveService, private dialog: MatDialog, private authService: AuthService, private toast: ToastService) {
   }
 
   leaveDataSubscription!: Subscription;
@@ -39,7 +40,7 @@ export class LeaveListViewComponent implements OnInit {
         this.dataSource.sort = this.sort;
       },
     });
-    this.leaveService.isUpdated$.subscribe(res => {
+    this.isUpdatedSubscription = this.leaveService.isUpdated$.subscribe(res => {
       console.log("Leaves update triggered \n", res);
       this.leaveService.getAllLeaves();
     });
@@ -55,17 +56,11 @@ export class LeaveListViewComponent implements OnInit {
   }
 
 
-  applyFilter(filterInput: HTMLInputElement) {
-    const filterValue = filterInput.value;
+  applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
-  }
-
-  clearFilter(filterInput: HTMLInputElement) {
-    filterInput.value = '';
-    this.applyFilter(filterInput);
   }
 
 
@@ -94,19 +89,21 @@ export class LeaveListViewComponent implements OnInit {
     dialogRef.afterClosed().subscribe(
       res => {
         if (res) {
-          console.log("REsponse ", res);
-          console.log("Deleting uid", uid, "\n leaveid:", leaveId);
-
           this.leaveService.deleteLeave(uid, leaveId).subscribe(
             res => {
               console.log(res);
               this.leaveService.isUpdated$.next(true);
-
+              this.toast.show('Leave Deleted successfuly', 'success');
             });
 
         }
       }
     );
+  }
+
+  ngOnDestroy() {
+    this.leaveDataSubscription.unsubscribe();
+    this.isUpdatedSubscription.unsubscribe();
   }
 
 }

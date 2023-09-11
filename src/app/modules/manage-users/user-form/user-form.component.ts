@@ -168,7 +168,7 @@ export class UserFormComponent {
    */
   isEmployeeIdExist: AsyncValidatorFn = (control: AbstractControl): Observable<ValidationErrors | null> => {
     return this.userService
-      .checkEmployeeIdTaken(control.value)
+      .checkEmployeeIdTaken(control.value.toLowerCase())
       .pipe(map(res => {
         if (Object.values(res).length != 0)
           return { employeeIdTaken: true };
@@ -185,7 +185,7 @@ export class UserFormComponent {
  */
   isEmailExist: AsyncValidatorFn = (control: AbstractControl): Observable<ValidationErrors | null> => {
     return this.userService
-      .checkEmailTaken(control.value)
+      .checkEmailTaken(control.value.toLowerCase())
       .pipe(
         map(res => {
           if (Object.values(res).length != 0)

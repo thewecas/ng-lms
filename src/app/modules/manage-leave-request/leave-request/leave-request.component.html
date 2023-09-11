@@ -3,8 +3,8 @@
 
   <mat-form-field class="searchbar">
     <mat-label>Filter</mat-label>
-    <input matInput (keyup)="applyFilter(input)" #input />
-    <button mat-icon-button matSuffix (click)="clearFilter(input)">
+    <input matInput (keyup)="applyFilter(input.value)" #input />
+    <button mat-icon-button matSuffix (click)="applyFilter('')">
       <mat-icon> {{ input.value == "" ? "search" : "close" }}</mat-icon>
     </button>
   </mat-form-field>

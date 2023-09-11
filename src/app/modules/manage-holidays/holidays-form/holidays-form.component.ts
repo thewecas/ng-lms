@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { HolidayService } from 'src/app/services/holiday/holiday.service';
+import { ToastService } from 'src/app/services/toast/toast.service';
 
 @Component({
   selector: 'app-holidays-form',
@@ -13,7 +14,7 @@ export class HolidaysFormComponent implements OnInit {
 
   holidayForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private holidayService: HolidayService, @Inject(MAT_DIALOG_DATA) public holiday: any | null) {
+  constructor(private fb: FormBuilder, private holidayService: HolidayService, private toast: ToastService, @Inject(MAT_DIALOG_DATA) public holiday: any | null) {
 
     console.log("Received holiday : ", holiday);
 
@@ -49,8 +50,9 @@ export class HolidaysFormComponent implements OnInit {
       }).subscribe({
         next: res => {
           this.holidayService.isUpdated$.next(true);
+          this.toast.show("Holiday Added successfuly", 'success');
         },
-        error: err => console.log(err)
+        error: err => this.toast.show(err.error.error.message, 'error', true)
       });
     else {
       this.holidayService.updateHoliday(this.holiday.id, {
@@ -60,10 +62,11 @@ export class HolidaysFormComponent implements OnInit {
       }).subscribe({
         next: res => {
           this.holidayService.isUpdated$.next(true);
+          this.toast.show("Holiday Updated successfuly", 'success');
+
         },
         error: err => {
-          console.log(err);
-
+          this.toast.show(err.error.error.message, 'error', true);
         }
       });
     }

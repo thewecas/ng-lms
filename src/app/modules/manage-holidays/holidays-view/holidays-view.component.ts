@@ -4,10 +4,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Subscription } from 'rxjs';
+import { Subscription } from 'rxjs/internal/Subscription';
 import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
 import { Holiday } from 'src/app/models/holiday';
 import { HolidayService } from 'src/app/services/holiday/holiday.service';
+import { ToastService } from 'src/app/services/toast/toast.service';
 import { HolidaysFormComponent } from '../holidays-form/holidays-form.component';
 
 @Component({
@@ -25,32 +26,28 @@ export class HolidaysViewComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('toggleHolidays') holidayToggle!: MatButtonToggleGroup;
 
-  constructor(private dialog: MatDialog, private holidayService: HolidayService) { }
+  constructor(private dialog: MatDialog, private toast: ToastService, private holidayService: HolidayService) { }
 
   holidayDataSubscription!: Subscription;
   isUpdatedSubscription!: Subscription;
   data!: any[];
 
+
   ngOnInit() {
+    /**
+     * fetch the data from database 
+     */
     this.holidayDataSubscription = this.holidayService.getHolidayData().subscribe({
       next: res => {
         this.data = res;
-        console.log("Holiday ", res);
-
-        this.dataSource = new MatTableDataSource(res);
+        this.dataSource = new MatTableDataSource(this.data);
         console.log(this.dataSource.sortData);
-        this.dataSource.sort = new MatSort();
-        this.dataSource.sort.active = 'date';
-
-
         this.dataSource.paginator = this.paginator;
       }
     });
 
     this.isUpdatedSubscription = this.holidayService.isUpdated$.subscribe(
       res => {
-        console.log("Holidays update triggered \n", res);
-
         this.holidayService.getAllHolidays();
       }
     );
@@ -74,34 +71,23 @@ export class HolidaysViewComponent implements OnInit, OnDestroy {
     this.ngAfterViewInit();
   }
 
-  applyFilter(filterInput: HTMLInputElement) {
-    const filterValue = filterInput.value;
+  applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
   }
 
-  clearFilter(filterInput: HTMLInputElement) {
-    filterInput.value = '';
-    this.applyFilter(filterInput);
-  }
 
   onAddHoliday() {
-    const dialogRef = this.dialog.open(HolidaysFormComponent, {
+    this.dialog.open(HolidaysFormComponent, {
       data: null
-    });
-    dialogRef.afterClosed().subscribe(res => {
-      console.log("Res");
     });
   }
 
   onEditHoliday(holiday: Holiday) {
-    const dialogRef = this.dialog.open(HolidaysFormComponent, {
+    this.dialog.open(HolidaysFormComponent, {
       data: holiday
-    });
-    dialogRef.afterClosed().subscribe(res => {
-      console.log("Dialog res : ", res);
     });
   }
 
@@ -120,16 +106,12 @@ export class HolidaysViewComponent implements OnInit, OnDestroy {
         this.holidayService.deleteHoliday(id).subscribe({
           next: res => {
             this.holidayService.isUpdated$.next(true);
+            this.toast.show("Holiday deleted successfuly", 'success');
           },
-          error: err => console.error(err)
+          error: err => this.toast.show("Holiday deleted successfuly", 'success')
         });
       }
     });
-  }
-
-  logData() {
-    console.log(this.dataSource._pageData(this.dataSource.filteredData));
-
   }
 
   trackById(index: number, item: any) {

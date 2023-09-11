@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn,
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { LeaveService } from 'src/app/services/leave/leave.service';
+import { ToastService } from 'src/app/services/toast/toast.service';
 
 @Component({
   selector: 'app-leave-form',
@@ -17,7 +18,7 @@ export class LeaveFormComponent {
   leaveForm!: FormGroup;
   employeeId!: string;
   uid!: string;
-  constructor(private fb: FormBuilder, private leaveService: LeaveService, private authService: AuthService, @Inject(MAT_DIALOG_DATA) public leave: any | null) {
+  constructor(private fb: FormBuilder, private leaveService: LeaveService, private authService: AuthService, private toast: ToastService, @Inject(MAT_DIALOG_DATA) public leave: any | null) {
     console.log("Received leave  : ", leave);
     this.employeeId = authService.getEmployeeId();
     this.uid = authService.getUserId();
@@ -46,12 +47,11 @@ export class LeaveFormComponent {
   }
 
   onSubmit() {
-
     if (!this.leave) {
       this.leaveService.addLeave(this.uid, { ...this.leaveForm.value, employeeId: this.employeeId, status: 'Pending' }).subscribe(
         res => {
-          console.log(res);
           this.leaveService.isUpdated$.next(true);
+          this.toast.show('Leave Applied successfuly', 'success');
         }
       );
     }
@@ -59,7 +59,7 @@ export class LeaveFormComponent {
       this.leaveService.editLeave(this.leave.uid, this.leave.leaveId, { ...this.leaveForm.value, status: 'Pending', date: new Date(this.leaveForm.value.date).getTime() }).subscribe(res => {
         console.log(res);
         this.leaveService.isUpdated$.next(true);
-
+        this.toast.show('Leave Updated successfuly', 'success');
       });
     }
   }

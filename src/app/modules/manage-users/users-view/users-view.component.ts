@@ -57,21 +57,13 @@ export class UsersViewComponent implements AfterViewInit {
    * apply filter to the datasource
    * @param filterInput - reference to the input element
    */
-  applyFilter(filterInput: HTMLInputElement) {
-    const filterValue = filterInput.value;
+  applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
   }
 
-  /**.
-   * clears the filter on datasource
-   */
-  clearFilter(filterInput: HTMLInputElement) {
-    filterInput.value = '';
-    this.applyFilter(filterInput);
-  }
 
   /**
    * opens the dialog for adding a new user
