@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject, skipWhile } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { Leave } from 'src/app/models/leave';
 import { AuthService } from '../auth/auth.service';
 import { FirebaseService } from '../firebase/firebase.service';
@@ -23,8 +23,7 @@ export class LeaveService {
     if (!this.allLeaves)
       this.getAllLeaves();
     return this.allLeaves$
-      .asObservable()
-      .pipe(skipWhile(res => res.length == 0));
+      .asObservable();
   }
 
   getAllLeaves() {
@@ -59,8 +58,7 @@ export class LeaveService {
       this.fetchLeavesByUser(uid);
     }
     return this.userLeaves$
-      .asObservable()
-      .pipe(skipWhile(res => res.length == 0));
+      .asObservable();
   }
 
   fetchLeavesByUser(uid: string) {

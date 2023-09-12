@@ -8,7 +8,12 @@
     [opened]="(isHandset$ | async) === false"
     *ngIf="isAdmin$ | async"
   >
-    <mat-toolbar class="sidebar">LMS</mat-toolbar>
+    <mat-toolbar class="sidebar">
+      <div>
+        <mat-icon>person</mat-icon>
+        <span>{{ username | titlecase }}</span>
+      </div>
+    </mat-toolbar>
 
     <mat-nav-list class="sidebar">
       <a
@@ -74,13 +79,13 @@
         type="button"
         aria-label="Toggle sidenav"
         mat-icon-button
-        *ngIf="isAdmin$ | async"
+        *ngIf="(isAdmin$ | async) && (isHandset$ | async)"
         (click)="toggleSidebar()"
       >
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <div class="header">
-        <h1>LMS</h1>
+        <h1>LEAVE LOG</h1>
         <a
           class="nav-link"
           routerLinkActive="active-nav-link"

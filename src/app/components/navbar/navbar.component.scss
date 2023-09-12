@@ -24,6 +24,10 @@
     }
   }
 
+  h1 {
+    letter-spacing: 2px;
+  }
+
   /* @media screen and (width<600px) {
     font-size: rem !important;
   } */
@@ -52,6 +56,18 @@
 
     * {
       color: white;
+    }
+  }
+}
+
+.sidebar {
+  div {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    span {
+      font-size: 1.1rem;
     }
   }
 }

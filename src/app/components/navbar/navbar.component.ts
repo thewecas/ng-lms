@@ -32,6 +32,10 @@ export class NavbarComponent {
     this.isAdmin$ = authService.isAdmin$;
   }
 
+  username!: string;
+  ngOnInit() {
+    this.username = this.authService.getUserName();
+  }
   /**
    * toggle sidebar
    */
@@ -45,7 +49,7 @@ export class NavbarComponent {
   onLogout() {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
-        title: 'Sing Out',
+        title: 'Sign Out',
         bodyText: "You'll be signed out from this website. Are you sure ?",
         primaryAction: "Confirm",
         secondaryAction: "Cancel",

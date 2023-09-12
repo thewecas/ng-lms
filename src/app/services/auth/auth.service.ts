@@ -207,4 +207,8 @@ export class AuthService {
   getUserRole() {
     return this.currentUser?.role;
   }
+
+  getUserName() {
+    return String(this.currentUser?.name);
+  }
 }

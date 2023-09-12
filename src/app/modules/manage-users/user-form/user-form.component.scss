@@ -1,5 +1,5 @@
 :host {
-  width: 500px;
+  width: min(100%, 700px);
   max-width: 100%;
   box-sizing: border-box;
   display: block;
@@ -19,7 +19,7 @@ form {
   gap: 0.5rem 1rem;
 
   .mat-mdc-form-field {
-    min-width: min(250px, 100%);
+    min-width: min(350px, 100%);
 
     display: unset;
   }
