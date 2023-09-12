@@ -20,63 +20,72 @@
 </div>
 
 <div class="__container">
-  <div class="button-toggle-group">
-    <mat-button-toggle-group
-      name="fontStyle"
-      aria-label="Font Style"
-      #toggleHolidays="matButtonToggleGroup"
-      (change)="toggleHolidayType()"
-    >
-      <mat-button-toggle checked="true" value="all">All</mat-button-toggle>
-      <mat-button-toggle checked="false" value="upcoming"
-        >Upcoming</mat-button-toggle
-      >
-      <mat-button-toggle value="recent">Recent</mat-button-toggle>
-    </mat-button-toggle-group>
-  </div>
-  <div class="holiday-card-container" *ngIf="!!dataSource">
-    <div
-      class="holiday-card"
-      *ngFor="
-        let holiday of dataSource._pageData(dataSource.filteredData);
-        index as i;
-        trackBy: trackById
-      "
-    >
-      <div class="date">
-        <p>{{ holiday.date | date : "EEE" }}</p>
-        <p>{{ holiday.date | date : "dd" }}</p>
-        <p>{{ holiday.date | date : "MMM '''yy" }}</p>
-      </div>
-      <div class="holiday-text-container">
-        <p class="title">{{ holiday.title }}</p>
-        <p class="description">{{ holiday.description }}</p>
-        <div class="holiday-type" [class]="holiday.type">
-          {{ holiday.type }} holiday
-        </div>
-      </div>
-      <button
-        mat-icon-button
-        class="action-btn"
-        [matMenuTriggerFor]="menu"
-        aria-label="Example icon-button with a menu"
-      >
-        <mat-icon>more_vert</mat-icon>
-      </button>
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
 
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="onEditHoliday(holiday)">
-          <span>Edit</span>
-          <mat-icon color="primary">edit</mat-icon>
-        </button>
-        <button
-          mat-menu-item
-          (click)="onDeleteHoliday(holiday.id, holiday.title)"
+  <div class="mat-elevation-z8">
+    <div class="button-toggle-group" *ngIf="!isLoading">
+      <mat-button-toggle-group
+        name="fontStyle"
+        aria-label="Font Style"
+        #toggleHolidays="matButtonToggleGroup"
+        (change)="filterHolidayByStatus(toggleHolidays.value)"
+      >
+        <mat-button-toggle [checked]="activeTab == 'upcoming'" value="upcoming">
+          Upcoming
+        </mat-button-toggle>
+        <mat-button-toggle [checked]="activeTab == 'recent'" value="recent"
+          >Recent</mat-button-toggle
         >
-          <span>Delete</span>
-          <mat-icon color="warn">delete</mat-icon>
+        <mat-button-toggle [checked]="activeTab == 'all'" value="all"
+          >All</mat-button-toggle
+        >
+      </mat-button-toggle-group>
+    </div>
+    <div class="holiday-card-container" *ngIf="!!dataSource && !isLoading">
+      <div
+        class="holiday-card"
+        *ngFor="
+          let holiday of dataSource._pageData(dataSource.filteredData)
+            | sortArray : 'date' : activeTab == 'upcoming';
+          index as i;
+          trackBy: trackById
+        "
+      >
+        <div class="date">
+          <p>{{ holiday.date | date : "EEE" }}</p>
+          <p>{{ holiday.date | date : "dd" }}</p>
+          <p>{{ holiday.date | date : "MMM '''yy" }}</p>
+        </div>
+        <div class="holiday-text-container">
+          <p class="title">{{ holiday.title }}</p>
+          <p class="description">{{ holiday.description }}</p>
+          <div class="holiday-type" [class]="holiday.type">
+            {{ holiday.type }} holiday
+          </div>
+        </div>
+        <button
+          mat-icon-button
+          class="action-btn"
+          [matMenuTriggerFor]="menu"
+          aria-label="Example icon-button with a menu"
+        >
+          <mat-icon>more_vert</mat-icon>
         </button>
-      </mat-menu>
+
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="onEditHoliday(holiday)">
+            <span>Edit</span>
+            <mat-icon color="primary">edit</mat-icon>
+          </button>
+          <button
+            mat-menu-item
+            (click)="onDeleteHoliday(holiday.id, holiday.title)"
+          >
+            <span>Delete</span>
+            <mat-icon color="warn">delete</mat-icon>
+          </button>
+        </mat-menu>
+      </div>
     </div>
   </div>
 

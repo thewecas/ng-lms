@@ -31,19 +31,30 @@ export class AuthService {
     this.firebase.signInUser(useCredentials)
       .subscribe({
         next: (res: any) => {
+          console.log("R", res);
+
           const idToken = res.idToken;
           const uid = res.localId;
           this.storeUserToLocalStorage(idToken);
-          this.currentUser = { ...Object(this.currentUser), idToken: idToken };
+          this.currentUser = { ...Object(this.currentUser), idToken: idToken, uid: uid };
           this.getCurrentUser(uid).subscribe({
             next: (res: any) => {
-              this.currentUser = { ...this.currentUser, ...res, uid: uid };
-              if (this.currentUser?.role == 'admin')
-                this.isAdmin$.next(true);
-              this.router.navigate(['/leaves']);
-              this.isAuthenticated$.next(true);
-              this.isLoading$.next(false);
-              this.toast.show('Logged in', 'info');
+              if (res.isDeleted) {
+                /**user account is deleted */
+                this.toast.show('Account is deleted', 'error', true);
+                this.isAuthenticated$.next(false);
+                this.isLoading$.next(false);
+              }
+              else {
+                this.currentUser = { ...this.currentUser, ...res, uid: uid };
+                if (this.currentUser?.role == 'admin')
+                  this.isAdmin$.next(true);
+                this.router.navigate(['/leaves']);
+                this.isAuthenticated$.next(true);
+                this.isLoading$.next(false);
+                this.toast.show('Signed in', 'info');
+              }
+
             }
           });
         },
@@ -67,7 +78,7 @@ export class AuthService {
     this.currentUser = null;
     this.isAuthenticated$.next(false);
     this.isAdmin$.next(false);
-    this.toast.show('Logged out', 'info');
+    this.toast.show('Signed out', 'info');
 
   }
 

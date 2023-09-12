@@ -19,6 +19,7 @@ export class UsersViewComponent implements AfterViewInit {
   displayedColumns: string[] = ['employeeId', 'name', 'email', 'designation', 'role', 'action'];
   dataSource!: MatTableDataSource<any>;
   isFilterCleared = true;
+  isLoading = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -29,10 +30,12 @@ export class UsersViewComponent implements AfterViewInit {
   userDataSubscription!: Subscription;
   isUpdatedSubscription!: Subscription;
   ngOnInit() {
+    this.isLoading = true;
     /** get the user data */
     this.userDataSubscription = this.userService.getUserData().subscribe(
       res => {
         this.dataSource = new MatTableDataSource(res);
+        this.isLoading = false;
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       }
@@ -121,7 +124,7 @@ export class UsersViewComponent implements AfterViewInit {
 
   ngDestroy() {
     /**
-     * unsubscribe from all the observables
+     * unsubscribe from all the subscriptions
      */
     this.userDataSubscription.unsubscribe();
     this.isUpdatedSubscription.unsubscribe();

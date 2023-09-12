@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatButtonToggleGroup } from '@angular/material/button-toggle';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -20,11 +19,13 @@ import { HolidaysFormComponent } from '../holidays-form/holidays-form.component'
 export class HolidaysViewComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['title', 'description', 'date', 'type', 'action'];
   dataSource!: MatTableDataSource<any>;
-  isFilterCleared = true;
+  activeTab!: string;
+
+  isLoading = false;
+
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild('toggleHolidays') holidayToggle!: MatButtonToggleGroup;
 
   constructor(private dialog: MatDialog, private toast: ToastService, private holidayService: HolidayService) { }
 
@@ -37,16 +38,18 @@ export class HolidaysViewComponent implements OnInit, OnDestroy {
     /**
      * fetch the data from database 
      */
+    this.isLoading = true;
     this.holidayDataSubscription = this.holidayService.getHolidayData().subscribe({
       next: res => {
         this.data = res;
-        this.dataSource = new MatTableDataSource(this.data);
-        this.dataSource.paginator = this.paginator;
+        this.filterHolidayByStatus('upcoming');
+        this.isLoading = false;
       }
     });
 
     this.isUpdatedSubscription = this.holidayService.isUpdated$.subscribe(
       res => {
+
         this.holidayService.getAllHolidays();
       }
     );
@@ -60,15 +63,25 @@ export class HolidaysViewComponent implements OnInit, OnDestroy {
     }
   }
 
-  toggleHolidayType() {
-    if (this.holidayToggle.value == 'upcoming')
-      this.dataSource = new MatTableDataSource(this.getUpcomingHolidays(this.data));
-    else if (this.holidayToggle.value == 'recent')
-      this.dataSource = new MatTableDataSource(this.getRecentHolidays(this.data));
+
+  filterHolidayByStatus(status: string) {
+    this.activeTab = status;
+    if (status == 'upcoming') {
+      this.dataSource = new MatTableDataSource(
+        this.data.filter(holiday => new Date().getTime() <= holiday.date)
+      );
+    }
+    else if (status == "recent") {
+      this.dataSource = new MatTableDataSource(
+        this.data.filter(holiday => new Date().getTime() > holiday.date)
+      );
+
+    }
     else
       this.dataSource = new MatTableDataSource(this.data);
     this.ngAfterViewInit();
   }
+
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -117,24 +130,15 @@ export class HolidaysViewComponent implements OnInit, OnDestroy {
     return item.id;
   }
 
-  getUpcomingHolidays(holidays: Holiday[]): any[] {
-    const arr = holidays.filter(holiday => {
-      return new Date().getTime() <= holiday.date;
-    });
-    return arr;
-  }
-
-  getRecentHolidays(holidays: Holiday[]): any[] {
-    const arr = holidays.filter(holiday => {
-      return new Date().getTime() > holiday.date;
-    });
-    return arr;
-  }
-
-
   ngOnDestroy() {
     this.holidayDataSubscription.unsubscribe();
     this.isUpdatedSubscription.unsubscribe();
+  }
+
+  sortData(isAscending: boolean = false) {
+    this.data.sort((holiday1: Holiday, holiday2: Holiday) => {
+      return (isAscending ? holiday1.date - holiday2.date : holiday2.date - holiday1.date) > 0 ? 1 : -1;
+    });
   }
 
 

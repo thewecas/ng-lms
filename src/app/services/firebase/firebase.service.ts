@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { tap } from 'rxjs';
 import { Holiday } from 'src/app/models/holiday';
 import { Leave } from 'src/app/models/leave';
 import { User } from 'src/app/models/user';
@@ -69,7 +70,8 @@ export class FirebaseService {
   }
 
   fetchAllHolidays() {
-    return this.http.get(`${this.dbUrl}/holidays.json`);
+    return this.http.get<Holiday[]>(`${this.dbUrl}/holidays.json`).pipe(tap(res => console.log(res)
+    ));
   }
 
   deleteHoliday(id: string) {

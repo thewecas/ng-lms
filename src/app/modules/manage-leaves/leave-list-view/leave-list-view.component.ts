@@ -1,6 +1,5 @@
 import { } from '@angular/compiler';
 import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
-import { MatButtonToggleGroup } from '@angular/material/button-toggle';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -8,6 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
 import { Leave } from 'src/app/models/leave';
+import { SortArrayPipe } from 'src/app/pipes/sort-array.pipe';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { LeaveService } from 'src/app/services/leave/leave.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
@@ -22,30 +22,33 @@ import { LeaveFormComponent } from '../leave-form/leave-form.component';
 export class LeaveListViewComponent implements OnInit {
   displayedColumns: string[] = ['fromDate', 'toDate', 'reason', 'type', 'status', 'action'];
   dataSource!: MatTableDataSource<Leave>;
+  activeTab!: string;
+  isLoading = true;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild('toggleLeaves') leaveToggle!: MatButtonToggleGroup;
 
   uid!: string;
-  data!: any[];
-  constructor(private leaveService: LeaveService, private dialog: MatDialog, private authService: AuthService, private toast: ToastService) {
+  data: any[] = [];
+
+  constructor(private leaveService: LeaveService, private dialog: MatDialog, private authService: AuthService, private toast: ToastService, private sortArray: SortArrayPipe) {
   }
 
   leaveDataSubscription!: Subscription;
   isUpdatedSubscription!: Subscription;
 
   ngOnInit() {
+    this.isLoading = true;
     this.uid = this.authService.getUserId();
     this.leaveDataSubscription = this.leaveService.getLeavesByUser(this.uid).subscribe({
       next: (res: any) => {
         this.data = res;
-        this.toggleLeaveType(true);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        this.filterLeavesByStatus('pending');
+        this.isLoading = false;
       },
     });
     this.isUpdatedSubscription = this.leaveService.isUpdated$.subscribe(res => {
-      this.leaveService.getAllLeaves();
+      this.isLoading = true;
+      this.leaveService.fetchLeavesByUser(this.uid);
     });
   }
 
@@ -58,18 +61,21 @@ export class LeaveListViewComponent implements OnInit {
     }
   }
 
-  toggleLeaveType(flag = false) {
-    if (flag || this.leaveToggle.value == 'pending') {
+  filterLeavesByStatus(status: string) {
+    this.activeTab = status;
+    if (status == 'pending') {
       this.dataSource = new MatTableDataSource(
-        this.data.filter(
-          leave => leave.status == 'Pending'
-        ));
+        this.sortArray
+          .transform(this.data, 'fromDate', true)
+          .filter(leave => leave.status == 'Pending')
+      );
     }
     else {
       this.dataSource = new MatTableDataSource(
-        this.data.filter(
-          leave => leave.status != 'Pending'
-        ));
+        this.sortArray
+          .transform(this.data, 'fromDate', false)
+          .filter(leave => leave.status != 'Pending')
+      );
     }
     this.ngAfterViewInit();
   }
@@ -111,7 +117,7 @@ export class LeaveListViewComponent implements OnInit {
           this.leaveService.deleteLeave(uid, leaveId).subscribe(
             res => {
               this.leaveService.isUpdated$.next(true);
-              this.toast.show('Leave Deleted successfuly', 'success');
+              this.toast.show('Leave withdrawn successfuly', 'success');
             });
 
         }
@@ -123,5 +129,7 @@ export class LeaveListViewComponent implements OnInit {
     this.leaveDataSubscription.unsubscribe();
     this.isUpdatedSubscription.unsubscribe();
   }
+
+
 
 }

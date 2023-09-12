@@ -1,9 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-import { MatButtonToggleGroup } from '@angular/material/button-toggle';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { SortArrayPipe } from 'src/app/pipes/sort-array.pipe';
 import { LeaveService } from 'src/app/services/leave/leave.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 
@@ -17,58 +17,65 @@ export class LeaveRequestComponent {
   dataSource!: MatTableDataSource<any>;
   isFilterCleared = true;
   data!: any[];
+  isLoading = false;
+
+  activeTab!: string;
 
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild('toggleLeaves') leaveToggle!: MatButtonToggleGroup;
 
-  constructor(private leaveService: LeaveService, private toast: ToastService) {
 
+  constructor(private leaveService: LeaveService, private toast: ToastService, private sortArray: SortArrayPipe) {
   }
 
   leaveDataSubscription!: Subscription;
   isUpdatedSubscription!: Subscription;
   ngOnInit() {
-    this.leaveDataSubscription = this.leaveService.getLeavesData().subscribe(
-      (res: any) => {
-        this.data = res;
-        this.toggleLeaveType(true);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-      }
-    );
+    this.isLoading = true;
+    this.leaveService.getAllLeaves();
+    this.leaveDataSubscription = this.leaveService
+      .getLeavesData()
+      .subscribe(
+        (res: any) => {
+          this.data = res;
+          this.filterLeavesByStatus('pending');
+          this.isLoading = false;
+        }
+      );
     this.isUpdatedSubscription = this.leaveService.isUpdated$.subscribe(res => {
+      this.isLoading = true;
       this.leaveService.getAllLeaves();
     });
 
   }
 
-
   ngAfterViewInit() {
     try {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-    } catch (error) {
-
-    }
+    } catch (error) { }
   }
 
-  toggleLeaveType(flag = false) {
-    if (flag || this.leaveToggle.value == 'pending') {
+  filterLeavesByStatus(status: string) {
+    this.activeTab = status;
+    if (status == 'pending') {
       this.dataSource = new MatTableDataSource(
-        this.data.filter(
-          leave => leave.status == 'Pending'
-        ));
+        this.sortArray
+          .transform(this.data, 'fromDate', true)
+          .filter(leave => leave.status == 'Pending')
+      );
     }
     else {
       this.dataSource = new MatTableDataSource(
-        this.data.filter(
-          leave => leave.status != 'Pending'
-        ));
+        this.sortArray
+          .transform(this.data, 'fromDate', false)
+          .filter(leave => leave.status != 'Pending')
+      );
     }
     this.ngAfterViewInit();
   }
+
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -81,10 +88,10 @@ export class LeaveRequestComponent {
     this.leaveService.updateStatus(uid, leaveId, status).subscribe({
       next: res => {
         this.toast.show(`Leave ${status} successfuly`, 'success');
+        this.leaveService.isUpdated$.next(true);
       },
       error: err => this.toast.show(err.error.error.message, 'error', true)
     }
-
     );
 
   }

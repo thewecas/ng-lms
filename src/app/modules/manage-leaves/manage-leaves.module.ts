@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -11,14 +12,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { SortArrayPipe } from 'src/app/pipes/sort-array.pipe';
 import { LeaveFormComponent } from './leave-form/leave-form.component';
 import { LeaveListViewComponent } from './leave-list-view/leave-list-view.component';
 import { ManageLeavesRoutingModule } from './manage-leaves-routing.module';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 
 
@@ -38,6 +40,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     MatButtonToggleModule,
     MatNativeDateModule,
     MatTooltipModule,
+    MatProgressSpinnerModule,
     ReactiveFormsModule,
     MatChipsModule,
     MatDialogModule,
@@ -46,6 +49,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-  ]
+  ],
+  providers: [SortArrayPipe]
 })
 export class ManageLeavesModule { }

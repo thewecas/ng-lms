@@ -9,7 +9,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { AuthErrorPipe } from 'src/app/pipes/auth-error.pipe';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
 
@@ -27,7 +26,6 @@ import { AuthService } from 'src/app/services/auth/auth.service';
     MatSnackBarModule,
     MatToolbarModule,
     MatProgressSpinnerModule,
-    AuthErrorPipe,
   ],
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss'],

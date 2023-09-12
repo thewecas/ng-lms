@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -31,6 +32,7 @@ import { AuthInterceptor } from './services/auth/auth.interceptor';
     MatButtonModule,
     MatSidenavModule,
     MatListModule,
+    MatDialogModule,
     MatIconModule,
   ],
   providers: [{

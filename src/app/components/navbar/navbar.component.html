@@ -59,7 +59,6 @@
         mat-list-item
         class="nav-link"
         routerLinkActive="active-nav-link"
-        routerLink="/login"
         (click)="onLogout()"
       >
         <div>
@@ -70,10 +69,7 @@
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <mat-toolbar
-      color="primary"
-      *ngIf="(isHandset$ | async) || !(isAdmin$ | async)"
-    >
+    <mat-toolbar color="primary">
       <button
         type="button"
         aria-label="Toggle sidenav"
@@ -88,7 +84,6 @@
         <a
           class="nav-link"
           routerLinkActive="active-nav-link"
-          routerLink="/login"
           (click)="onLogout()"
         >
           <mat-icon>logout</mat-icon>

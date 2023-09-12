@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
@@ -32,6 +33,7 @@ import { UsersViewComponent } from './users-view/users-view.component';
     MatChipsModule,
     MatDialogModule,
     MatFormFieldModule,
+    MatProgressSpinnerModule,
     MatIconModule,
     MatButtonModule,
     MatRadioModule,
