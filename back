@@ -13,7 +13,6 @@
         <img src="../../../assets/logo.svg" alt="" />
         <button
           mat-icon-button
-          color="primary"
           class="close-btn"
           *ngIf="isHandset$ | async"
           (click)="toggleSidebar()"
@@ -23,48 +22,44 @@
       </div>
 
       <mat-nav-list class="sidebar">
-        <button
-          mat-flat-button
+        <a
+          mat-list-item
           class="nav-link"
           routerLinkActive="active-nav-link"
           routerLink="/users"
-          (click)="setTitle('Users')"
         >
           <div>
             <mat-icon>group</mat-icon>
             Users
           </div>
-        </button>
-        <!-- <button -->
-        <!-- mat-flat-button -->
-        <!-- class="nav-link" -->
-        <!-- routerLinkActive="active-nav-link" -->
-        <!-- routerLink="/holidays" -->
-        <!-- (click)="setTitle('Holidays')" -->
-        <!-- > -->
-        <!-- <div> -->
-        <!-- <mat-icon>weekend</mat-icon> -->
-        <!-- Holidays -->
-        <!-- </div> -->
-        <!-- </button> -->
-        <button
-          mat-flat-button
+        </a>
+        <a
+          mat-list-item
           class="nav-link"
           routerLinkActive="active-nav-link"
-          routerLink="/leave-requests"
-          (click)="setTitle('Leave Requests')"
+          routerLink="/holidays"
+        >
+          <div>
+            <mat-icon>weekend</mat-icon>
+            Holidays
+          </div>
+        </a>
+        <a
+          mat-list-item
+          class="nav-link"
+          routerLinkActive="active-nav-link"
+          routerLink="/leave-request"
         >
           <div>
             <mat-icon>free_cancellation</mat-icon>
             Leave Requests
           </div>
-        </button>
+        </a>
         <button
-          mat-flat-button
+          mat-raised-button
           class="nav-link"
           routerLinkActive="active-nav-link"
           routerLink="/leaves"
-          (click)="setTitle('Leaves')"
         >
           <div>
             <mat-icon>surfing</mat-icon>
@@ -73,32 +68,28 @@
         </button>
       </mat-nav-list>
 
-      <div class="account-container">
-        <div class="user">
-          <button mat-mini-fab class="user-icon" color="primary">
-            <mat-icon>person</mat-icon>
-          </button>
-          <div>
-            <p class="mat-h2">{{ username | titlecase }}</p>
-            <p class="mat-caption">{{ role | titlecase }}</p>
-          </div>
-        </div>
-        <button
-          class="logout"
-          mat-raised-button
-          color="primary"
-          (click)="onLogout()"
-        >
-          <mat-icon>logout</mat-icon>
-          Sign Out
+      <div class="user">
+        <button mat-mini-fab class="user-icon" color="primary">
+          <mat-icon>person</mat-icon>
         </button>
+        <div>
+          <p class="mat-h2">{{ username | titlecase }}</p>
+          <p class="mat-caption">{{ role | titlecase }}</p>
+        </div>
       </div>
+      <button
+        class="logout"
+        mat-raised-button
+        color="primary"
+        (click)="onLogout()"
+      >
+        <mat-icon>logout</mat-icon>
+        Logout
+      </button>
     </div>
   </mat-sidenav>
-  <div class="backdrop" *ngIf="isHandset$ | async"></div>
-
   <mat-sidenav-content>
-    <mat-toolbar color="primary" class="header">
+    <mat-toolbar color="primary">
       <button
         type="button"
         aria-label="Toggle sidenav"
@@ -108,9 +99,6 @@
       >
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-
-      <h1 class="mat-headline-1">{{ title }}</h1>
-      <p class="today-date">{{ date | date : "dd MMM, yyyy" }}</p>
     </mat-toolbar>
 
     <div class="outlet-container">

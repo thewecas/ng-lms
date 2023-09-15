@@ -1,13 +1,15 @@
+@use "@angular/material" as mat;
+@import "./styles/theme";
+
 :root {
   font-size: min(14px, 5vw);
 }
 
 html,
 body {
-  // background-color: rgb(234, 233, 233);
   font-size: 1rem;
   height: 100%;
-  min-height: 100svh;
+  min-height: 100vh;
   margin: 0;
   color: #333;
   box-sizing: border-box;
@@ -22,7 +24,8 @@ body {
 }
 
 //reset font size
-*:not(h1, h2, h3, h4, h5, h6) {
+p,
+a {
   font-size: 1rem;
 }
 
@@ -35,11 +38,14 @@ h6 {
   margin: 8px 0;
 }
 
-p {
-  margin: 0;
+*:not(button) {
+  font-weight: 400 !important;
 }
 
-
+button {
+  border-radius: 20px !important;
+  height: 3rem !important;
+}
 
 //custom scrollbar styling
 ::-webkit-scrollbar {
@@ -49,15 +55,13 @@ p {
 
 ::-webkit-scrollbar-thumb {
   border-radius: 30px;
-  background-color: rgba(#3b55e2, 0.8);
+  background-color: mat.get-color-from-palette($primary-palette, 900);
 }
 
 ::-webkit-scrollbar-track {
   background-color: rgba(#c6cfdc, 0.5);
   border-radius: 20px;
 }
-
-
 
 a,
 a:visited,
@@ -76,30 +80,18 @@ a:hover {
   }
 }
 
-
 //global styling for components
 
 .header-container {
   display: grid;
   grid-template-areas:
-    'area1 area1'
-    ' area3 area2'
-  ;
+    "area1 area1"
+    " area3 area2";
   // grid-template-columns:  1fr auto;
   align-items: center;
   gap: 1rem;
   position: relative;
   z-index: 2;
-
-  .header {
-    font-size: 2.5rem;
-    font-weight: 500;
-    margin: 0;
-    grid-area: area1;
-    // display: none;
-    color: #3b55e2;
-    justify-self: center;
-  }
 
   button.action-btn {
     border-radius: 0.4rem;
@@ -114,13 +106,13 @@ a:hover {
     justify-self: self-start;
     grid-area: area3;
 
-    >:nth-child(2) {
+    > :nth-child(2) {
       display: none;
     }
   }
 
   @media screen and (width<600px) {
-    grid-template-areas: 'area1 area3';
+    grid-template-areas: "area1 area3";
 
     .header {
       justify-self: self-start;
@@ -173,8 +165,6 @@ a:hover {
     display: none;
   }
 
-
-
   @media screen and (width<992px) {
     .btn-container {
       display: none !important;
@@ -184,7 +174,6 @@ a:hover {
       display: block !important;
     }
   }
-
 }
 
 .form_container {
@@ -194,7 +183,6 @@ a:hover {
     padding: 1rem 2rem 0 2rem;
   }
 }
-
 
 .mat-mdc-menu-content {
   box-shadow: 0 0 20px rgba(rgb(0, 0, 0), 9);
@@ -207,7 +195,6 @@ a:hover {
 }
 
 tr {
-
   td,
   th {
     padding: 1rem;
@@ -217,16 +204,6 @@ tr {
     }
   }
 }
-
-
-.mat-mdc-fab.mat-primary,
-.mat-toolbar.mat-primary,
-.mat-mdc-raised-button,
-.mat-mdc-mini-fab.mat-primary {
-  background-color: #3b55e2 !important;
-}
-
-
 
 //styling for toast / snakbar
 .mat-mdc-snack-bar-container .mdc-snackbar__surface {
@@ -248,7 +225,7 @@ tr {
   }
 
   &::before {
-    font-family: 'Material Icons';
+    font-family: "Material Icons";
     font-size: 1.5rem;
     width: 1.5ch;
   }
@@ -263,12 +240,11 @@ tr {
   }
 
   .mdc-button__label::after {
-    content: 'close';
-    font-family: 'Material Icons';
+    content: "close";
+    font-family: "Material Icons";
     font-size: 1.5rem;
   }
 }
-
 
 .error {
   background-color: #bd2626 !important;
@@ -282,7 +258,7 @@ tr {
   background-color: #26bd2b !important;
 
   &::before {
-    content: 'check_circle';
+    content: "check_circle";
   }
 }
 
@@ -290,7 +266,7 @@ tr {
   background-color: #babd26 !important;
 
   &::before {
-    content: 'warning';
+    content: "warning";
   }
 }
 
@@ -298,12 +274,11 @@ tr {
   background-color: #265dbd !important;
 
   &::before {
-    content: 'info';
+    content: "info";
   }
 }
 
-
-// styling for toggle buttons 
+// styling for toggle buttons
 
 .button-toggle-group {
   width: min-content;
@@ -312,9 +287,9 @@ tr {
 }
 
 .mat-button-toggle-appearance-standard.mat-button-toggle-checked {
-  color: #4455b1;
+  color: mat.get-color-from-palette($primary-palette, 800);
   border: none;
-  border-bottom: 2px solid #4455b1 !important;
+  border-bottom: 2px solid mat.get-color-from-palette($primary-palette, 800) !important;
   background-color: #eeeff9;
 }
 
@@ -329,11 +304,32 @@ tr {
   border: none;
 }
 
-
-
 .mat-mdc-progress-spinner {
   position: absolute !important;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+// stylign for backdrop of navbar
+
+.mat-drawer-backdrop.ng-star-inserted.mat-drawer-shown {
+  background-color: rgba($background, 0.6) !important;
+}
+
+.mat-toolbar-single-row {
+  @media screen and (width<768px) {
+    padding-left: 0 !important;
+  }
+}
+
+.cdk-overlay-pane {
+  width: min(500px, 90vw);
+  max-width: unset !important;
+}
+.cdk-overlay-dark-backdrop {
+  background-color: rgba(
+    darken(mat.get-color-from-palette($primary-palette, 900), 80%),
+    0.8
+  );
 }

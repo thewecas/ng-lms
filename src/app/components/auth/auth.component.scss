@@ -1,104 +1,78 @@
+@use "@angular/material" as mat;
+@import "../../../styles/colors";
+
 :host {
-  height: 100svh;
+  height: 100vh;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background: linear-gradient(0deg, rgba(#f9e17e, 0.1), rgba(#f9e17e, 0.1)),
+    url(../../../assets/images/bg.jpg);
+  background-size: cover;
+
+  background-position: center;
+}
+
+.wrapper {
+  padding: 1rem;
+  margin-inline: auto;
+}
+
+.logo-container {
+  width: min(80%, 700px);
+  aspect-ratio: 5/4;
+  margin-inline: auto;
+  border-radius: 1rem;
+  backdrop-filter: blur(50px);
+  background-color: rgba(rgb(0, 0, 0), 0.5);
+  padding: 5%;
+  height: min-content;
+  display: grid;
+  place-content: center;
+
+  .logo {
+    width: 100%;
+    filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.2));
+  }
+}
+
+.slogan {
+  display: none;
+  color: mat.get-color-from-palette($primary-palette, 700);
+  margin-block: 1rem !important;
+  font-size: 3.35vw;
+}
+
+.aside-container {
   display: flex;
   flex-direction: column;
-}
-
-.container {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  background-image: url(../../../assets/images/bg.jpg);
-  background-size: cover;
-  background-position: center;
   height: 100%;
+  justify-content: center;
+  width: min(500px, 100%);
+  padding: min(3rem, 5vw);
+  height: 100%;
+  background-color: $background;
 
-
-}
-
-
-
-.header {
-  color: rgba(255, 255, 255, 0.8);
-  text-align: center;
-  flex-grow: 1;
-  backdrop-filter: blur(10px);
-  padding: 2rem 1rem;
-
-  h1 {
-    font-size: min(3rem, 10vw);
-    text-transform: uppercase;
-    letter-spacing: 5px;
-    word-spacing: 10px;
-
-    &::first-letter {
-      font-size: min(5rem, 15vw);
-      color: rgb(202, 169, 232);
-      color: #3b55e2;
-
-    }
-  }
-
-  p {
-    font-size: min(2rem, 6vw);
-    color: rgba(255, 255, 255, 0.6);
-    letter-spacing: 2px;
-  }
-}
-
-@media screen and (width<600px) {
-  .container {
-    flex-direction: column;
-    justify-content: flex-start;
-    // height: auto !important;
+  .logo-icon {
+    width: 50%;
+    margin-bottom: 10%;
+    margin-inline: auto;
   }
 
   .header {
-    flex-grow: 0;
-    background-color: rgba(white, 0.9);
+    margin-block: 4rem 2rem;
 
-    p,
-    h1 {
-      color: black !important;
+    .mat-h2 {
+      margin-bottom: 0rem !important;
+      color: mat.get-color-from-palette($primary-palette, 900);
+    }
 
+    .mat-h3 {
+      font-weight: 300 !important;
     }
   }
 
   .login-container {
-    width: 100% !important;
-    flex-grow: 1;
-    height: max-content !important;
-    background-color: rgba(white, 0.9) !important;
-    backdrop-filter: blur(10px);
-
-    >div {
-      text-align: center;
-    }
-
-    form,
-    .error-container {
-      width: min(300px, 100%);
-      margin-inline: auto;
-    }
-  }
-
-
-}
-
-.login-container {
-  padding: 3rem;
-  height: 100%;
-  padding-bottom: 5%;
-  width: min(500px, 100%);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 3rem;
-  background-color: rgba(white, 0.8);
-  backdrop-filter: blur(10px);
-  border-left: 2px solid rgba(108, 112, 151, 0.458);
-
-  form {
     display: grid;
     gap: 1rem;
 
@@ -109,33 +83,46 @@
     }
 
     .btn-container {
-
       button {
         display: block;
         margin-left: auto;
       }
     }
+  }
+}
 
-
+@media screen and (width<600px) {
+  :host {
+    flex-direction: column;
+    justify-content: space-around;
+    backdrop-filter: blur(10px);
+    background: linear-gradient(
+        0deg,
+        rgba($background, 0.5),
+        rgba($background, 0.5)
+      ),
+      url(../../../assets/images/bg.jpg);
   }
 
-  .error-container {
-    background-color: rgba(red, 0.2);
-    min-height: 2rem;
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
-    text-transform: capitalize;
-    display: flex;
+  .slogan {
+    font-size: 5vw;
+    display: unset;
+  }
 
-    >* {
-      &:first-child {
-        flex-grow: 1;
-        font-weight: 500;
-      }
+  .logo-container {
+    background-color: unset;
+    backdrop-filter: unset;
+  }
+
+  .aside-container {
+    height: min-content;
+
+    .logo-icon {
+      display: none;
     }
 
-    .close-btn {
-      color: rgb(239, 0, 0);
-    }
+    background-color: unset;
+    backdrop-filter: unset;
+    justify-content: flex-end;
   }
 }

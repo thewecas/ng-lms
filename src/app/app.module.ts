@@ -12,20 +12,18 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { AuthComponent } from './components/auth/auth.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { AuthInterceptor } from './services/auth/auth.interceptor';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    LoaderComponent,
-    NavbarComponent,
-  ],
+  declarations: [AppComponent, LoaderComponent, NavbarComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    AuthComponent,
     BrowserAnimationsModule,
     MatSnackBarModule,
     MatToolbarModule,
@@ -35,11 +33,13 @@ import { AuthInterceptor } from './services/auth/auth.interceptor';
     MatDialogModule,
     MatIconModule,
   ],
-  providers: [{
-    provide: HTTP_INTERCEPTORS,
-    useClass: AuthInterceptor,
-    multi: true
-  }],
-  bootstrap: [AppComponent]
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

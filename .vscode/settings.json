@@ -10,5 +10,6 @@
     "workbench.editor.showTabs": "undefined",
     "workbench.colorCustomizations": "undefined",
     "window.zoomLevel": "undefined"
-  }
+  },
+  "svg.preview.background": "editor"
 }

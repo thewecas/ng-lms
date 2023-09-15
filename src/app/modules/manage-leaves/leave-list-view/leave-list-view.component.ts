@@ -104,8 +104,8 @@ export class LeaveListViewComponent implements OnInit {
   onDeleteLeave(uid: string, leaveId: string, fromDate: string) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
-        title: "Cancel Leave",
-        bodyText: `You're leave on ${(new Date(fromDate)).toDateString()} will be canceled. Are uou sure?`,
+        title: "Withdraw Leave",
+        bodyText: `You're leave on ${(new Date(fromDate)).toDateString()} will be Withdrawn. Are uou sure?`,
         primaryAction: 'Confirm',
         secondaryAction: 'Cancel',
         btnColor: 'warn'

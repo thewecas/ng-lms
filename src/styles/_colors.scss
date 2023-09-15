@@ -1,0 +1,80 @@
+@use '@angular/material' as mat;
+
+
+
+// $custom-primary-pallete: (
+//   50:#e6edff,
+//   100:#e1d1ff,
+//   200:#c2a4ff,
+//   300:#a476ff,
+//   400:#955fff,
+//   500:#8549ff,
+//   600:#7632ff,
+//   700:#671bff,
+//   800:#5d18e6,
+//   900:#5216cc,
+//   contrast: (50: black,
+//     100:black,
+//     200:black,
+//     300:black,
+//     400:black,
+//     500:white,
+//     600:white,
+//     700:white,
+//     800:white,
+//     900:white)
+// );
+
+$custom-primary-pallete: (
+  50:#fef9e5,
+  100:#fdf3cb,
+  200:#fcf0bf,
+  300:#fbedb2,
+  400:#fbeaa5,
+  500:#fae798,
+  600:#fae48b,
+  700:#f9e17e,
+  800:#e0cb71,
+  900:#c7b465,
+  contrast: (50: black,
+    100:black,
+    200:black,
+    300:black,
+    400:black,
+    500:black,
+    600:black,
+    700:black,
+    800:black,
+    900:black)
+);
+
+$custom-accent-pallete: (
+  50 :#edf5fb,
+  100:#e7f2fa,
+  200:#e1eff9,
+  300:#dbecf8,
+  400:#d5e9f7,
+  500:#cfe5f5,
+  600:#c9e2f4,
+  700:#b0c9db,
+  800:#b0c9db,
+  900:#9cb2c2,
+  contrast: (50: black,
+    100:black,
+    200:black,
+    300:black,
+    400:black,
+    500:black,
+    600:black,
+    700:black,
+    800:black,
+    900:black)
+);
+
+
+$primary-palette: mat.define-palette($custom-primary-pallete, 700, 600, 900);
+$accent-palette: mat.define-palette($custom-accent-pallete);
+$warn-palette: mat.define-palette(mat.$deep-orange-palette, A400);
+
+$background: #1c1c1c;
+$text: rgb(215, 214, 214);

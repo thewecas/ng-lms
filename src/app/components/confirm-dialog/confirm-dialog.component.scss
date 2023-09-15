@@ -1,0 +1,28 @@
+@use "@angular/material" as mat;
+@import "../../../styles/colors";
+:host {
+  display: block;
+  background-color: lighten($background, 2%);
+}
+
+.mat-mdc-dialog-title {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background-color: $background;
+
+  h2 {
+    font-weight: 300 !important;
+    text-transform: capitalize;
+    color: mat.get-color-from-palette($primary-palette, 400);
+  }
+}
+
+.mdc-dialog__content {
+  padding: 1rem 1.5rem;
+  font-weight: 400;
+}
+
+.mdc-dialog__actions {
+  padding: 1rem 1rem !important;
+}

@@ -1,7 +1,7 @@
 :host {
   display: flex;
   flex-direction: column;
-  height: 100svh;
+  height: 100vh;
 }
 
 .container {
@@ -18,8 +18,7 @@
   position: relative;
   flex-basis: 100%;
 
-
-  >:nth-child(2) {
+  > :nth-child(2) {
     display: flex;
     width: 100%;
     flex-direction: column;
@@ -29,7 +28,7 @@
   @media screen and (width<600px) {
     padding: 1rem;
 
-    >:nth-child(2) {
+    > :nth-child(2) {
       gap: 1rem;
     }
   }

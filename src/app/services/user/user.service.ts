@@ -9,12 +9,30 @@ import { FirebaseService } from '../firebase/firebase.service';
 })
 export class UserService {
 
-  private users: any = null;
+  private users!: User[];
   private users$ = new BehaviorSubject<any>([]);
   isUpdated$ = new Subject<boolean>();
   constructor(private firebase: FirebaseService) {
 
   }
+
+  pageSize: number = 5;
+  lastIndex: string = '';
+
+
+  // getPageData(pageNo: number) {
+  //   /**
+  //    * check if the data is already available locally
+  //    */
+  //   if (pageNo * this.pageSize <= this.users.length) {
+  //     return this.users.slice(
+  //       (pageNo - 1 * this.pageSize), (pageNo * this.pageSize)
+  //     );
+  //   }
+  //   else {
+
+  //   }
+  // }
 
   getUserData() {
     if (!this.users)
@@ -26,10 +44,10 @@ export class UserService {
 
   getAllUsers() {
     this.firebase.fethcAllUsers().subscribe((res) => {
-      this.users = res;
       const userData = Object.entries(res).map(([key, val]) => {
         return { ...Object(val), uid: key };
       });
+      this.users = userData;
       this.users$.next(userData);
     });
 

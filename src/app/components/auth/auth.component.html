@@ -1,69 +1,76 @@
-<div class="container">
-  <div class="header">
-    <h1>Leave Management System</h1>
-    <p>Leaves Made Simple</p>
+<div class="wrapper">
+  <div class="logo-container">
+    <img class="logo" src="../../../assets/logo-large.svg" alt="" />
+    <p class="slogan">Leaves Made Simple</p>
   </div>
-  <div class="login-container">
-    <div>
-      <h1>Welcome back,</h1>
-      <p>Enter your login credentials</p>
-    </div>
-    <form [formGroup]="signInForm" (ngSubmit)="onSubmit()">
-      <div>
-        <mat-form-field appearance="outline">
-          <mat-label>Email</mat-label>
-          <input
-            matInput
-            placeholder="Enter your email"
-            formControlName="email"
-            name="email"
-          />
-          <mat-error *ngIf="signInForm.get('email')?.hasError('required')"
-            >Email cannot be empty</mat-error
-          >
-          <mat-error *ngIf="signInForm.get('email')?.hasError('email')"
-            >Not a valid email</mat-error
-          >
-        </mat-form-field>
-      </div>
-      <div>
-        <mat-form-field appearance="outline">
-          <mat-label>Password</mat-label>
-          <input
-            matInput
-            [type]="isPasswordHidden ? 'password' : 'text'"
-            formControlName="password"
-            name="password"
-            placeholder="Enter your password"
-          />
-          <button
-            mat-icon-button
-            matSuffix
-            type="button"
-            (click)="isPasswordHidden = !isPasswordHidden"
-            [attr.aria-label]="'Hide password'"
-            [attr.aria-pressed]="isPasswordHidden"
-          >
-            <mat-icon>{{
-              isPasswordHidden ? "visibility_off" : "visibility"
-            }}</mat-icon>
-          </button>
-          <mat-error *ngIf="signInForm.get('password')?.hasError('required')"
-            >Password cannot be empty</mat-error
-          >
-        </mat-form-field>
-      </div>
+</div>
 
-      <div class="btn-container">
-        <button
-          mat-raised-button
-          color="primary"
-          type="submit"
-          [disabled]="signInForm.invalid"
-        >
-          Sign In
-        </button>
-      </div>
-    </form>
+<div class="aside-container">
+  <img src="../../../assets/favicon.svg" alt="" class="logo-icon" />
+
+  <div class="header">
+    <p class="mat-h2">Welcome Back,</p>
+    <p class="mat-body">Enter your Login Credentials</p>
   </div>
+  <form
+    class="login-container"
+    [formGroup]="signInForm"
+    (ngSubmit)="onSubmit()"
+  >
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          placeholder="Enter your email"
+          formControlName="email"
+          name="email"
+        />
+        <mat-error *ngIf="signInForm.get('email')?.hasError('required')"
+          >Email cannot be empty</mat-error
+        >
+        <mat-error *ngIf="signInForm.get('email')?.hasError('email')"
+          >Not a valid email</mat-error
+        >
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          [type]="isPasswordHidden ? 'password' : 'text'"
+          formControlName="password"
+          name="password"
+          placeholder="Enter your password"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="isPasswordHidden = !isPasswordHidden"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="isPasswordHidden"
+        >
+          <mat-icon>{{
+            isPasswordHidden ? "visibility_off" : "visibility"
+          }}</mat-icon>
+        </button>
+        <mat-error *ngIf="signInForm.get('password')?.hasError('required')"
+          >Password cannot be empty</mat-error
+        >
+      </mat-form-field>
+    </div>
+
+    <div class="btn-container">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="signInForm.invalid"
+      >
+        SIGN IN
+      </button>
+    </div>
+  </form>
 </div>

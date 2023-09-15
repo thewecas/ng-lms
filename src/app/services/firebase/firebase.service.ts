@@ -34,7 +34,6 @@ export class FirebaseService {
     });
   }
 
-
   updateUser(id: string, user: User) {
     return this.http.put(`${this.dbUrl}/users/${id}.json`, user);
   }
@@ -49,6 +48,8 @@ export class FirebaseService {
     return this.http.get(`${this.dbUrl}/users/${uid}.json`);
   }
 
+
+
   lookupUser(idToken: string) {
     return this.http.post(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${this.apiKey}`, {
       idToken
@@ -62,6 +63,9 @@ export class FirebaseService {
   getUserByEmail(email: string) {
     return this.http.get(`${this.dbUrl}/users.json?orderBy="email"&equalTo="${email}"`);
   }
+
+
+
 
   addHoliday(holiday: Holiday) {
     return this.http.post(`${this.dbUrl}/holidays.json`, {

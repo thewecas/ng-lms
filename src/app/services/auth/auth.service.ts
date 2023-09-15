@@ -205,7 +205,7 @@ export class AuthService {
    * @returns - role of current user 
    */
   getUserRole() {
-    return this.currentUser?.role;
+    return String(this.currentUser?.role);
   }
 
   getUserName() {

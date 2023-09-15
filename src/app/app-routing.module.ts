@@ -6,9 +6,9 @@ import { isAuthenticatedGuard } from './guards/is-authenticated.guard';
 
 const routes: Routes = [
   {
-    path: "login",
-    loadComponent: () => import('./components/auth/auth.component').then(c => c.AuthComponent),
-
+    path: 'login',
+    loadComponent: () =>
+      import('./components/auth/auth.component').then((c) => c.AuthComponent),
   },
   {
     path: '',
@@ -17,39 +17,54 @@ const routes: Routes = [
     children: [
       {
         path: 'users',
-        loadChildren: () => import('./modules/manage-users/manage-users.module').then(m => m.ManageUsersModule),
-        canActivate: [isAdminGuard]
+        loadChildren: () =>
+          import('./modules/manage-users/manage-users.module').then(
+            (m) => m.ManageUsersModule
+          ),
+        canActivate: [isAdminGuard],
+        title: 'Users',
       },
       {
         path: 'holidays',
-        loadChildren: () => import('./modules/manage-holidays/manage-holidays.module').then(m => m.ManageHolidaysModule),
-        canActivate: [isAdminGuard]
+        loadChildren: () =>
+          import('./modules/manage-holidays/manage-holidays.module').then(
+            (m) => m.ManageHolidaysModule
+          ),
+        canActivate: [isAdminGuard],
+        title: 'Holidays',
       },
       {
-        path: 'leave-request',
-        loadChildren: () => import('./modules/manage-leave-request/manage-leave-request.module').then(m => m.ManageLeaveRequestModule),
-        canActivate: [isAdminGuard]
+        path: 'leave-requests',
+        loadChildren: () =>
+          import(
+            './modules/manage-leave-request/manage-leave-request.module'
+          ).then((m) => m.ManageLeaveRequestModule),
+        canActivate: [isAdminGuard],
+        title: 'Leave Requests',
       },
       {
         path: 'leaves',
-        loadChildren: () => import('./modules/manage-leaves/manage-leaves.module').then(m => m.ManageLeavesModule),
+        loadChildren: () =>
+          import('./modules/manage-leaves/manage-leaves.module').then(
+            (m) => m.ManageLeavesModule
+          ),
+        title: 'Leaves',
       },
       {
         path: '',
         redirectTo: 'leaves',
-        pathMatch: 'full'
-      }
-    ]
+        pathMatch: 'full',
+      },
+    ],
   },
   {
     path: '**',
     redirectTo: 'leaves',
-  }
-
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

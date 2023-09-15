@@ -1,109 +1,164 @@
+@use "@angular/material" as mat;
+@import "../../../styles/colors";
+
 :host {
-  height: 100svh;
-}
-
-.mat-drawer-inner-container {
-  display: flex;
-}
-
-.header {
-  font-size: 1.5rem !important;
-  letter-spacing: 3px;
-  font-weight: 400;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  a {
-    padding-top: 0.75rem;
-
-    * {
-      color: white;
-      vertical-align: center;
-    }
-  }
-
-  h1 {
-    letter-spacing: 2px;
-  }
-
-  /* @media screen and (width<600px) {
-    font-size: rem !important;
-  } */
-}
-
-.mat-mdc-nav-list {
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  flex-grow: 1;
-
-  .nav-link {
-    div {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    &:last-child {
-      align-self: flex-end;
-    }
-  }
-
-  .active-nav-link {
-    background-color: #3b55e2;
-
-    * {
-      color: white;
-    }
-  }
-}
-
-.sidebar {
-  div {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-
-    span {
-      font-size: 1.1rem;
-    }
-  }
+  height: 100vh;
 }
 
 .sidenav-container {
   height: 100%;
-}
 
-.sidenav {
-  width: 200px;
-}
+  .backdrop {
+    background-color: rgba($background, 0.1);
+    position: absolute;
+    height: 100vh;
+    width: 100svw;
+    top: 0;
+    z-index: -1;
+  }
 
-.sidenav .mat-toolbar {
-  background: inherit;
-}
+  .sidenav {
+    width: 250px;
+    display: flex !important;
 
-.mat-toolbar.mat-primary {
-  position: sticky;
-  top: 0;
-  z-index: 9999;
-}
+    .sidebar-container {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1rem;
+      background-color: $background;
 
-.mat-sidenav-content {
+      .mat-mdc-nav-list {
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+        gap: 0.5rem;
+        flex-basis: 70%;
 
-  height: 100svh;
-  overflow: auto;
-  scrollbar-gutter: stable;
-}
+        .nav-link {
+          justify-content: flex-start !important;
+          padding-block: 0.5rem;
+          background-color: unset;
 
-.outlet-container {
-  padding: 1rem;
-  width: min(1240px, 100%);
-  height: auto;
-  margin-inline: auto;
+          div {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+          }
 
-  @media screen and (width<600px) {
-    padding-bottom: 5rem;
+          &:hover {
+            opacity: 0.8;
+          }
+        }
+
+        .active-nav-link {
+          background-color: mat.get-color-from-palette($primary-palette, 700);
+          position: relative;
+
+          /*  div {
+            &::before {
+              content: '';
+              position: absolute;
+              display: block;
+              width: 0.25rem;
+              background-color: mat.get-color-from-palette($primary-palette, 50);
+              left: 0;
+              height: 100%;
+            }
+
+          } */
+
+          * {
+            color: mat.get-contrast-color-from-palette(
+              $primary-palette,
+              700
+            ) !important;
+          }
+        }
+      }
+    }
+
+    .mat-toolbar {
+      background: transparent !important;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .brand-container {
+      width: 100%;
+      display: flex;
+
+      img {
+        width: 100%;
+      }
+    }
+
+    .account-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .user {
+      display: flex;
+      gap: 1rem;
+      height: auto !important;
+      align-items: center;
+
+      .user-icon {
+        &:hover {
+          cursor: unset;
+        }
+      }
+
+      div {
+        p {
+          margin: 0 !important;
+        }
+      }
+    }
+
+    @media screen and (width<600px) {
+      .brand-container {
+        img {
+          width: 70%;
+        }
+      }
+    }
+
+    .close-btn {
+      margin-left: auto;
+    }
+  }
+
+  .mat-sidenav-content {
+    height: 100vh;
+    overflow: auto;
+    scrollbar-gutter: stable;
+
+    .today-date {
+      margin-left: auto;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .mat-toolbar.mat-primary {
+      position: sticky;
+      top: 0;
+      z-index: 9999;
+    }
+
+    .outlet-container {
+      padding: 1rem;
+      width: min(1240px, 100%);
+      height: auto;
+      margin-inline: auto;
+
+      @media screen and (width<600px) {
+        padding-bottom: 5rem;
+      }
+    }
   }
 }
