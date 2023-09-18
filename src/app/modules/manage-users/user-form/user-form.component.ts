@@ -1,5 +1,13 @@
 import { Component, Inject } from '@angular/core';
-import { AbstractControl, AsyncValidatorFn, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  AsyncValidatorFn,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable, map } from 'rxjs';
 import { ToastService } from 'src/app/services/toast/toast.service';
@@ -8,7 +16,7 @@ import { UserService } from 'src/app/services/user/user.service';
 @Component({
   selector: 'app-user-form',
   templateUrl: './user-form.component.html',
-  styleUrls: ['./user-form.component.scss']
+  styleUrls: ['./user-form.component.scss'],
 })
 export class UserFormComponent {
   hidePassword = true;
@@ -16,8 +24,12 @@ export class UserFormComponent {
   title!: string;
 
   userForm!: FormGroup;
-  constructor(private fb: FormBuilder, private toast: ToastService, private userService: UserService, @Inject(MAT_DIALOG_DATA) public user: any | null) {
-  }
+  constructor(
+    private fb: FormBuilder,
+    private toast: ToastService,
+    private userService: UserService,
+    @Inject(MAT_DIALOG_DATA) public user: any | null
+  ) {}
 
   ngOnInit() {
     /**
@@ -27,8 +39,7 @@ export class UserFormComponent {
       name: ['', Validators.required],
       designation: ['', Validators.required],
       role: ['employee', Validators.required],
-    }
-    );
+    });
 
     /**
      * if the user object is passed to the component via @Inject
@@ -42,49 +53,38 @@ export class UserFormComponent {
         'employeeId',
         this.fb.control('', {
           updateOn: 'blur',
-          validators: [
-            Validators.required,
-            Validators.pattern(/PWS\d{1,3}/i)
-          ],
-          asyncValidators: [
-            this.isEmployeeIdExist
-          ]
-        }));
+          validators: [Validators.required, Validators.pattern(/PW\d{1,3}/i)],
+          asyncValidators: [this.isEmployeeIdExist],
+        })
+      );
 
       this.userForm.addControl(
         'email',
         this.fb.control('', {
           updateOn: 'blur',
-          validators: [
-            Validators.required,
-            Validators.email
-          ],
-          asyncValidators: [
-            this.isEmailExist
-          ]
-        }));
+          validators: [Validators.required, Validators.email],
+          asyncValidators: [this.isEmailExist],
+        })
+      );
 
       this.userForm.addControl(
         'password',
         this.fb.control('', [
           Validators.required,
-          Validators.pattern('[a-zA-Z0-9]{6,16}')
-        ]));
+          Validators.pattern('[a-zA-Z0-9]{6,16}'),
+        ])
+      );
 
       this.userForm.addControl(
         'confirmPassword',
-        this.fb.control('', [
-          Validators.required,
-          this.passwordMatch
-        ]));
-    }
-
-    else {
-      this.title = "Update User";
+        this.fb.control('', [Validators.required, this.passwordMatch])
+      );
+    } else {
+      this.title = 'Update User';
       this.userForm.addControl('employeeId', this.fb.control(''));
       this.userForm.addControl('email', this.fb.control(''));
       /**
-       * set the values of the form to the values from 
+       * set the values of the form to the values from
        * the user object passed via @Inject
        */
       this.userForm.setValue({
@@ -92,10 +92,9 @@ export class UserFormComponent {
         name: this.user.name,
         email: this.user.email,
         designation: this.user.designation,
-        role: this.user.role
+        role: this.user.role,
       });
     }
-
   }
 
   onSubmit() {
@@ -104,35 +103,30 @@ export class UserFormComponent {
       this.userService
         .addNewUser({
           ...this.userForm.value,
-          employeeId: this.userForm.value.employeeId.toLowerCase()
+          employeeId: this.userForm.value.employeeId.toLowerCase(),
         })
         .subscribe({
-          next: res => {
+          next: (res) => {
             this.userService.isUpdated$.next(true);
             this.toast.show('User Added Succesfully', 'success');
           },
-          error: err => {
+          error: (err) => {
             this.toast.show(err.error.error.message, 'error', true);
-          }
+          },
         });
-    else
-      /**Update exiting user */
+    /**Update exiting user */ else
       this.userService
-        .updateUser(
-          this.user.uid,
-          this.userForm.value
-        )
+        .updateUser(this.user.uid, this.userForm.value)
         .subscribe({
-          next: res => {
+          next: (res) => {
             this.userService.isUpdated$.next(true);
             this.toast.show('User Updated Succesfully', 'success');
           },
-          error: err => {
+          error: (err) => {
             this.toast.show(err.error.error.message, 'error', true);
-          }
+          },
         });
   }
-
 
   /**
    * function to set the pattern for confirm password
@@ -146,18 +140,22 @@ export class UserFormComponent {
    * Validator Function to check whether the
    *  PASSWORD and CONFIRMPASSWORD are same ore not
    * @param control -reference to Abstract control instance
-   *  of conifrm password field 
-   * @returns - Vaidator Error if the password does not match 
+   *  of conifrm password field
+   * @returns - Vaidator Error if the password does not match
    */
-  passwordMatch: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  passwordMatch: ValidatorFn = (
+    control: AbstractControl
+  ): ValidationErrors | null => {
     const confirmPassword = control?.value ?? '';
-    return this.passwordPattern != confirmPassword ? {
-      passwordMatch: {
-        password: this.passwordPattern,
-        confirmPassword: confirmPassword,
-        isMatch: false
-      }
-    } : null;
+    return this.passwordPattern != confirmPassword
+      ? {
+          passwordMatch: {
+            password: this.passwordPattern,
+            confirmPassword: confirmPassword,
+            isMatch: false,
+          },
+        }
+      : null;
   };
 
   /**
@@ -166,34 +164,33 @@ export class UserFormComponent {
    * @param control - istance of Abstract control of EmployeeId field
    * @returns - observable of type Validation error if the employee id already exist
    */
-  isEmployeeIdExist: AsyncValidatorFn = (control: AbstractControl): Observable<ValidationErrors | null> => {
+  isEmployeeIdExist: AsyncValidatorFn = (
+    control: AbstractControl
+  ): Observable<ValidationErrors | null> => {
     return this.userService
       .checkEmployeeIdTaken(control.value.toLowerCase())
-      .pipe(map(res => {
-        if (Object.values(res).length != 0)
-          return { employeeIdTaken: true };
-        else
-          return null;
-      }));
-  };
-
-  /**
- * Async Validator function to check whether the entered email Id
- * is already exist/assosiated with anotehr employee
- * @param control - istance of Abstract control of employee field
- * @returns - observable of type Validation error if the Email id already exist
- */
-  isEmailExist: AsyncValidatorFn = (control: AbstractControl): Observable<ValidationErrors | null> => {
-    return this.userService
-      .checkEmailTaken(control.value.toLowerCase())
       .pipe(
-        map(res => {
-          if (Object.values(res).length != 0)
-            return { emailTaken: true };
-          else
-            return null;
+        map((res) => {
+          if (Object.values(res).length != 0) return { employeeIdTaken: true };
+          else return null;
         })
       );
   };
 
+  /**
+   * Async Validator function to check whether the entered email Id
+   * is already exist/assosiated with anotehr employee
+   * @param control - istance of Abstract control of employee field
+   * @returns - observable of type Validation error if the Email id already exist
+   */
+  isEmailExist: AsyncValidatorFn = (
+    control: AbstractControl
+  ): Observable<ValidationErrors | null> => {
+    return this.userService.checkEmailTaken(control.value.toLowerCase()).pipe(
+      map((res) => {
+        if (Object.values(res).length != 0) return { emailTaken: true };
+        else return null;
+      })
+    );
+  };
 }

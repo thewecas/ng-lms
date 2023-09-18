@@ -13,7 +13,7 @@
   <mat-form-field class="searchbar">
     <mat-label>Filter</mat-label>
     <input matInput (keyup)="applyFilter(input.value)" #input />
-    <button mat-icon-button matSuffix (click)="applyFilter('')">
+    <button mat-icon-button matSuffix (click)="applyFilter((input.value = ''))">
       <mat-icon> {{ input.value == "" ? "search" : "close" }}</mat-icon>
     </button>
   </mat-form-field>
@@ -22,86 +22,51 @@
 <div class="__container">
   <mat-spinner *ngIf="isLoading"></mat-spinner>
 
-  <div class="mat-elevation-z8">
-    <table mat-table *ngIf="!isLoading" [dataSource]="dataSource" matSort>
-      <ng-container matColumnDef="employeeId" sticky>
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-        <td mat-cell *matCellDef="let row">{{ row.employeeId }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-        <td mat-cell *matCellDef="let row">{{ row.name }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="email">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
-        <td mat-cell *matCellDef="let row">{{ row.email }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="designation">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Designation</th>
-        <td mat-cell *matCellDef="let row">{{ row.designation }}</td>
-      </ng-container>
-      <ng-container matColumnDef="role">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Role</th>
-        <td mat-cell *matCellDef="let row">
-          <mat-chip class="role">{{ row.role }}</mat-chip>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="action" stickyEnd>
-        <th mat-header-cell *matHeaderCellDef>Action</th>
-        <td mat-cell *matCellDef="let row">
-          <div class="btn-container">
-            <button mat-icon-button color="primary" (click)="onEditUser(row)">
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button
-              mat-icon-button
-              color="warn"
-              (click)="onDeleteUser(row.uid, row.employeeId)"
-            >
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
-
-          <button
-            class="btn-container short"
-            mat-icon-button
-            [matMenuTriggerFor]="menu"
-          >
-            <mat-icon>more_vert</mat-icon>
+  <div class="cards-container">
+    <ng-container
+      *ngFor="let user of dataSource._pageData(dataSource.filteredData)"
+    >
+      <div class="card">
+        <div class="card-header">
+          <p class="employeeId">
+            {{ user.employeeId }}
+          </p>
+          <p class="role" [class]="user.role">{{ user.role }}</p>
+        </div>
+        <div class="card-body">
+          <p class="name">
+            {{ user.name.split(" ")[0] }}
+            <span class="last-name">{{
+              user.name.split(" ").slice(1).join(" ")
+            }}</span>
+          </p>
+          <p class="designation">
+            <mat-icon>badge</mat-icon>
+            <span>{{ user.designation }}</span>
+          </p>
+          <a class="mail" [href]="'mailto:' + user.email">
+            <mat-icon>alternate_email</mat-icon>
+            <span>{{ user.email }}</span>
+          </a>
+        </div>
+        <div class="card-actions">
+          <button mat-stroked-button color="primary" (click)="onEditUser(user)">
+            <mat-icon>edit</mat-icon> Edit
           </button>
-
-          <mat-menu #menu="matMenu" class="btn-container.menu">
-            <button mat-menu-item (click)="onEditUser(row)">
-              <mat-icon color="primary">edit</mat-icon>
-              <span>Edit</span>
-            </button>
-            <button
-              mat-menu-item
-              (click)="onDeleteUser(row.uid, row.employeeId)"
-            >
-              <mat-icon color="warn">delete</mat-icon>
-              <span>Delete</span>
-            </button>
-          </mat-menu>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-
-      <!-- Row shown when there is no matching data. -->
-      <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell" colspan="4" class="placeholder-text">
-          No data matching the filter "{{ input.value }}"
-        </td>
-      </tr>
-    </table>
+          <button
+            mat-stroked-button
+            color="warn"
+            (click)="onDeleteUser(user.uid, user.employeeId)"
+          >
+            <mat-icon>delete</mat-icon> Delete
+          </button>
+        </div>
+      </div>
+    </ng-container>
   </div>
+
   <mat-paginator
-    [pageSizeOptions]="[5, 10, 25, 100]"
+    [pageSizeOptions]="[8, 16, 36, 72]"
     aria-label="Select page of users"
   ></mat-paginator>
 </div>

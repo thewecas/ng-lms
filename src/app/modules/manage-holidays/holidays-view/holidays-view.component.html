@@ -12,7 +12,7 @@
   <mat-form-field class="searchbar">
     <mat-label>Filter</mat-label>
     <input matInput (keyup)="applyFilter(input.value)" #input />
-    <button mat-icon-button matSuffix (click)="applyFilter('')">
+    <button mat-icon-button matSuffix (click)="applyFilter((input.value = ''))">
       <mat-icon> {{ input.value == "" ? "search" : "close" }}</mat-icon>
     </button>
   </mat-form-field>
@@ -21,7 +21,7 @@
 <div class="__container">
   <mat-spinner *ngIf="isLoading"></mat-spinner>
 
-  <div class="mat-elevation-z8">
+  <div>
     <div class="button-toggle-group" *ngIf="!isLoading">
       <mat-button-toggle-group
         name="fontStyle"
@@ -41,8 +41,7 @@
       </mat-button-toggle-group>
     </div>
     <div class="holiday-card-container" *ngIf="!!dataSource && !isLoading">
-      <div
-        class="holiday-card"
+      <ng-container
         *ngFor="
           let holiday of dataSource._pageData(dataSource.filteredData)
             | sortArray : 'date' : activeTab == 'upcoming';
@@ -50,43 +49,45 @@
           trackBy: trackById
         "
       >
-        <div class="date">
-          <p [class]="holiday.type">
-            {{ holiday.date | date : "EEE" }}
-          </p>
-          <p>{{ holiday.date | date : "dd" }}</p>
-          <p>{{ holiday.date | date : "MMM '''yy" }}</p>
-        </div>
-        <div class="holiday-text-container">
-          <p class="title">{{ holiday.title }}</p>
-          <p class="description">{{ holiday.description }}</p>
-          <div class="holiday-type" [class]="holiday.type">
-            {{ holiday.type }} Holiday
+        <div class="holiday-card">
+          <div class="date">
+            <p [class]="holiday.type">
+              {{ holiday.date | date : "EEE" }}
+            </p>
+            <p>{{ holiday.date | date : "dd" }}</p>
+            <p>{{ holiday.date | date : "MMM '''yy" }}</p>
           </div>
-        </div>
-        <button
-          mat-icon-button
-          class="action-btn"
-          [matMenuTriggerFor]="menu"
-          aria-label="Example icon-button with a menu"
-        >
-          <mat-icon>more_vert</mat-icon>
-        </button>
-
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="onEditHoliday(holiday)">
-            <span>Edit</span>
-            <mat-icon color="primary">edit</mat-icon>
-          </button>
+          <div class="holiday-text-container">
+            <p class="title">{{ holiday.title }}</p>
+            <p class="description">{{ holiday.description }}</p>
+            <div class="holiday-type" [class]="holiday.type">
+              {{ holiday.type }} Holiday
+            </div>
+          </div>
           <button
-            mat-menu-item
-            (click)="onDeleteHoliday(holiday.id, holiday.title)"
+            mat-icon-button
+            class="action-btn"
+            [matMenuTriggerFor]="menu"
+            aria-label="Example icon-button with a menu"
           >
-            <span>Delete</span>
-            <mat-icon color="warn">delete</mat-icon>
+            <mat-icon>more_vert</mat-icon>
           </button>
-        </mat-menu>
-      </div>
+
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="onEditHoliday(holiday)">
+              <span>Edit</span>
+              <mat-icon color="primary">edit</mat-icon>
+            </button>
+            <button
+              mat-menu-item
+              (click)="onDeleteHoliday(holiday.id, holiday.title)"
+            >
+              <span>Delete</span>
+              <mat-icon color="warn">delete</mat-icon>
+            </button>
+          </mat-menu>
+        </div>
+      </ng-container>
     </div>
   </div>
 

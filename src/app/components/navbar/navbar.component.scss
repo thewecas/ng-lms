@@ -138,8 +138,10 @@
   .mat-sidenav-content {
     height: 100vh;
     overflow: auto;
-    scrollbar-gutter: stable;
     background-color: rgba($background, 0.8);
+    @media screen and (width>600px) {
+      scrollbar-gutter: stable;
+    }
 
     .today-date {
       margin-left: auto;

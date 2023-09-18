@@ -8,14 +8,14 @@
           matInput
           type="text"
           formControlName="employeeId"
-          placeholder="PWS##"
+          placeholder="PW###"
           [readonly]="!!user"
         />
         <mat-error *ngIf="userForm.get('employeeId')?.hasError('required')"
           >Id cannot be empty</mat-error
         >
         <mat-error *ngIf="userForm.get('employeeId')?.hasError('pattern')"
-          >Match the pattern PWS##</mat-error
+          >Match the pattern PW###</mat-error
         >
         <mat-error
           *ngIf="userForm.get('employeeId')?.hasError('employeeIdTaken')"

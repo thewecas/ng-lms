@@ -39,15 +39,25 @@ h6 {
   margin: 8px 0;
 }
 
-button {
-  border-radius: 20px !important;
-  height: 3rem !important;
+button:not(
+    .mat-button-toggle-button,
+    .mat-mdc-button,
+    .mat-mdc-mini-fab,
+    .mat-mdc-icon-button
+  ) {
+  border-radius: 2rem !important;
+  height: 2.5rem !important;
+  padding: 0.5rem 1.5rem !important;
 }
 
 //custom scrollbar styling
 ::-webkit-scrollbar {
   height: 0.5rem;
   width: 0.5rem;
+  @media screen and (width<600px) {
+    height: 0 !important;
+    width: 0 !important;
+  }
 }
 
 ::-webkit-scrollbar-thumb {
@@ -92,7 +102,6 @@ a:hover {
 
   button.action-btn {
     border-radius: 0.4rem;
-    height: 3rem;
     width: fit-content;
     justify-self: self-end;
     grid-area: area2;
@@ -136,13 +145,16 @@ a:hover {
   background-color: rgba($background, 1);
   position: relative;
   min-height: 50vh;
+  overflow: auto;
 
   .mat-elevation-z8 {
     position: relative;
     box-shadow: none !important;
     overflow-x: auto;
     min-height: 50vh;
-    scrollbar-gutter: stable;
+    @media screen and (width>600px) {
+      scrollbar-gutter: stable;
+    }
   }
 
   .btn-container {

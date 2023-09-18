@@ -13,7 +13,7 @@
   <mat-form-field class="searchbar">
     <mat-label>Filter</mat-label>
     <input matInput (keyup)="applyFilter(input.value)" #input />
-    <button mat-icon-button matSuffix (click)="applyFilter('')">
+    <button mat-icon-button matSuffix (click)="applyFilter((input.value = ''))">
       <mat-icon> {{ input.value == "" ? "search" : "close" }}</mat-icon>
     </button>
   </mat-form-field>
