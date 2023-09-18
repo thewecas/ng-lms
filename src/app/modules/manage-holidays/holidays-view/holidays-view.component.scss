@@ -1,8 +1,9 @@
+@use "@angular/material" as mat;
+@import "../../../../styles/colors";
+
 .mat-elevation-z8 {
   width: 100%;
 }
-
-
 
 .holiday-card-container {
   padding: 1rem;
@@ -13,94 +14,82 @@
 
 .holiday-card {
   display: flex;
-  background-color: rgb(255, 255, 255);
   border-radius: 0.5rem;
   overflow: hidden;
   width: 100%;
   position: relative;
   font-size: min(1rem, 1vw) !important;
-  box-shadow: 2px 3px 15px rgb(200 200 200 / 50%);
-
+  background-color: lighten($background, 5%);
   .date {
-    display: grid;
-    height: 100% !important;
-    width: 25%;
-    width: minmax(10ch, 3.5rem);
-    min-width: 10ch;
-    max-width: 3.5rem;
-    background-color: hsl(231deg 100% 78.79% / 17%);
-
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 65px;
     p {
-
-      display: grid;
-      place-content: center;
-      padding: 1rem;
+      padding-inline: 0.5rem;
+      text-align: center;
 
       &:nth-child(1) {
-        background-color: #3b55e2;
-        color: white;
+        text-transform: uppercase;
+        font-weight: 500 !important;
+        padding-block: 0.75rem 0.5rem;
+        background-color: mat.get-color-from-palette($primary-palette, 600);
+        color: $background;
       }
-
       &:nth-child(2) {
-        font-size: 1.6em;
-        font-weight: 600;
+        color: mat.get-color-from-palette($primary-palette, 600);
+        font-size: 2rem;
         text-decoration: underline;
-        text-underline-offset: 1.25rem;
-        text-decoration-color: gray;
-
+        padding-block: 0.5rem 0.35rem;
+        text-underline-offset: 0.75rem;
       }
-
       &:nth-child(3) {
-        font-weight: 500;
+        padding-block: 0.5rem 0.75rem;
+        color: mat.get-color-from-palette($primary-palette, 100);
       }
     }
   }
 
   .holiday-text-container {
-    width: 75%;
-    padding: 1rem 1.5rem 1rem 1rem;
+    padding: 0.75rem 1.8rem 0.75rem 1rem;
+    width: 100%;
     display: grid;
     gap: 1rem;
 
     .title {
+      font-size: 1.5rem;
+      line-height: 1.25;
+      max-height: 28px;
       text-transform: capitalize;
-      font-size: 1.3em;
-      font-weight: 500;
-      position: relative;
+      color: mat.get-color-from-palette($primary-palette, 50);
+      overflow: hidden;
       display: -webkit-box;
       -webkit-line-clamp: 1;
       line-clamp: 1;
-      overflow: hidden;
       -webkit-box-orient: vertical;
     }
-
-
-
     .description {
+      overflow: hidden;
       display: -webkit-box;
-      -webkit-line-clamp: 3;
-      line-clamp: 3;
-      overflow: hidden !important;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
       -webkit-box-orient: vertical;
     }
-
-
     .holiday-type {
-      font-size: 0.8rem !important;
-      width: max-content;
-      height: max-content;
-      border-radius: 0.25rem;
-      background-color: rgba(#4455b1, 0.8);
-      color: white;
       padding: 0.25rem 0.5rem;
-
-      &.National {
-        background-color: rgba(rgb(200, 0, 0), 0.8);
-      }
-
+      border-radius: 20px;
+      font-size: 0.8rem;
+      width: fit-content;
       &.Restricted {
-        background-color: rgba(rgba(0, 200, 0), 0.8);
+        background-color: mat.get-color-from-palette($accent-palette, 800);
+        color: mat.get-contrast-color-from-palette($accent-palette, 800);
       }
+      &.National {
+        background-color: mat.get-color-from-palette($primary-palette, 800);
+        color: mat.get-contrast-color-from-palette($primary-palette, 800);
+      }
+      background-color: mat.get-color-from-palette($accent-palette, 800);
+      color: mat.get-contrast-color-from-palette($accent-palette, 800);
     }
   }
 

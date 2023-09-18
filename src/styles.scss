@@ -21,6 +21,7 @@ body {
   font-family: roboto, sans-serif !important;
   box-sizing: border-box;
   padding: 0;
+  margin: 0;
 }
 
 //reset font size
@@ -36,10 +37,6 @@ h4,
 h5,
 h6 {
   margin: 8px 0;
-}
-
-*:not(button) {
-  font-weight: 400 !important;
 }
 
 button {
@@ -136,7 +133,7 @@ a:hover {
   display: flex;
   flex-direction: column;
   margin-block: 1rem;
-  box-shadow: 0px 0px 10px rgba(gray, 0.2);
+  background-color: rgba($background, 1);
   position: relative;
   min-height: 50vh;
 
@@ -189,7 +186,7 @@ a:hover {
 }
 
 .mat-mdc-paginator {
-  @media screen and (width<768px) {
+  @media screen and (width<600px) {
     padding-bottom: 2rem;
   }
 }
@@ -289,18 +286,17 @@ tr {
 .mat-button-toggle-appearance-standard.mat-button-toggle-checked {
   color: mat.get-color-from-palette($primary-palette, 800);
   border: none;
+  background-color: rgba($background, 0.9);
   border-bottom: 2px solid mat.get-color-from-palette($primary-palette, 800) !important;
-  background-color: #eeeff9;
 }
 
 .mat-button-toggle-group-appearance-standard {
   border: none !important;
-  border-bottom: 2px solid #eeeff9;
 }
 
 .mat-button-toggle-appearance-standard {
-  width: 15ch;
-  background-color: #f1f1f1;
+  min-width: 12ch;
+  background-color: lighten($background, 5%) !important;
   border: none;
 }
 
@@ -314,19 +310,19 @@ tr {
 // stylign for backdrop of navbar
 
 .mat-drawer-backdrop.ng-star-inserted.mat-drawer-shown {
-  background-color: rgba($background, 0.6) !important;
+  background-color: rgba($background, 0.7) !important;
 }
 
 .mat-toolbar-single-row {
-  @media screen and (width<768px) {
+  @media screen and (width<600px) {
     padding-left: 0 !important;
   }
 }
 
-.cdk-overlay-pane {
-  width: min(500px, 90vw);
-  max-width: unset !important;
-}
+// .cdk-overlay-pane {
+//   width: min(500px, 90vw);
+//   max-width: unset !important;
+// }
 .cdk-overlay-dark-backdrop {
   background-color: rgba(
     darken(mat.get-color-from-palette($primary-palette, 900), 80%),

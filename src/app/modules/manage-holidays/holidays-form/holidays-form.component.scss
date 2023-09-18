@@ -8,7 +8,6 @@
 .container {
   padding: 1rem;
 
-
   h2 {
     padding-inline: 1.5rem;
   }
@@ -33,8 +32,7 @@ form {
   }
 }
 
-
-.mat-mdc-radio-button~.mat-mdc-radio-button {
+.mat-mdc-radio-button ~ .mat-mdc-radio-button {
   margin-left: 16px;
 }
 

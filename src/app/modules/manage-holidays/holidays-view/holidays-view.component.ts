@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -14,74 +20,74 @@ import { HolidaysFormComponent } from '../holidays-form/holidays-form.component'
   selector: 'app-holidays-view',
   templateUrl: './holidays-view.component.html',
   styleUrls: ['./holidays-view.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HolidaysViewComponent implements OnInit, OnDestroy {
-  displayedColumns: string[] = ['title', 'description', 'date', 'type', 'action'];
+  displayedColumns: string[] = [
+    'title',
+    'description',
+    'date',
+    'type',
+    'action',
+  ];
   dataSource!: MatTableDataSource<any>;
   activeTab!: string;
 
   isLoading = false;
 
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private dialog: MatDialog, private toast: ToastService, private holidayService: HolidayService) { }
+  constructor(
+    private dialog: MatDialog,
+    private toast: ToastService,
+    private holidayService: HolidayService
+  ) {}
 
   holidayDataSubscription!: Subscription;
   isUpdatedSubscription!: Subscription;
   data!: any[];
 
-
   ngOnInit() {
     /**
-     * fetch the data from database 
+     * fetch the data from database
      */
     this.isLoading = true;
-    this.holidayDataSubscription = this.holidayService.getHolidayData().subscribe({
-      next: res => {
-        this.data = res;
-        this.filterHolidayByStatus('upcoming');
-        this.isLoading = false;
-      }
-    });
+    this.holidayDataSubscription = this.holidayService
+      .getHolidayData()
+      .subscribe({
+        next: (res) => {
+          this.data = res;
+          this.filterHolidayByStatus(this.activeTab);
+          this.isLoading = false;
+        },
+      });
 
     this.isUpdatedSubscription = this.holidayService.isUpdated$.subscribe(
-      res => {
-
+      (res) => {
         this.holidayService.getAllHolidays();
       }
     );
-
   }
   ngAfterViewInit() {
     try {
       this.dataSource.paginator = this.paginator;
-    } catch (error) {
-
-    }
+    } catch (error) {}
   }
 
-
-  filterHolidayByStatus(status: string) {
+  filterHolidayByStatus(status: string = 'upcoming') {
     this.activeTab = status;
     if (status == 'upcoming') {
       this.dataSource = new MatTableDataSource(
-        this.data.filter(holiday => new Date().getTime() <= holiday.date)
+        this.data.filter((holiday) => new Date().getTime() <= holiday.date)
       );
-    }
-    else if (status == "recent") {
+    } else if (status == 'recent') {
       this.dataSource = new MatTableDataSource(
-        this.data.filter(holiday => new Date().getTime() > holiday.date)
+        this.data.filter((holiday) => new Date().getTime() > holiday.date)
       );
-
-    }
-    else
-      this.dataSource = new MatTableDataSource(this.data);
+    } else this.dataSource = new MatTableDataSource(this.data);
     this.ngAfterViewInit();
   }
-
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -90,16 +96,15 @@ export class HolidaysViewComponent implements OnInit, OnDestroy {
     }
   }
 
-
   onAddHoliday() {
     this.dialog.open(HolidaysFormComponent, {
-      data: null
+      data: null,
     });
   }
 
   onEditHoliday(holiday: Holiday) {
     this.dialog.open(HolidaysFormComponent, {
-      data: holiday
+      data: holiday,
     });
   }
 
@@ -110,17 +115,18 @@ export class HolidaysViewComponent implements OnInit, OnDestroy {
         bodyText: `${title} will be deleted. Are you sure?`,
         primaryAction: 'Confirm',
         secondaryAction: 'Cancel',
-        btnColor: 'warn'
-      }
+        btnColor: 'warn',
+      },
     });
-    dialogRef.afterClosed().subscribe(res => {
+    dialogRef.afterClosed().subscribe((res) => {
       if (res) {
         this.holidayService.deleteHoliday(id).subscribe({
-          next: res => {
+          next: (res) => {
             this.holidayService.isUpdated$.next(true);
-            this.toast.show("Holiday deleted successfuly", 'success');
+            this.toast.show('Holiday deleted successfuly', 'success');
           },
-          error: err => this.toast.show("Holiday deleted successfuly", 'success')
+          error: (err) =>
+            this.toast.show('Holiday deleted successfuly', 'success'),
         });
       }
     });
@@ -137,9 +143,11 @@ export class HolidaysViewComponent implements OnInit, OnDestroy {
 
   sortData(isAscending: boolean = false) {
     this.data.sort((holiday1: Holiday, holiday2: Holiday) => {
-      return (isAscending ? holiday1.date - holiday2.date : holiday2.date - holiday1.date) > 0 ? 1 : -1;
+      return (isAscending
+        ? holiday1.date - holiday2.date
+        : holiday2.date - holiday1.date) > 0
+        ? 1
+        : -1;
     });
   }
-
-
 }

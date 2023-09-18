@@ -51,7 +51,9 @@
         "
       >
         <div class="date">
-          <p>{{ holiday.date | date : "EEE" }}</p>
+          <p [class]="holiday.type">
+            {{ holiday.date | date : "EEE" }}
+          </p>
           <p>{{ holiday.date | date : "dd" }}</p>
           <p>{{ holiday.date | date : "MMM '''yy" }}</p>
         </div>
@@ -59,7 +61,7 @@
           <p class="title">{{ holiday.title }}</p>
           <p class="description">{{ holiday.description }}</p>
           <div class="holiday-type" [class]="holiday.type">
-            {{ holiday.type }} holiday
+            {{ holiday.type }} Holiday
           </div>
         </div>
         <button

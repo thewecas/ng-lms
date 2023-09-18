@@ -3,6 +3,7 @@
 
 :host {
   height: 100vh;
+  background-color: rgba($background, 0.8);
 }
 
 .sidenav-container {
@@ -27,6 +28,7 @@
       flex-direction: column;
       justify-content: space-between;
       padding: 1rem;
+      padding-bottom: max(2rem, calc(100vh - 100svh));
       background-color: $background;
 
       .mat-mdc-nav-list {
@@ -137,6 +139,7 @@
     height: 100vh;
     overflow: auto;
     scrollbar-gutter: stable;
+    background-color: rgba($background, 0.8);
 
     .today-date {
       margin-left: auto;

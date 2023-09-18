@@ -9,24 +9,18 @@ import { MatIconModule } from '@angular/material/icon';
   standalone: true,
   imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule],
   templateUrl: './confirm-dialog.component.html',
-  styleUrls: ['./confirm-dialog.component.scss']
+  styleUrls: ['./confirm-dialog.component.scss'],
 })
 export class ConfirmDialogComponent {
-
   @ViewChild('header') header!: HTMLElement;
-  constructor(@Inject(MAT_DIALOG_DATA) public data: {
-    title: string;
-    bodyText: string,
-    primaryAction: string;
-    secondaryAction: string;
-    btnColor: string;
-  }) {
-    setTimeout(() => {
-      console.log(this.header);
-      console.log(Object(this.header).nativeElement.attributes.color.value);
-
-    }, 2000);
-
-
-  }
+  constructor(
+    @Inject(MAT_DIALOG_DATA)
+    public data: {
+      title: string;
+      bodyText: string;
+      primaryAction: string;
+      secondaryAction: string;
+      btnColor: string;
+    }
+  ) {}
 }
