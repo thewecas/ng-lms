@@ -34,9 +34,11 @@
   }
 
   .card-body {
+    gap: 0rem;
     .name {
       font-size: 1.5rem;
       text-transform: capitalize;
+      line-height: 1.5;
       overflow: hidden;
       display: -webkit-box;
       -webkit-line-clamp: 1;

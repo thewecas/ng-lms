@@ -138,6 +138,8 @@
   .mat-sidenav-content {
     height: 100vh;
     overflow: auto;
+    display: flex;
+    flex-direction: column;
     background-color: rgba($background, 0.8);
     @media screen and (width>600px) {
       scrollbar-gutter: stable;
@@ -158,9 +160,8 @@
     .outlet-container {
       padding: 1rem;
       width: min(1240px, 100%);
-      height: auto;
+      height: 100%;
       margin-inline: auto;
-
       @media screen and (width<600px) {
         padding-bottom: 5rem;
       }
