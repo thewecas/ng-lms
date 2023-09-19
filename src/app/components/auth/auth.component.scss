@@ -6,7 +6,11 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  background: linear-gradient(0deg, rgba(#f9e17e, 0.1), rgba(#f9e17e, 0.1)),
+  background: linear-gradient(
+      0deg,
+      rgba(mat.get-color-from-palette($primary-palette, 800), 0.1),
+      rgba(mat.get-color-from-palette($primary-palette, 600), 0.1)
+    ),
     url(../../../assets/images/bg.jpg);
   background-size: cover;
 
@@ -24,7 +28,7 @@
   margin-inline: auto;
   border-radius: 1rem;
   backdrop-filter: blur(50px);
-  background-color: rgba(rgb(0, 0, 0), 0.5);
+  background-color: rgba($background, 0.5);
   padding: 5%;
   height: min-content;
   display: grid;
@@ -32,7 +36,7 @@
 
   .logo {
     width: 100%;
-    filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.2));
+    filter: drop-shadow(1px 1px 2px rgba($background, 0.2));
   }
 }
 

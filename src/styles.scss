@@ -39,12 +39,7 @@ h6 {
   margin: 8px 0;
 }
 
-button:not(
-    .mat-button-toggle-button,
-    .mat-mdc-button,
-    .mat-mdc-mini-fab,
-    .mat-mdc-icon-button
-  ) {
+button:not(.mat-button-toggle-button, .mat-mdc-mini-fab, .mat-mdc-icon-button) {
   border-radius: 2rem !important;
   height: 2.5rem !important;
   padding: 0.5rem 1.5rem !important;
@@ -340,4 +335,52 @@ tr {
     darken(mat.get-color-from-palette($primary-palette, 900), 80%),
     0.8
   );
+}
+
+.cards-container {
+  padding: 1rem;
+  height: 100%;
+}
+
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+  gap: 1rem;
+  .card {
+    background-color: lighten($background, 5%);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    .card-header {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .card-body {
+      padding-top: 0.75rem;
+      margin-block: 0.75rem 1rem;
+      border-top: 2px solid mat.get-color-from-palette($primary-palette, 700);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+
+      > * {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .mat-icon {
+        color: mat.get-color-from-palette($primary-palette, 400);
+        font-size: 1.5rem;
+        margin-top: 4px;
+      }
+    }
+    .card-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      button {
+        padding: 0rem 1.25rem !important;
+      }
+    }
+  }
 }

@@ -22,9 +22,15 @@
 <div class="__container">
   <mat-spinner *ngIf="isLoading"></mat-spinner>
 
-  <div class="cards-container">
+  <div class="cards-container" *ngIf="!isLoading">
     <ng-container
-      *ngFor="let user of dataSource._pageData(dataSource.filteredData)"
+      *ngFor="
+        let user of dataSource._pageData(
+          dataSource.filteredData | sortArray : 'employeeId'
+        );
+        index as i;
+        trackBy: trackById
+      "
     >
       <div class="card">
         <div class="card-header">
@@ -66,7 +72,7 @@
   </div>
 
   <mat-paginator
-    [pageSizeOptions]="[8, 16, 36, 72]"
+    [pageSizeOptions]="[12, 24, 36, 72]"
     aria-label="Select page of users"
   ></mat-paginator>
 </div>

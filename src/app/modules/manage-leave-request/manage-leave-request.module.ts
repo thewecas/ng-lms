@@ -16,11 +16,8 @@ import { SortArrayPipe } from 'src/app/pipes/sort-array.pipe';
 import { LeaveRequestComponent } from './leave-request/leave-request.component';
 import { ManageLeaveRequestRoutingModule } from './manage-leave-request-routing.module';
 
-
 @NgModule({
-  declarations: [
-    LeaveRequestComponent,
-  ],
+  declarations: [LeaveRequestComponent],
   imports: [
     CommonModule,
     ManageLeaveRequestRoutingModule,
@@ -29,13 +26,14 @@ import { ManageLeaveRequestRoutingModule } from './manage-leave-request-routing.
     MatIconModule,
     MatPaginatorModule,
     MatMenuModule,
+    SortArrayPipe,
     MatProgressSpinnerModule,
     MatTableModule,
     MatButtonToggleModule,
     MatTooltipModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
   ],
-  providers: [SortArrayPipe]
+  providers: [SortArrayPipe],
 })
-export class ManageLeaveRequestModule { }
+export class ManageLeaveRequestModule {}

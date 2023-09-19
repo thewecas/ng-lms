@@ -16,17 +16,15 @@ import { MatTableModule } from '@angular/material/table';
 import { ManageUsersRoutingModule } from './manage-users-routing.module';
 import { UserFormComponent } from './user-form/user-form.component';
 import { UsersViewComponent } from './users-view/users-view.component';
-
+import { SortArrayPipe } from 'src/app/pipes/sort-array.pipe';
 
 @NgModule({
-  declarations: [
-    UsersViewComponent,
-    UserFormComponent
-  ],
+  declarations: [UsersViewComponent, UserFormComponent],
   imports: [
     CommonModule,
     MatPaginatorModule,
     MatSortModule,
+    SortArrayPipe,
     MatTableModule,
     ReactiveFormsModule,
     MatMenuModule,
@@ -39,7 +37,7 @@ import { UsersViewComponent } from './users-view/users-view.component';
     MatRadioModule,
     MatInputModule,
     MatDialogModule,
-    ManageUsersRoutingModule
-  ]
+    ManageUsersRoutingModule,
+  ],
 })
-export class ManageUsersModule { }
+export class ManageUsersModule {}

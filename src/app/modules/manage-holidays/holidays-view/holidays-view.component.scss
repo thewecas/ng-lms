@@ -5,8 +5,7 @@
 //   width: 100%;
 // }
 
-.holiday-card-container {
-  padding: 1rem;
+.cards-container {
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));

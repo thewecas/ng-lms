@@ -1,5 +1,58 @@
-// .header-container {
-//   display: flex !important;
-//   justify-content: space-between;
-//   margin-bottom: 1rem;
-// }
+@use "@angular/material" as mat;
+@import "../../../../styles/colors";
+.cards-container {
+  grid-template-columns: repeat(auto-fill, minmax(min(350px, 100%), 1fr));
+
+  .card-header {
+    justify-content: space-between;
+    button {
+      height: auto !important;
+      padding: 0.25rem 0.5rem !important;
+    }
+    .user-id {
+      text-transform: uppercase;
+    }
+    .leave-type {
+      color: mat.get-contrast-color-from-palette($primary-palette, 300);
+      padding: 0.25rem 0.75rem !important;
+      color: mat.get-color-from-palette($primary-palette, 300);
+      border-radius: 2rem;
+    }
+  }
+  .card-body {
+    p {
+      span {
+        font-size: 0.9rem;
+        &:after {
+          content: " : ";
+        }
+      }
+      strong {
+        font-weight: 500;
+        font-size: 1.2rem;
+        text-transform: capitalize;
+      }
+      &.status {
+        strong {
+          padding: 0.25rem 1rem;
+          border-radius: 2rem;
+          font-weight: 400;
+          font-size: 1rem;
+        }
+      }
+
+      &.Rejected {
+        strong {
+          background-color: mat.get-color-from-palette($warn-palette, 400);
+          color: mat.get-contrast-color-from-palette($warn-palette, 400);
+        }
+      }
+      &.Approved {
+        strong {
+          background-color: mat.get-color-from-palette($primary-palette, 400);
+          color: mat.get-contrast-color-from-palette($primary-palette, 400);
+        }
+      }
+    }
+  }
+}
