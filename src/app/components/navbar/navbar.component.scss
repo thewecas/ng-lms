@@ -2,7 +2,7 @@
 @import "../../../styles/colors";
 
 :host {
-  height: 100svh;
+  height: 100dvh;
   background-color: rgba($background, 0.8);
 }
 
@@ -12,7 +12,7 @@
   .backdrop {
     background-color: rgba($background, 0.1);
     position: absolute;
-    height: 100svh;
+    height: 100dvh;
     width: 100svw;
     top: 0;
     z-index: -1;
@@ -28,7 +28,7 @@
       flex-direction: column;
       justify-content: space-between;
       padding: 1rem;
-      padding-bottom: max(2rem, calc(100svh - 100svh));
+      padding-bottom: max(2rem, calc(100dvh - 100dvh));
       background-color: $background;
 
       .mat-mdc-nav-list {
@@ -85,6 +85,7 @@
       background: transparent !important;
       display: flex;
       justify-content: space-between;
+      z-index: 1;
     }
 
     .brand-container {
@@ -136,7 +137,7 @@
   }
 
   .mat-sidenav-content {
-    height: 100svh;
+    height: 100dvh;
     overflow: auto;
     display: flex;
     flex-direction: column;
@@ -149,23 +150,25 @@
       margin-left: auto;
       font-weight: 700;
       text-transform: uppercase;
+      @media screen and (width<600px) {
+        display: none;
+      }
     }
 
     .mat-toolbar.mat-primary {
       position: sticky;
       top: 0;
       min-height: 60px;
-      z-index: 9999;
     }
 
     .outlet-container {
       padding: 1rem;
       width: min(1240px, 100%);
-      height: 100%;
+      height: calc(100dvh - 60px);
       margin-inline: auto;
-      border: 1px solid;
+      position: relative;
       @media screen and (width<600px) {
-        padding-inline: 0 !important;
+        padding: 0 !important;
       }
     }
   }

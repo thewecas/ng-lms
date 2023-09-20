@@ -23,9 +23,23 @@ export class HolidaysFormComponent implements OnInit {
 
   ngOnInit() {
     this.holidayForm = this.fb.group({
-      title: ['', [Validators.required, Validators.maxLength(50)]],
+      title: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(50),
+          Validators.pattern(/\S.*/),
+        ],
+      ],
       date: ['', Validators.required],
-      description: ['', [Validators.required, Validators.maxLength(200)]],
+      description: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(200),
+          Validators.pattern(/\S.*/),
+        ],
+      ],
       type: ['', Validators.required],
     });
     if (!this.holiday) {

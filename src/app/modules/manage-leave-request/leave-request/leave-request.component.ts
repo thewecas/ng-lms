@@ -23,7 +23,7 @@ export class LeaveRequestComponent {
     'status',
     'action',
   ];
-  dataSource!: MatTableDataSource<any>;
+  dataSource = new MatTableDataSource<any>();
   isFilterCleared = true;
   data!: any[];
   isLoading = false;
@@ -76,17 +76,13 @@ export class LeaveRequestComponent {
   filterLeavesByStatus(status: string) {
     this.activeTab = status;
     if (status == 'pending') {
-      this.dataSource = new MatTableDataSource(
-        this.sortArray
-          .transform(this.data, 'fromDate', true)
-          .filter((leave) => leave.status == 'Pending')
-      );
+      this.dataSource.data = this.sortArray
+        .transform(this.data, 'fromDate', true)
+        .filter((leave) => leave.status == 'Pending');
     } else {
-      this.dataSource = new MatTableDataSource(
-        this.sortArray
-          .transform(this.data, 'fromDate', false)
-          .filter((leave) => leave.status != 'Pending')
-      );
+      this.dataSource.data = this.sortArray
+        .transform(this.data, 'fromDate', false)
+        .filter((leave) => leave.status != 'Pending');
     }
     this.ngAfterViewInit();
   }

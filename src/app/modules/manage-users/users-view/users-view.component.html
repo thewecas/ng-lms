@@ -11,8 +11,12 @@
   </button>
 
   <mat-form-field class="searchbar">
-    <mat-label>Filter</mat-label>
-    <input matInput (keyup)="applyFilter(input.value)" #input />
+    <input
+      matInput
+      placeholder="Filter"
+      (keyup)="applyFilter(input.value)"
+      #input
+    />
     <button mat-icon-button matSuffix (click)="applyFilter((input.value = ''))">
       <mat-icon> {{ input.value == "" ? "search" : "close" }}</mat-icon>
     </button>
@@ -21,8 +25,31 @@
 
 <div class="__container">
   <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <div
+    class="placeholder"
+    *ngIf="
+      !isLoading && dataSource._pageData(dataSource.filteredData).length == 0
+    "
+  >
+    <h1>No data to display</h1>
+    <button
+      mat-fab
+      extended
+      color="primary"
+      class="action-btn"
+      (click)="onAddNewUser()"
+    >
+      <mat-icon>add</mat-icon>
+      Add User
+    </button>
+  </div>
 
-  <div class="cards-container" *ngIf="!isLoading">
+  <div
+    class="cards-container"
+    *ngIf="
+      !isLoading && dataSource._pageData(dataSource.filteredData).length != 0
+    "
+  >
     <ng-container
       *ngFor="
         let user of dataSource._pageData(

@@ -33,7 +33,7 @@ export class LeaveListViewComponent implements OnInit {
     'status',
     'action',
   ];
-  dataSource!: MatTableDataSource<Leave>;
+  dataSource = new MatTableDataSource<any>();
   activeTab!: string;
   isLoading = true;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -83,17 +83,13 @@ export class LeaveListViewComponent implements OnInit {
   filterLeavesByStatus(status: string) {
     this.activeTab = status;
     if (status == 'pending') {
-      this.dataSource = new MatTableDataSource(
-        this.sortArray
-          .transform(this.data, 'fromDate', true)
-          .filter((leave) => leave.status == 'Pending')
-      );
+      this.dataSource.data = this.sortArray
+        .transform(this.data, 'fromDate', true)
+        .filter((leave) => leave.status == 'Pending');
     } else {
-      this.dataSource = new MatTableDataSource(
-        this.sortArray
-          .transform(this.data, 'fromDate', false)
-          .filter((leave) => leave.status != 'Pending')
-      );
+      this.dataSource.data = this.sortArray
+        .transform(this.data, 'fromDate', false)
+        .filter((leave) => leave.status != 'Pending');
     }
     this.ngAfterViewInit();
   }

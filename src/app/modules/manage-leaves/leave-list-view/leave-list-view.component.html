@@ -11,8 +11,12 @@
   </button>
 
   <mat-form-field class="searchbar">
-    <mat-label>Filter</mat-label>
-    <input matInput (keyup)="applyFilter(input.value)" #input />
+    <input
+      matInput
+      placeholder="Filter"
+      (keyup)="applyFilter(input.value)"
+      #input
+    />
     <button mat-icon-button matSuffix (click)="applyFilter((input.value = ''))">
       <mat-icon> {{ input.value == "" ? "search" : "close" }}</mat-icon>
     </button>
@@ -20,7 +24,7 @@
 </div>
 <div class="__container">
   <mat-spinner *ngIf="isLoading"></mat-spinner>
-  <div class="button-toggle-group" *ngIf="!isLoading">
+  <div class="button-toggle-group">
     <mat-button-toggle-group
       name="fontStyle"
       aria-label="Font Style"
@@ -36,7 +40,31 @@
     </mat-button-toggle-group>
   </div>
 
-  <div class="cards-container" *ngIf="!isLoading">
+  <div
+    class="placeholder"
+    *ngIf="
+      !isLoading && dataSource._pageData(dataSource.filteredData).length == 0
+    "
+  >
+    <h1>No data to display</h1>
+    <button
+      mat-fab
+      extended
+      color="primary"
+      class="action-btn"
+      (click)="onApplyLeave()"
+    >
+      <mat-icon>add</mat-icon>
+      Apply Leave
+    </button>
+  </div>
+
+  <div
+    class="cards-container"
+    *ngIf="
+      !isLoading && dataSource._pageData(dataSource.filteredData).length != 0
+    "
+  >
     <ng-container
       *ngFor="
         let leave of dataSource._pageData(

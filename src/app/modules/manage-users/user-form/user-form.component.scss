@@ -1,44 +1,44 @@
-:host {
-  width: min(100%, 700px);
-  max-width: 100%;
-  box-sizing: border-box;
-  display: block;
-}
+// :host {
+//   width: min(100%, 700px);
+//   max-width: 100%;
+//   box-sizing: border-box;
+//   display: block;
+// }
 
-.container {
-  padding: 1rem;
+// .container {
+//   padding: 1rem;
 
-  h2 {
-    padding-inline: 1.5rem;
-  }
-}
+//   h2 {
+//     padding-inline: 1.5rem;
+//   }
+// }
 
-form {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5rem 1rem;
+// form {
+//   display: grid;
+//   grid-template-columns: 1fr 1fr;
+//   gap: 0.5rem 1rem;
 
-  .mat-mdc-form-field {
-    min-width: min(350px, 100%);
+//   .mat-mdc-form-field {
+//     min-width: min(350px, 100%);
 
-    display: unset;
-  }
+//     display: unset;
+//   }
 
-  @media screen and (width<600px) {
-    grid-template-columns: 1fr;
-  }
-}
+//   @media screen and (width<600px) {
+//     grid-template-columns: 1fr;
+//   }
+// }
 
-.mat-mdc-radio-group {
-  display: flex;
-  align-items: center;
+// .mat-mdc-radio-group {
+//   display: flex;
+//   align-items: center;
 
-  .mat-mdc-radio-button {
-    display: flex;
-    align-items: center;
-  }
-}
+//   .mat-mdc-radio-button {
+//     display: flex;
+//     align-items: center;
+//   }
+// }
 
-.mat-mdc-radio-button~.mat-mdc-radio-button {
-  margin-left: 16px;
-}
+// .mat-mdc-radio-button~.mat-mdc-radio-button {
+//   margin-left: 16px;
+// }

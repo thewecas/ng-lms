@@ -1,5 +1,5 @@
-<div class="form_container">
-  <h2 class="header">{{ title }}</h2>
+<div class="form-container user">
+  <h2 class="form-header">{{ title }}</h2>
   <mat-dialog-content>
     <form action="" [formGroup]="userForm">
       <mat-form-field appearance="outline">
@@ -72,11 +72,13 @@
         </button>
         <mat-error
           *ngIf="
-            userForm.get('password')?.hasError('pattern') &&
-            (userForm.get('password')?.value.length < 6 ||
-              userForm.get('password')?.value.length < 6)
+            userForm.get('password')?.value.length < 6 ||
+            userForm.get('password')?.value.length < 6
           "
           >Length should be between 6-16</mat-error
+        >
+        <mat-error *ngIf="userForm.get('password')?.hasError('pattern')"
+          >Can only contains Alpha-numerics</mat-error
         >
         <mat-error *ngIf="userForm.get('password')?.hasError('required')"
           >Password cannot be empty</mat-error
@@ -129,6 +131,7 @@
       [mat-dialog-close]="true"
       cdkFocusInitial
       color="primary"
+      [disabled]="userForm.invalid"
       (click)="onSubmit()"
     >
       Save

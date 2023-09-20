@@ -29,7 +29,7 @@ export class UsersViewComponent implements AfterViewInit {
     'role',
     'action',
   ];
-  dataSource!: MatTableDataSource<any>;
+  dataSource = new MatTableDataSource<any>();
   isFilterCleared = true;
   isLoading = false;
 
@@ -50,7 +50,7 @@ export class UsersViewComponent implements AfterViewInit {
     this.userDataSubscription = this.userService
       .getUserData()
       .subscribe((res) => {
-        this.dataSource = new MatTableDataSource(res);
+        this.dataSource.data = res;
         this.isLoading = false;
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;

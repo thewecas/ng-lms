@@ -1,5 +1,5 @@
-<div class="container">
-  <h2>{{ title }}</h2>
+<div class="form-container">
+  <h2 class="form-header">{{ title }}</h2>
   <mat-dialog-content>
     <form action="" [formGroup]="leaveForm">
       <mat-form-field appearance="outline">
@@ -60,6 +60,9 @@
         <mat-error *ngIf="leaveForm.get('reason')?.hasError('required')"
           >Cannot be empty</mat-error
         >
+        <mat-error *ngIf="leaveForm.get('reason')?.hasError('pattern')"
+          >Cannot have leading spaces</mat-error
+        >
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -83,6 +86,7 @@
       [mat-dialog-close]="true"
       cdkFocusInitial
       color="primary"
+      [disabled]="leaveForm.invalid"
       (click)="onSubmit()"
     >
       Save

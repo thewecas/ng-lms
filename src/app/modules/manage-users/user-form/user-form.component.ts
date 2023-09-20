@@ -36,8 +36,8 @@ export class UserFormComponent {
      * initilaize the user form
      */
     this.userForm = this.fb.group({
-      name: ['', Validators.required],
-      designation: ['', Validators.required],
+      name: ['', [Validators.required, Validators.pattern(/\S.*/)]],
+      designation: ['', [Validators.required, Validators.pattern(/\S.*/)]],
       role: ['employee', Validators.required],
     });
 

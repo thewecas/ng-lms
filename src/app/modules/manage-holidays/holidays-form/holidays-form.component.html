@@ -1,5 +1,5 @@
-<div class="container">
-  <h2>{{ title }}</h2>
+<div class="form-container">
+  <h2 class="form-header">{{ title }}</h2>
   <mat-dialog-content>
     <form action="" [formGroup]="holidayForm">
       <mat-form-field appearance="outline">
@@ -9,7 +9,10 @@
           >Title cannot be empty</mat-error
         >
         <mat-error *ngIf="holidayForm.get('title')?.hasError('maxlength')"
-          >Cannot exceed 30 letters</mat-error
+          >Cannot exceed 50 letters</mat-error
+        >
+        <mat-error *ngIf="holidayForm.get('title')?.hasError('pattern')"
+          >Cannot have leading spaces</mat-error
         >
       </mat-form-field>
 
@@ -33,7 +36,10 @@
           >Description cannot be empty</mat-error
         >
         <mat-error *ngIf="holidayForm.get('description')?.hasError('maxlength')"
-          >Cannot exceed 180 letters</mat-error
+          >Cannot exceed 200 letters</mat-error
+        >
+        <mat-error *ngIf="holidayForm.get('description')?.hasError('pattern')"
+          >Cannot have leading spaces</mat-error
         >
       </mat-form-field>
       <mat-form-field appearance="outline">

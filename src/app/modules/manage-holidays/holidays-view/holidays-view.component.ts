@@ -30,7 +30,7 @@ export class HolidaysViewComponent implements OnInit, OnDestroy {
     'type',
     'action',
   ];
-  dataSource!: MatTableDataSource<any>;
+  dataSource = new MatTableDataSource<any>();
   activeTab!: string;
 
   isLoading = false;
@@ -78,14 +78,14 @@ export class HolidaysViewComponent implements OnInit, OnDestroy {
   filterHolidayByStatus(status: string = 'upcoming') {
     this.activeTab = status;
     if (status == 'upcoming') {
-      this.dataSource = new MatTableDataSource(
-        this.data.filter((holiday) => new Date().getTime() <= holiday.date)
+      this.dataSource.data = this.data.filter(
+        (holiday) => new Date().getTime() <= holiday.date
       );
     } else if (status == 'recent') {
-      this.dataSource = new MatTableDataSource(
-        this.data.filter((holiday) => new Date().getTime() > holiday.date)
+      this.dataSource.data = this.data.filter(
+        (holiday) => new Date().getTime() > holiday.date
       );
-    } else this.dataSource = new MatTableDataSource(this.data);
+    } else this.dataSource.data = this.data;
     this.ngAfterViewInit();
   }
 
