@@ -6,7 +6,7 @@ import { AuthService } from './services/auth/auth.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
   title = 'lms';
@@ -14,6 +14,5 @@ export class AppComponent {
   isLoading$: BehaviorSubject<boolean>;
   constructor(private authService: AuthService, private dialog: MatDialog) {
     this.isLoading$ = authService.isLoading$;
-
   }
 }

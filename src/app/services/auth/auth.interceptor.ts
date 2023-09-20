@@ -4,7 +4,7 @@ import {
   HttpHeaders,
   HttpInterceptor,
   HttpParams,
-  HttpRequest
+  HttpRequest,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -12,22 +12,20 @@ import { AuthService } from './auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
+  constructor(private authService: AuthService) {}
 
-  constructor(private authService: AuthService) { }
-
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+  intercept(
+    request: HttpRequest<unknown>,
+    next: HttpHandler
+  ): Observable<HttpEvent<unknown>> {
     const idToken = this.authService.getIdToken();
 
-
-    if (!!idToken && !request.url.includes('identitytoolkit.googleapis.com')) {
+    if (!!idToken && !request.url.includes('googleapis.com')) {
       const modifiedReq = request.clone({
         params: new HttpParams().set('auth', idToken),
-        headers: new HttpHeaders().set('Access-Control-Allow-Origin', '*')
-
+        headers: new HttpHeaders().set('Access-Control-Allow-Origin', '*'),
       });
       return next.handle(modifiedReq);
-    }
-    else
-      return next.handle(request);
+    } else return next.handle(request);
   }
 }

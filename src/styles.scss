@@ -9,7 +9,7 @@ html,
 body {
   font-size: 1rem;
   height: 100%;
-  min-height: 100vh;
+  min-height: 100svh;
   margin: 0;
   color: #333;
   box-sizing: border-box;
@@ -86,10 +86,7 @@ a:hover {
 
 .header-container {
   display: grid;
-  grid-template-areas:
-    "area1 area1"
-    " area3 area2";
-  // grid-template-columns:  1fr auto;
+  grid-template-areas: "area1 area2";
   align-items: center;
   gap: 1rem;
   position: relative;
@@ -105,7 +102,7 @@ a:hover {
   .searchbar {
     width: min(100%, 250px);
     justify-self: self-start;
-    grid-area: area3;
+    grid-area: area1;
 
     > :nth-child(2) {
       display: none;
@@ -113,13 +110,8 @@ a:hover {
   }
 
   @media screen and (width<600px) {
-    grid-template-areas: "area1 area3";
-
-    .header {
-      justify-self: self-start;
-      font-size: 2rem;
-    }
-
+    padding-inline: 1rem;
+    grid-template-areas: "area1 area1";
     button.action-btn {
       position: fixed;
       bottom: 2rem;
@@ -129,6 +121,7 @@ a:hover {
 
     .searchbar {
       justify-self: self-end;
+      width: 100%;
     }
   }
 }
@@ -139,7 +132,7 @@ a:hover {
   margin-block: 1rem;
   background-color: rgba($background, 1);
   position: relative;
-  min-height: 70vh;
+  height: 100%;
   overflow: auto;
 
   .mat-elevation-z8 {
@@ -194,9 +187,6 @@ a:hover {
 
 .mat-mdc-paginator {
   margin-top: auto;
-  @media screen and (width<600px) {
-    padding-bottom: 2rem;
-  }
 }
 
 tr {
@@ -327,10 +317,10 @@ tr {
   }
 }
 
-// .cdk-overlay-pane {
-//   width: min(500px, 90vw);
-//   max-width: unset !important;
-// }
+.cdk-overlay-pane {
+  width: auto !important;
+  max-width: 90vw !important;
+}
 .cdk-overlay-dark-backdrop {
   background-color: rgba(
     darken(mat.get-color-from-palette($primary-palette, 900), 80%),
@@ -341,10 +331,9 @@ tr {
 .cards-container {
   padding: 1rem;
   height: 100%;
-}
-
-.cards-container {
   display: grid;
+  align-content: start;
+  overflow: auto;
   grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
   gap: 1rem;
   .card {
@@ -384,4 +373,8 @@ tr {
       }
     }
   }
+}
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  background-color: lighten($background, 2%) !important;
 }

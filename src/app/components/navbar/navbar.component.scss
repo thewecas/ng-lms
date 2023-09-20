@@ -2,7 +2,7 @@
 @import "../../../styles/colors";
 
 :host {
-  height: 100vh;
+  height: 100svh;
   background-color: rgba($background, 0.8);
 }
 
@@ -12,7 +12,7 @@
   .backdrop {
     background-color: rgba($background, 0.1);
     position: absolute;
-    height: 100vh;
+    height: 100svh;
     width: 100svw;
     top: 0;
     z-index: -1;
@@ -28,7 +28,7 @@
       flex-direction: column;
       justify-content: space-between;
       padding: 1rem;
-      padding-bottom: max(2rem, calc(100vh - 100svh));
+      padding-bottom: max(2rem, calc(100svh - 100svh));
       background-color: $background;
 
       .mat-mdc-nav-list {
@@ -136,7 +136,7 @@
   }
 
   .mat-sidenav-content {
-    height: 100vh;
+    height: 100svh;
     overflow: auto;
     display: flex;
     flex-direction: column;
@@ -154,6 +154,7 @@
     .mat-toolbar.mat-primary {
       position: sticky;
       top: 0;
+      min-height: 60px;
       z-index: 9999;
     }
 
@@ -162,8 +163,9 @@
       width: min(1240px, 100%);
       height: 100%;
       margin-inline: auto;
+      border: 1px solid;
       @media screen and (width<600px) {
-        padding-bottom: 5rem;
+        padding-inline: 0 !important;
       }
     }
   }

@@ -59,6 +59,12 @@
                 (request.toDate | date : "yyyy")
             }}</strong>
           </p>
+          <p>
+            <span>Day(s)</span>
+            <strong>
+              {{ getTotalDays(request.fromDate, request.toDate) }}
+            </strong>
+          </p>
           <p
             class="status"
             [class]="request.status"

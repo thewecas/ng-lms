@@ -40,6 +40,7 @@ import { ManageLeavesRoutingModule } from './manage-leaves-routing.module';
     MatButtonToggleModule,
     MatNativeDateModule,
     MatTooltipModule,
+    SortArrayPipe,
     MatProgressSpinnerModule,
     ReactiveFormsModule,
     MatChipsModule,

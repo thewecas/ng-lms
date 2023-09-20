@@ -98,6 +98,13 @@ export class LeaveRequestComponent {
     }
   }
 
+  getTotalDays(from: Date, to: Date) {
+    const totalDays =
+      Math.ceil(new Date(to).getTime() - new Date(from).getTime()) /
+      (60 * 60 * 24 * 1000);
+    return totalDays ? totalDays : 1;
+  }
+
   onUpdateStatus(
     uid: string,
     leaveId: string,

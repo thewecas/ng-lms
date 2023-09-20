@@ -2,7 +2,7 @@
 @import "../../../styles/colors";
 
 :host {
-  height: 100vh;
+  height: 100svh;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -106,6 +106,7 @@
         rgba($background, 0.5)
       ),
       url(../../../assets/images/bg.jpg);
+    transform: matrix();
   }
 
   .slogan {
