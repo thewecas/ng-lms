@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -8,6 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Leave } from 'src/app/models/leave';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { LeaveService } from 'src/app/services/leave/leave.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
@@ -15,9 +16,8 @@ import { ToastService } from 'src/app/services/toast/toast.service';
 @Component({
   selector: 'app-leave-form',
   templateUrl: './leave-form.component.html',
-  styleUrls: ['./leave-form.component.scss'],
 })
-export class LeaveFormComponent {
+export class LeaveFormComponent implements OnInit {
   title!: string;
 
   leaveForm!: FormGroup;
@@ -28,7 +28,7 @@ export class LeaveFormComponent {
     private leaveService: LeaveService,
     private authService: AuthService,
     private toast: ToastService,
-    @Inject(MAT_DIALOG_DATA) public leave: any | null
+    @Inject(MAT_DIALOG_DATA) public leave: Leave | null
   ) {
     this.employeeId = authService.getEmployeeId();
     this.uid = authService.getUserId();
@@ -63,7 +63,7 @@ export class LeaveFormComponent {
           employeeId: this.employeeId,
           status: 'Pending',
         })
-        .subscribe((res) => {
+        .subscribe(() => {
           this.leaveService.isUpdated$.next(true);
           this.toast.show('Leave Applied successfuly', 'success');
         });
@@ -74,7 +74,7 @@ export class LeaveFormComponent {
           status: 'Pending',
           date: new Date(this.leaveForm.value.date).getTime(),
         })
-        .subscribe((res) => {
+        .subscribe(() => {
           this.leaveService.isUpdated$.next(true);
           this.toast.show('Leave Updated successfuly', 'success');
         });

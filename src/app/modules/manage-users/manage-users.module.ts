@@ -13,10 +13,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { SortArrayPipe } from 'src/app/pipes/sort-array.pipe';
 import { ManageUsersRoutingModule } from './manage-users-routing.module';
 import { UserFormComponent } from './user-form/user-form.component';
 import { UsersViewComponent } from './users-view/users-view.component';
-import { SortArrayPipe } from 'src/app/pipes/sort-array.pipe';
 
 @NgModule({
   declarations: [UsersViewComponent, UserFormComponent],
@@ -24,7 +24,6 @@ import { SortArrayPipe } from 'src/app/pipes/sort-array.pipe';
     CommonModule,
     MatPaginatorModule,
     MatSortModule,
-    SortArrayPipe,
     MatTableModule,
     ReactiveFormsModule,
     MatMenuModule,
@@ -39,5 +38,7 @@ import { SortArrayPipe } from 'src/app/pipes/sort-array.pipe';
     MatDialogModule,
     ManageUsersRoutingModule,
   ],
+
+  providers: [SortArrayPipe],
 })
 export class ManageUsersModule {}

@@ -91,6 +91,4 @@ import { Component } from '@angular/core';
     `,
   ],
 })
-export class LoaderComponent {
-  constructor() {}
-}
+export class LoaderComponent {}

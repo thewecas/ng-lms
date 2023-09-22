@@ -12,15 +12,18 @@
   background-color: $background;
 
   h2 {
-    font-weight: 300 !important;
+    font-weight: 400 !important;
     text-transform: capitalize;
     color: mat.get-color-from-palette($primary-palette, 400);
+    font-size: 2rem;
+    margin: 0 !important;
   }
 }
 
 .mdc-dialog__content {
   padding: 1rem 1.5rem !important;
   font-weight: 400;
+  min-height: 60px;
 }
 
 .mdc-dialog__actions {

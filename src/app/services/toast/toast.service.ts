@@ -13,7 +13,7 @@ export class ToastService {
    * @param className - error | success | warn | info
    * @param isHttpError - if true then formats the error message to easily readable string
    */
-  show(message: string, className: string, isHttpError: boolean = false) {
+  show(message: string, className: string, isHttpError = false) {
     if (isHttpError) {
       message = this.formatErrorMessage(message);
     }
@@ -21,7 +21,7 @@ export class ToastService {
     config.horizontalPosition = 'end';
     config.verticalPosition = 'top';
     config.announcementMessage = message;
-    // config.duration = 3000;
+    config.duration = 3000;
     config.panelClass = ['toast', className];
     this.snakbar.open(message, ' ', config);
   }

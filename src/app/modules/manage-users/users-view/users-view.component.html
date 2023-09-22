@@ -7,7 +7,7 @@
     (click)="onAddNewUser()"
   >
     <mat-icon>add</mat-icon>
-    Add User
+    New User
   </button>
 
   <mat-form-field class="searchbar">
@@ -18,7 +18,7 @@
       #input
     />
     <button mat-icon-button matSuffix (click)="applyFilter((input.value = ''))">
-      <mat-icon> {{ input.value == "" ? "search" : "close" }}</mat-icon>
+      <mat-icon> {{ input.value === "" ? "search" : "close" }}</mat-icon>
     </button>
   </mat-form-field>
 </div>
@@ -28,7 +28,7 @@
   <div
     class="placeholder"
     *ngIf="
-      !isLoading && dataSource._pageData(dataSource.filteredData).length == 0
+      !isLoading && dataSource._pageData(dataSource.filteredData).length === 0
     "
   >
     <h1>No data to display</h1>
@@ -47,14 +47,12 @@
   <div
     class="cards-container"
     *ngIf="
-      !isLoading && dataSource._pageData(dataSource.filteredData).length != 0
+      !isLoading && dataSource._pageData(dataSource.filteredData).length !== 0
     "
   >
     <ng-container
       *ngFor="
-        let user of dataSource._pageData(
-          dataSource.filteredData | sortArray : 'employeeId'
-        );
+        let user of dataSource._pageData(dataSource.filteredData);
         index as i;
         trackBy: trackById
       "

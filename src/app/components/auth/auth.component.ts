@@ -1,7 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,8 +15,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { AuthService } from 'src/app/services/auth/auth.service';
-
-
 
 @Component({
   selector: 'app-auth',
@@ -31,11 +34,10 @@ import { AuthService } from 'src/app/services/auth/auth.service';
   styleUrls: ['./auth.component.scss'],
 })
 export class AuthComponent implements OnInit {
-  isPasswordHidden: boolean = true;
+  isPasswordHidden = true;
   signInForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
-  }
+  constructor(private fb: FormBuilder, private authService: AuthService) {}
 
   /**
    * initlaize the signInForm
@@ -43,7 +45,7 @@ export class AuthComponent implements OnInit {
   ngOnInit() {
     this.signInForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
     });
   }
 
@@ -53,5 +55,4 @@ export class AuthComponent implements OnInit {
   onSubmit() {
     this.authService.login(this.signInForm.value);
   }
-
 }

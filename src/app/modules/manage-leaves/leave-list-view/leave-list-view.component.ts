@@ -1,7 +1,9 @@
 import {} from '@angular/compiler';
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -24,7 +26,9 @@ import { LeaveFormComponent } from '../leave-form/leave-form.component';
   styleUrls: ['./leave-list-view.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LeaveListViewComponent implements OnInit {
+export class LeaveListViewComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   displayedColumns: string[] = [
     'fromDate',
     'toDate',
@@ -33,14 +37,14 @@ export class LeaveListViewComponent implements OnInit {
     'status',
     'action',
   ];
-  dataSource = new MatTableDataSource<any>();
+  dataSource = new MatTableDataSource<Leave>();
   activeTab!: string;
   isLoading = true;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   uid!: string;
-  data: any[] = [];
+  data: Leave[] = [];
 
   constructor(
     private leaveService: LeaveService,
@@ -59,38 +63,40 @@ export class LeaveListViewComponent implements OnInit {
     this.leaveDataSubscription = this.leaveService
       .getLeavesByUser(this.uid)
       .subscribe({
-        next: (res: any) => {
-          this.data = res;
-          this.filterLeavesByStatus('pending');
-          this.isLoading = false;
+        next: (res: Leave[] | null) => {
+          if (res) {
+            this.data = res;
+            this.filterLeavesByStatus('pending');
+            this.isLoading = false;
+          }
         },
       });
-    this.isUpdatedSubscription = this.leaveService.isUpdated$.subscribe(
-      (res) => {
-        this.isLoading = true;
-        this.leaveService.fetchLeavesByUser(this.uid);
-      }
-    );
+    this.isUpdatedSubscription = this.leaveService.isUpdated$.subscribe(() => {
+      this.isLoading = true;
+      this.leaveService.fetchLeavesByUser(this.uid);
+    });
   }
 
   ngAfterViewInit() {
     try {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   filterLeavesByStatus(status: string) {
     this.activeTab = status;
-    if (status == 'pending') {
-      this.dataSource.data = this.sortArray
-        .transform(this.data, 'fromDate', true)
-        .filter((leave) => leave.status == 'Pending');
-    } else {
-      this.dataSource.data = this.sortArray
-        .transform(this.data, 'fromDate', false)
-        .filter((leave) => leave.status != 'Pending');
-    }
+    let filteredData = this.data;
+    if (status == 'pending')
+      filteredData = this.data.filter((leave) => leave.status == 'Pending');
+    else filteredData = this.data.filter((leave) => leave.status != 'Pending');
+    this.dataSource.data = this.sortArray.transform(
+      filteredData,
+      'fromDate',
+      status == 'pending'
+    );
     this.ngAfterViewInit();
   }
 
@@ -109,16 +115,16 @@ export class LeaveListViewComponent implements OnInit {
   }
 
   onApplyLeave() {
-    const dialogRef = this.dialog.open(LeaveFormComponent);
+    this.dialog.open(LeaveFormComponent);
   }
 
   onEditLeave(leave: Leave) {
-    const dialogRef = this.dialog.open(LeaveFormComponent, {
+    this.dialog.open(LeaveFormComponent, {
       data: leave,
     });
   }
 
-  onDeleteLeave(uid: any, leaveId: any, fromDate: any) {
+  onDeleteLeave(uid: string, leaveId: string, fromDate: number) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
         title: 'Withdraw Leave',
@@ -132,7 +138,7 @@ export class LeaveListViewComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((res) => {
       if (res) {
-        this.leaveService.deleteLeave(uid, leaveId).subscribe((res) => {
+        this.leaveService.deleteLeave(uid, leaveId).subscribe(() => {
           this.leaveService.isUpdated$.next(true);
           this.toast.show('Leave withdrawn successfuly', 'success');
         });
@@ -140,7 +146,7 @@ export class LeaveListViewComponent implements OnInit {
     });
   }
 
-  trackById(index: number, item: any) {
+  trackById(index: number, item: Leave) {
     return item.leaveId;
   }
 

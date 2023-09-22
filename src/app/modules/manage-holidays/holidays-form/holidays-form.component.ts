@@ -1,16 +1,16 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Holiday } from 'src/app/models/holiday';
 import { HolidayService } from 'src/app/services/holiday/holiday.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 
 @Component({
   selector: 'app-holidays-form',
   templateUrl: './holidays-form.component.html',
-  styleUrls: ['./holidays-form.component.scss'],
 })
 export class HolidaysFormComponent implements OnInit {
-  title: string = 'Add holiday';
+  title = 'Add holiday';
 
   holidayForm!: FormGroup;
 
@@ -18,11 +18,13 @@ export class HolidaysFormComponent implements OnInit {
     private fb: FormBuilder,
     private holidayService: HolidayService,
     private toast: ToastService,
-    @Inject(MAT_DIALOG_DATA) public holiday: any | null
+    @Inject(MAT_DIALOG_DATA)
+    public holiday: Holiday | null /**If the `holiday` is not null then we are updating the existing holiday */
   ) {}
 
   ngOnInit() {
     this.holidayForm = this.fb.group({
+      /**Initilaize the form */
       title: [
         '',
         [
@@ -45,7 +47,7 @@ export class HolidaysFormComponent implements OnInit {
     if (!this.holiday) {
       this.title = 'New Holiday';
     } else {
-      this.title = 'Update Holiday';
+      this.title = 'Edit Holiday';
       this.holidayForm.setValue({
         title: this.holiday.title,
         description: this.holiday.description,
@@ -56,35 +58,38 @@ export class HolidaysFormComponent implements OnInit {
   }
 
   onSubmit() {
-    if (!this.holiday)
+    if (!this.holiday) {
+      /**Add new Holiday */
       this.holidayService
         .addHoliday({
           ...this.holidayForm.value,
           date: new Date(this.holidayForm.value.date).getTime(),
         })
         .subscribe({
-          next: (res) => {
+          next: () => {
             this.holidayService.isUpdated$.next(true);
             this.toast.show('Holiday Added successfuly', 'success');
           },
           error: (err) =>
             this.toast.show(err.error.error.message, 'error', true),
         });
-    else {
-      this.holidayService
-        .updateHoliday(this.holiday.id, {
-          ...this.holidayForm.value,
-          date: new Date(this.holidayForm.value.date).getTime(),
-        })
-        .subscribe({
-          next: (res) => {
-            this.holidayService.isUpdated$.next(true);
-            this.toast.show('Holiday Updated successfuly', 'success');
-          },
-          error: (err) => {
-            this.toast.show(err.error.error.message, 'error', true);
-          },
-        });
+    } else {
+      /**Update existing Holiday */
+      if (this.holiday.id)
+        this.holidayService
+          .updateHoliday(this.holiday.id, {
+            ...this.holidayForm.value,
+            date: new Date(this.holidayForm.value.date).getTime(),
+          })
+          .subscribe({
+            next: () => {
+              this.holidayService.isUpdated$.next(true);
+              this.toast.show('Holiday Updated successfuly', 'success');
+            },
+            error: (err) => {
+              this.toast.show(err.error.error.message, 'error', true);
+            },
+          });
     }
   }
 }

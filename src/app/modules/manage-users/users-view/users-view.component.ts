@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  OnInit,
   ViewChild,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,6 +11,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
+import { User } from 'src/app/models/user';
+import { SortArrayPipe } from 'src/app/pipes/sort-array.pipe';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { UserFormComponent } from '../user-form/user-form.component';
@@ -20,7 +23,7 @@ import { UserFormComponent } from '../user-form/user-form.component';
   styleUrls: ['./users-view.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UsersViewComponent implements AfterViewInit {
+export class UsersViewComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
     'employeeId',
     'name',
@@ -29,7 +32,7 @@ export class UsersViewComponent implements AfterViewInit {
     'role',
     'action',
   ];
-  dataSource = new MatTableDataSource<any>();
+  dataSource = new MatTableDataSource<User>();
   isFilterCleared = true;
   isLoading = false;
 
@@ -39,7 +42,8 @@ export class UsersViewComponent implements AfterViewInit {
   constructor(
     private userService: UserService,
     private toast: ToastService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private sortArray: SortArrayPipe
   ) {}
 
   userDataSubscription!: Subscription;
@@ -50,25 +54,26 @@ export class UsersViewComponent implements AfterViewInit {
     this.userDataSubscription = this.userService
       .getUserData()
       .subscribe((res) => {
-        this.dataSource.data = res;
+        if (res)
+          this.dataSource.data = this.sortArray.transform(res, 'employeeId');
         this.isLoading = false;
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       });
 
     /**  refetches the data for each value emited by the isUpdated observable */
-    this.isUpdatedSubscription = this.userService.isUpdated$.subscribe(
-      (res) => {
-        this.userService.getAllUsers();
-      }
-    );
+    this.isUpdatedSubscription = this.userService.isUpdated$.subscribe(() => {
+      this.userService.getAllUsers();
+    });
   }
 
   ngAfterViewInit() {
     try {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   /**
@@ -95,7 +100,7 @@ export class UsersViewComponent implements AfterViewInit {
    * opens a dialog to edit existing user
    * @param user - object containing the user data
    */
-  onEditUser(user: any) {
+  onEditUser(user: User) {
     this.dialog.open(UserFormComponent, {
       data: user,
     });
@@ -121,7 +126,7 @@ export class UsersViewComponent implements AfterViewInit {
     dialogRef.afterClosed().subscribe((res) => {
       if (res) {
         this.userService.deleteUser(id).subscribe({
-          next: (res) => {
+          next: () => {
             this.userService.isUpdated$.next(true);
             this.toast.show('User Deleted Successfully', 'success');
           },
@@ -133,7 +138,7 @@ export class UsersViewComponent implements AfterViewInit {
     });
   }
 
-  trackById(index: number, item: any) {
+  trackById(index: number, item: User) {
     return item.employeeId;
   }
 

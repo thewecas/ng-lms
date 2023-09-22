@@ -9,7 +9,7 @@ $custom-theme: mat.define-dark-theme(
       accent: $accent-palette,
       warn: $warn-palette,
     ),
-    density: -1,
+    density: 0,
   )
 );
 

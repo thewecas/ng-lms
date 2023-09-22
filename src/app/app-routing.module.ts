@@ -13,7 +13,7 @@ const routes: Routes = [
   {
     path: '',
     component: NavbarComponent,
-    canActivateChild: [isAuthenticatedGuard],
+    canActivate: [isAuthenticatedGuard],
     children: [
       {
         path: 'users',
@@ -22,7 +22,7 @@ const routes: Routes = [
             (m) => m.ManageUsersModule
           ),
         canActivate: [isAdminGuard],
-        title: 'Users',
+        title: 'LMS - Users',
       },
       {
         path: 'holidays',
@@ -31,7 +31,7 @@ const routes: Routes = [
             (m) => m.ManageHolidaysModule
           ),
         canActivate: [isAdminGuard],
-        title: 'Holidays',
+        title: 'LMS - Holidays',
       },
       {
         path: 'leave-requests',
@@ -40,7 +40,7 @@ const routes: Routes = [
             './modules/manage-leave-request/manage-leave-request.module'
           ).then((m) => m.ManageLeaveRequestModule),
         canActivate: [isAdminGuard],
-        title: 'Leave Requests',
+        title: 'LMS - Leave Requests',
       },
       {
         path: 'leaves',
@@ -48,12 +48,7 @@ const routes: Routes = [
           import('./modules/manage-leaves/manage-leaves.module').then(
             (m) => m.ManageLeavesModule
           ),
-        title: 'Leaves',
-      },
-      {
-        path: '',
-        redirectTo: 'leaves',
-        pathMatch: 'full',
+        title: 'LMS - Leaves',
       },
     ],
   },

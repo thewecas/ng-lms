@@ -26,7 +26,6 @@ import { ManageLeaveRequestRoutingModule } from './manage-leave-request-routing.
     MatIconModule,
     MatPaginatorModule,
     MatMenuModule,
-    SortArrayPipe,
     MatProgressSpinnerModule,
     MatTableModule,
     MatButtonToggleModule,

@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   OnDestroy,
@@ -12,6 +13,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
 import { Holiday } from 'src/app/models/holiday';
+import { SortArrayPipe } from 'src/app/pipes/sort-array.pipe';
 import { HolidayService } from 'src/app/services/holiday/holiday.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { HolidaysFormComponent } from '../holidays-form/holidays-form.component';
@@ -22,7 +24,7 @@ import { HolidaysFormComponent } from '../holidays-form/holidays-form.component'
   styleUrls: ['./holidays-view.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HolidaysViewComponent implements OnInit, OnDestroy {
+export class HolidaysViewComponent implements OnInit, OnDestroy, AfterViewInit {
   displayedColumns: string[] = [
     'title',
     'description',
@@ -30,7 +32,7 @@ export class HolidaysViewComponent implements OnInit, OnDestroy {
     'type',
     'action',
   ];
-  dataSource = new MatTableDataSource<any>();
+  dataSource = new MatTableDataSource<Holiday>();
   activeTab!: string;
 
   isLoading = false;
@@ -41,12 +43,13 @@ export class HolidaysViewComponent implements OnInit, OnDestroy {
   constructor(
     private dialog: MatDialog,
     private toast: ToastService,
-    private holidayService: HolidayService
+    private holidayService: HolidayService,
+    private sortArray: SortArrayPipe
   ) {}
 
   holidayDataSubscription!: Subscription;
   isUpdatedSubscription!: Subscription;
-  data!: any[];
+  data!: Holiday[];
 
   ngOnInit() {
     /**
@@ -57,14 +60,16 @@ export class HolidaysViewComponent implements OnInit, OnDestroy {
       .getHolidayData()
       .subscribe({
         next: (res) => {
-          this.data = res;
-          this.filterHolidayByStatus(this.activeTab);
-          this.isLoading = false;
+          if (res) {
+            this.data = res;
+            this.filterHolidayByStatus(this.activeTab);
+            this.isLoading = false;
+          }
         },
       });
 
     this.isUpdatedSubscription = this.holidayService.isUpdated$.subscribe(
-      (res) => {
+      () => {
         this.holidayService.getAllHolidays();
       }
     );
@@ -72,20 +77,28 @@ export class HolidaysViewComponent implements OnInit, OnDestroy {
   ngAfterViewInit() {
     try {
       this.dataSource.paginator = this.paginator;
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  filterHolidayByStatus(status: string = 'upcoming') {
+  filterHolidayByStatus(status = 'upcoming') {
     this.activeTab = status;
+    let filteredData = this.data;
     if (status == 'upcoming') {
-      this.dataSource.data = this.data.filter(
+      filteredData = this.data.filter(
         (holiday) => new Date().getTime() <= holiday.date
       );
     } else if (status == 'recent') {
-      this.dataSource.data = this.data.filter(
+      filteredData = this.data.filter(
         (holiday) => new Date().getTime() > holiday.date
       );
-    } else this.dataSource.data = this.data;
+    }
+    this.dataSource.data = this.sortArray.transform(
+      filteredData,
+      'date',
+      this.activeTab !== 'recent'
+    );
     this.ngAfterViewInit();
   }
 
@@ -121,33 +134,23 @@ export class HolidaysViewComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((res) => {
       if (res) {
         this.holidayService.deleteHoliday(id).subscribe({
-          next: (res) => {
+          next: () => {
             this.holidayService.isUpdated$.next(true);
             this.toast.show('Holiday deleted successfuly', 'success');
           },
-          error: (err) =>
+          error: () =>
             this.toast.show('Holiday deleted successfuly', 'success'),
         });
       }
     });
   }
 
-  trackById(index: number, item: any) {
+  trackById(index: number, item: Holiday) {
     return item.id;
   }
 
   ngOnDestroy() {
     this.holidayDataSubscription.unsubscribe();
     this.isUpdatedSubscription.unsubscribe();
-  }
-
-  sortData(isAscending: boolean = false) {
-    this.data.sort((holiday1: Holiday, holiday2: Holiday) => {
-      return (isAscending
-        ? holiday1.date - holiday2.date
-        : holiday2.date - holiday1.date) > 0
-        ? 1
-        : -1;
-    });
   }
 }

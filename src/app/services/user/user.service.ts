@@ -1,95 +1,101 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject, exhaustMap, skipWhile, throwError } from 'rxjs';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { Subject } from 'rxjs/internal/Subject';
+import { exhaustMap } from 'rxjs/internal/operators/exhaustMap';
+import { skipWhile } from 'rxjs/internal/operators/skipWhile';
 import { User } from 'src/app/models/user';
 import { FirebaseService } from '../firebase/firebase.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
-
   private users!: User[];
-  private users$ = new BehaviorSubject<any>([]);
-  isUpdated$ = new Subject<boolean>();
-  constructor(private firebase: FirebaseService) {
+  private readonly users$ = new BehaviorSubject<User[] | null>(null);
+  public isUpdated$ = new Subject<boolean>();
 
-  }
+  constructor(private readonly firebase: FirebaseService) {}
 
-  pageSize: number = 5;
-  lastIndex: string = '';
-
-
-  // getPageData(pageNo: number) {
-  //   /**
-  //    * check if the data is already available locally
-  //    */
-  //   if (pageNo * this.pageSize <= this.users.length) {
-  //     return this.users.slice(
-  //       (pageNo - 1 * this.pageSize), (pageNo * this.pageSize)
-  //     );
-  //   }
-  //   else {
-
-  //   }
-  // }
-
+  /**
+   * Get User Data
+   * @returns - Observable of user data
+   */
   getUserData() {
-    if (!this.users)
-      this.getAllUsers();
-    return this.users$
-      .asObservable()
-      .pipe(skipWhile(res => res.length == 0));
+    if (!this.users) this.getAllUsers();
+    return this.users$.asObservable().pipe(skipWhile((res) => res === null));
   }
 
+  /**
+   * Fetches the user data from firebase.
+   * Performs transformation to convert object of object to array of object
+   */
   getAllUsers() {
-    this.firebase.fethcAllUsers().subscribe((res) => {
+    this.firebase.fetchAllUsers().subscribe((res) => {
       const userData = Object.entries(res).map(([key, val]) => {
         return { ...Object(val), uid: key };
       });
       this.users = userData;
       this.users$.next(userData);
     });
-
   }
 
-  addNewUser(user: any) {
-    return this.firebase
-      .signUpUser({ email: user.email, password: user.password })
-      .pipe(
-        exhaustMap((res: any) => {
-          return this.updateUser(res.localId, user);
-        }));
+  /**
+   * Register New user
+   * @param credentials - Contains email and password
+   * @param user - Contains User info
+   * @returns - observabel of signup user method
+   */
+  addNewUser(
+    credentials: { email: string; password: string },
+    user: {
+      employeeId: string;
+      name: string;
+      email: string;
+      role: string;
+      designation: string;
+      isDeleted: boolean;
+    }
+  ) {
+    return this.firebase.signUpUser(credentials).pipe(
+      exhaustMap((res) =>
+        this.updateUser(Object(res).localId, {
+          ...user,
+          uid: Object(res).localId,
+        })
+      )
+    );
   }
 
+  /**
+   * Delete the user by setting the flag isDeleted to true
+   * @param id - user id
+   */
   deleteUser(id: string) {
     return this.firebase.setUserDeleted(id);
   }
 
+  /**
+   * Update User Data
+   * @param uid - unique id of user
+   * @param user - user details
+   */
   updateUser(uid: string, user: User) {
-    return this.firebase.updateUser(
-      uid, {
-      employeeId: user.employeeId,
-      name: user.name,
-      email: user.email,
-      designation: user.designation,
-      role: user.role,
-      isDeleted: false
-    });
+    return this.firebase.updateUser(uid, user);
   }
 
-
+  /**
+   * Chcek whether the employee Id is already associated with another user
+   * @param employeeId - employeeId to be searched
+   */
   checkEmployeeIdTaken(employeeId: string) {
     return this.firebase.getUserByEmployeeId(employeeId);
   }
 
+  /**
+   * Check whether the email id is already associated with another user
+   * @param email - emal to be searched
+   */
   checkEmailTaken(email: string) {
     return this.firebase.getUserByEmail(email);
   }
-
-  handleError(err: HttpErrorResponse) {
-
-    return throwError(() => "");
-  }
-
 }

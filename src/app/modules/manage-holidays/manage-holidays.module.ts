@@ -25,11 +25,7 @@ import { HolidaysViewComponent } from './holidays-view/holidays-view.component';
 import { ManageHolidaysRoutingModule } from './manage-holidays-routing.module';
 
 @NgModule({
-  declarations: [
-    HolidaysViewComponent,
-    HolidaysFormComponent,
-
-  ],
+  declarations: [HolidaysViewComponent, HolidaysFormComponent],
   imports: [
     CommonModule,
     ManageHolidaysRoutingModule,
@@ -40,7 +36,6 @@ import { ManageHolidaysRoutingModule } from './manage-holidays-routing.module';
     MatDialogModule,
     MatTableModule,
     MatProgressSpinnerModule,
-    SortArrayPipe,
     MatIconModule,
     MatSortModule,
     MatPaginatorModule,
@@ -51,7 +46,8 @@ import { ManageHolidaysRoutingModule } from './manage-holidays-routing.module';
     MatDatepickerModule,
     MatNativeDateModule,
     MatInputModule,
-    ReactiveFormsModule
-  ]
+    ReactiveFormsModule,
+  ],
+  providers: [SortArrayPipe],
 })
-export class ManageHolidaysModule { }
+export class ManageHolidaysModule {}

@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
   AbstractControl,
   AsyncValidatorFn,
@@ -9,16 +9,17 @@ import {
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Observable, map } from 'rxjs';
+import { Observable } from 'rxjs/internal/Observable';
+import { map } from 'rxjs/internal/operators/map';
+import { User } from 'src/app/models/user';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'app-user-form',
   templateUrl: './user-form.component.html',
-  styleUrls: ['./user-form.component.scss'],
 })
-export class UserFormComponent {
+export class UserFormComponent implements OnInit {
   hidePassword = true;
   hideConfirmPassword = true;
   title!: string;
@@ -28,7 +29,7 @@ export class UserFormComponent {
     private fb: FormBuilder,
     private toast: ToastService,
     private userService: UserService,
-    @Inject(MAT_DIALOG_DATA) public user: any | null
+    @Inject(MAT_DIALOG_DATA) public user: User | null
   ) {}
 
   ngOnInit() {
@@ -80,7 +81,7 @@ export class UserFormComponent {
         this.fb.control('', [Validators.required, this.passwordMatch])
       );
     } else {
-      this.title = 'Update User';
+      this.title = 'Edit User';
       this.userForm.addControl('employeeId', this.fb.control(''));
       this.userForm.addControl('email', this.fb.control(''));
       /**
@@ -101,12 +102,22 @@ export class UserFormComponent {
     if (!this.user)
       /**add new user */
       this.userService
-        .addNewUser({
-          ...this.userForm.value,
-          employeeId: this.userForm.value.employeeId.toLowerCase(),
-        })
+        .addNewUser(
+          {
+            email: this.userForm.value.email,
+            password: this.userForm.value.password,
+          },
+          {
+            name: String(this.userForm.value.name),
+            email: String(this.userForm.value.email),
+            designation: String(this.userForm.value.designation),
+            role: String(this.userForm.value.role),
+            employeeId: String(this.userForm.value.employeeId),
+            isDeleted: false,
+          }
+        )
         .subscribe({
-          next: (res) => {
+          next: () => {
             this.userService.isUpdated$.next(true);
             this.toast.show('User Added Succesfully', 'success');
           },
@@ -114,11 +125,12 @@ export class UserFormComponent {
             this.toast.show(err.error.error.message, 'error', true);
           },
         });
-    /**Update exiting user */ else
+    else {
+      /**Update exiting user */
       this.userService
-        .updateUser(this.user.uid, this.userForm.value)
+        .updateUser(String(this.user.uid), this.userForm.value)
         .subscribe({
-          next: (res) => {
+          next: () => {
             this.userService.isUpdated$.next(true);
             this.toast.show('User Updated Succesfully', 'success');
           },
@@ -126,6 +138,7 @@ export class UserFormComponent {
             this.toast.show(err.error.error.message, 'error', true);
           },
         });
+    }
   }
 
   /**

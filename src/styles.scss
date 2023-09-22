@@ -50,8 +50,8 @@ button:not(.mat-button-toggle-button, .mat-mdc-mini-fab, .mat-mdc-icon-button) {
   height: 0.5rem;
   width: 0.5rem;
   @media screen and (width<600px) {
-    height: 0 !important;
-    width: 0 !important;
+    height: 0.2 !important;
+    width: 0.2 !important;
   }
 }
 
@@ -337,6 +337,7 @@ tr {
   display: grid;
   align-content: start;
   overflow: auto;
+  scrollbar-gutter: stable;
   grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
   gap: 1rem;
   padding-inline: 1rem;
@@ -397,25 +398,31 @@ tr {
   color: mat.get-color-from-palette($primary-palette, 700) !important;
 }
 .mat-mdc-dialog-container .mdc-dialog__content {
-  padding: 0.2rem !important;
+  padding: 0.5rem 0.2rem !important;
 }
 
 // form styling
 .form-container {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  padding: 1.5rem !important;
+  background-color: lighten($background, 2%) !important;
 
   .form-header {
+    padding: 1rem 1.5rem;
+    margin: 0 !important;
+
     text-transform: capitalize;
-    margin-block: 0 8px !important;
     color: mat.get-color-from-palette($primary-palette, 400);
+    font-weight: 400 !important;
+    background-color: $background !important;
+    font-size: 2rem;
   }
 
   form {
     display: grid;
     gap: 1rem;
+    padding-inline: 1.5rem;
+    padding-top: 1.5rem;
     .mat-mdc-form-field {
       display: block;
     }
@@ -451,7 +458,8 @@ tr {
   }
 
   .mat-mdc-dialog-actions {
-    padding: 0 !important;
+    padding-inline: 1.5rem;
+    padding-bottom: 1.5rem;
   }
 }
 

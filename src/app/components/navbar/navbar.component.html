@@ -110,7 +110,16 @@
       </button>
 
       <h1 class="mat-headline-1">{{ title }}</h1>
+
       <p class="today-date">{{ date | date : "dd MMM, yyyy" }}</p>
+      <button
+        *ngIf="(isAdmin$ | async) === false"
+        class="logout"
+        mat-icon-button
+        (click)="onLogout()"
+      >
+        <mat-icon>logout</mat-icon>
+      </button>
     </mat-toolbar>
 
     <div class="outlet-container">

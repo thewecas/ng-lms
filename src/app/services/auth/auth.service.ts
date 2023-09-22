@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, catchError, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { Observable } from 'rxjs/internal/Observable';
+import { catchError } from 'rxjs/internal/operators/catchError';
 import { User } from 'src/app/models/user';
 import { FirebaseService } from '../firebase/firebase.service';
 import { ToastService } from '../toast/toast.service';
@@ -11,20 +13,23 @@ import { ToastService } from '../toast/toast.service';
 export class AuthService {
   isAuthenticated$ = new BehaviorSubject<boolean>(false);
   isAdmin$ = new BehaviorSubject<boolean>(false);
-  public currentUser: User | null = null;
-  expirationTime: number = 60 * 60 * 60 * 60;
   isLoading$ = new BehaviorSubject<boolean>(false);
+  currentUser: User | null = null;
+  readonly expirationTime: number = 60 * 60 * 60 * 60;
+  readonly tokenName = 'lms-userToken';
 
   constructor(
-    private router: Router,
-    private firebase: FirebaseService,
-    private toast: ToastService
-  ) {}
+    private readonly router: Router,
+    private readonly firebase: FirebaseService,
+    private readonly toast: ToastService
+  ) {
+    console.log('Auth Service Instantiated');
+  }
 
   /**
    * Login user into the lms webapp
-   * Call the siginin method of firebase authentication,
-   * store the idtoken to localstorage,
+   * Call the sign in method of firebase authentication,
+   * store the refresh token to local storage,
    * Get the user information from the realtime database,
    * Navigate user based on his role
    * @param useCredentials - contains email & password
@@ -33,27 +38,25 @@ export class AuthService {
     this.isLoading$.next(true);
 
     this.firebase.signInUser(useCredentials).subscribe({
-      next: (res: any) => {
-        console.log('R', res);
-
-        const idToken = res.idToken;
-        const uid = res.localId;
+      next: (res: { uid: string; idToken: string; refreshToken: string }) => {
         this.storeUserToLocalStorage(res.refreshToken);
         this.currentUser = {
           ...Object(this.currentUser),
-          idToken: idToken,
-          uid: uid,
+          ...res,
         };
-        this.getCurrentUser(uid).subscribe({
-          next: (res: any) => {
-            if (res.isDeleted) {
+        this.firebase.getUserData(res.uid).subscribe({
+          next: (response: User) => {
+            if (response.isDeleted) {
               /**user account is deleted */
               this.toast.show('Account is deleted', 'error', true);
               this.isAuthenticated$.next(false);
               this.isLoading$.next(false);
             } else {
-              this.currentUser = { ...this.currentUser, ...res, uid: uid };
-              if (this.currentUser?.role == 'admin') this.isAdmin$.next(true);
+              this.currentUser = {
+                ...this.currentUser,
+                ...response,
+              };
+              if (this.currentUser?.role === 'admin') this.isAdmin$.next(true);
               this.router.navigate(['/leaves']);
               this.isAuthenticated$.next(true);
               this.isLoading$.next(false);
@@ -72,16 +75,16 @@ export class AuthService {
 
   /**
    * Logout the current user,
-   * remove the lms-useridToken from the localstorage,
+   * remove the lms-user idToken from the local storage,
    * set current user to null,
    * navigate to login page
    */
   logout() {
-    localStorage.removeItem('lms-userToken');
-    this.router.navigate(['/login']);
+    localStorage.removeItem(this.tokenName);
     this.currentUser = null;
     this.isAuthenticated$.next(false);
     this.isAdmin$.next(false);
+    this.router.navigate(['/login']);
     this.toast.show('Signed out', 'info');
   }
 
@@ -90,6 +93,8 @@ export class AuthService {
    * @returns observable
    */
   checkIsAuthenticated() {
+    console.log('why its refreahing ?');
+
     this.isLoading$.next(true);
     return new Observable<boolean>((observer) => {
       /**if isAuthenticated is true then user is logged in & session is valid */
@@ -102,29 +107,28 @@ export class AuthService {
         const refreshToken = this.fetchUserFromLocalStorage();
         /**if id exist then check for session validity */
         if (refreshToken)
-          this.firebase.refershIdToken(refreshToken).subscribe({
-            next: (res: any) => {
-              const uid = res.user_id;
-              const idToken = res.id_token;
+          this.firebase.refreshIdToken(refreshToken).subscribe({
+            next: (res: { uid: string; idToken: string }) => {
+              console.log('Refershing, ', res);
+
               this.currentUser = {
                 ...Object(this.currentUser),
-                uid: uid,
-                idToken: idToken,
+                ...res,
               };
-              this.getCurrentUser(uid).subscribe({
-                next: (res) => {
+              this.firebase.getUserData(res.uid).subscribe({
+                next: (response: User) => {
                   this.currentUser = {
                     ...this.currentUser,
-                    ...Object(res),
+                    ...Object(response),
                   };
-                  if (this.currentUser?.role == 'admin')
+                  if (this.currentUser?.role === 'admin')
                     this.isAdmin$.next(true);
                   observer.next(true);
                   observer.complete();
                   this.isAuthenticated$.next(true);
                   this.isLoading$.next(false);
                 },
-                error: (err) => {
+                error: () => {
                   observer.next(false);
                   observer.complete();
                   this.isAuthenticated$.next(false);
@@ -149,39 +153,30 @@ export class AuthService {
    */
   checkSessionValidity(idToken: string) {
     return this.firebase.lookupUser(idToken).pipe(
-      catchError((err) => {
-        throw 'Validation error';
+      catchError(() => {
+        throw new Error('Validation error');
       })
     );
   }
 
   /**
-   * Funciton to fetch the userdetails frm realtime database
-   * @param uid - localId of the user
-   * @returns - observable
-   */
-  getCurrentUser(uid: string) {
-    return this.firebase.getUserData(uid);
-  }
-
-  /**
-   * Store the idtoken of user to local storage
+   * Store the idToken of user to local storage
    * @param idToken - access token of the current user
    */
   storeUserToLocalStorage(token: string) {
-    localStorage.setItem('lms-userToken', token);
+    localStorage.setItem(this.tokenName, token);
   }
 
   /**
-   * fetches the user idToken stored in the localstorage of
-   * @returns - idtokne from the local storage
+   * fetches the user idToken stored in the local storage of
+   * @returns - idToken from the local storage
    */
   fetchUserFromLocalStorage() {
-    return localStorage.getItem('lms-userToken');
+    return localStorage.getItem(this.tokenName);
   }
 
   /**
-   * @returns - userId of cuurent user
+   * @returns - userId of current user
    */
   getUserId() {
     return String(this.currentUser?.uid);
@@ -195,7 +190,7 @@ export class AuthService {
   }
 
   /**
-   * @returns -idtoken of current user
+   * @returns -idToken of current user
    */
   getIdToken(): string | null {
     return this.currentUser?.idToken ?? null;

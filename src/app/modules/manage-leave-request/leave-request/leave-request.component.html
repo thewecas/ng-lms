@@ -7,7 +7,7 @@
       #input
     />
     <button mat-icon-button matSuffix (click)="applyFilter((input.value = ''))">
-      <mat-icon> {{ input.value == "" ? "search" : "close" }}</mat-icon>
+      <mat-icon> {{ input.value === "" ? "search" : "close" }}</mat-icon>
     </button>
   </mat-form-field>
 </div>
@@ -21,10 +21,10 @@
       #toggleLeaves="matButtonToggleGroup"
       (change)="filterLeavesByStatus(toggleLeaves.value)"
     >
-      <mat-button-toggle [checked]="activeTab == 'pending'" value="pending">
+      <mat-button-toggle [checked]="activeTab === 'pending'" value="pending">
         Pending
       </mat-button-toggle>
-      <mat-button-toggle [checked]="activeTab == 'history'" value="history"
+      <mat-button-toggle [checked]="activeTab === 'history'" value="history"
         >History</mat-button-toggle
       >
     </mat-button-toggle-group>
@@ -32,7 +32,7 @@
   <div
     class="placeholder"
     *ngIf="
-      !isLoading && dataSource._pageData(dataSource.filteredData).length == 0
+      !isLoading && dataSource._pageData(dataSource.filteredData).length === 0
     "
   >
     <h1>No data to display</h1>
@@ -40,14 +40,12 @@
   <div
     class="cards-container"
     *ngIf="
-      !isLoading && dataSource._pageData(dataSource.filteredData).length != 0
+      !isLoading && dataSource._pageData(dataSource.filteredData).length !== 0
     "
   >
     <ng-container
       *ngFor="
-        let request of dataSource._pageData(
-          dataSource.filteredData | sortArray : 'fromDate'
-        );
+        let request of dataSource._pageData(dataSource.filteredData);
         index as i;
         trackBy: trackById
       "
@@ -67,11 +65,10 @@
           <p>
             <span>Date(s)</span
             ><strong>{{
-              (request.fromDate == request.toDate
-                ? (request.fromDate | date : "dd MMM")
-                : (request.fromDate | date : "dd MMM") +
-                  " - " +
-                  (request.toDate | date : "dd MMM")) +
+              (request.fromDate | date : "dd MMM") +
+                (request.fromDate === request.toDate
+                  ? ""
+                  : " - " + (request.toDate | date : "dd MMM")) +
                 ", " +
                 (request.toDate | date : "yyyy")
             }}</strong>
@@ -85,13 +82,13 @@
           <p
             class="status"
             [class]="request.status"
-            *ngIf="request.status != 'Pending'"
+            *ngIf="request.status !== 'Pending'"
           >
             <span>Status </span>
             <strong>{{ request.status }}</strong>
           </p>
         </div>
-        <div class="card-actions" *ngIf="request.status == 'Pending'">
+        <div class="card-actions" *ngIf="request.status === 'Pending'">
           <button
             mat-stroked-button
             color="primary"
@@ -103,7 +100,7 @@
           <button
             mat-stroked-button
             color="warn"
-            [disabled]="request.status != 'Pending'"
+            [disabled]="request.status !== 'Pending'"
             (click)="onUpdateStatus(request.uid, request.leaveId, 'Rejected')"
           >
             <mat-icon>close</mat-icon>

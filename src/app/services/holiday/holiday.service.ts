@@ -1,20 +1,19 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject, skipWhile } from 'rxjs';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { Subject } from 'rxjs/internal/Subject';
+import { skipWhile } from 'rxjs/internal/operators/skipWhile';
 import { Holiday } from 'src/app/models/holiday';
-import { } from '../../../assets/holidays.json';
 import { FirebaseService } from '../firebase/firebase.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class HolidayService {
-  private holidays: any = null;
+  private holidays: Holiday[] | null = null;
 
-  private holidays$ = new BehaviorSubject<any>([]);
+  private holidays$ = new BehaviorSubject<Holiday[] | null>(null);
   isUpdated$ = new Subject<boolean>();
-  constructor(private firebase: FirebaseService) {
-
-  }
+  constructor(private firebase: FirebaseService) {}
 
   /**
    * Fetch the holiday data observable
@@ -24,35 +23,29 @@ export class HolidayService {
     if (!this.holidays) {
       this.getAllHolidays();
     }
-    return this.holidays$
-      .asObservable()
-      .pipe(skipWhile(res => res.length == 0));
+    return this.holidays$.asObservable().pipe(skipWhile((res) => res === null));
   }
 
   /**
-   * fetehes the holiday data from database,
+   * fetches the holiday data from database,
    * Calls the next method of `holidays$` subject
    */
   getAllHolidays() {
-    this.firebase
-      .fetchAllHolidays()
-      .subscribe({
-        next: (res) => {
-          this.holidays = res;
-          const holidayData = Object.entries(res)
-            .map(([key, val]) => {
-              return { ...val, id: key };
-            });
-          this.holidays$.next(holidayData);
-        },
-      }
-      );
+    this.firebase.fetchAllHolidays().subscribe({
+      next: (res) => {
+        const holidayData = Object.entries(res).map(([key, val]) => {
+          return { ...Object(val), id: key };
+        });
+        this.holidays = holidayData;
+        this.holidays$.next(holidayData);
+      },
+    });
   }
 
   /**
    * Add holiday to the database
-   * @param holiday - Object of type `Holiday` 
-   * @returns - Object of type `Holiday` 
+   * @param holiday - Object of type `Holiday`
+   * @returns - Object of type `Holiday`
    */
   addHoliday(holiday: Holiday) {
     return this.firebase.addHoliday(holiday);
@@ -68,7 +61,7 @@ export class HolidayService {
   }
 
   /**
-   * Update the existing holiday 
+   * Update the existing holiday
    * @param id - id of the holiday
    * @param holiday - `Holiday` object with updated data
    * @returns - `Holiday` object with updated data
