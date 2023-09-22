@@ -1,5 +1,15 @@
 # Lms
+## Demo : [lms-vikas.web.app](https://lms-vikas.web.app)
 
+## Login Credentials 
+- **Admin** :
+   - Email : `admin@gmail.com`
+   - Password : `123456`
+- **Client** :
+   - Email : `client@gmail.com`
+   - Password : `123456`
+ 
+--- 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.4.
 
 ## Development server
