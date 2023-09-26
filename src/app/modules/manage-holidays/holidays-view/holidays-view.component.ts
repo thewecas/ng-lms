@@ -41,17 +41,18 @@ export class HolidaysViewComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
-    private dialog: MatDialog,
-    private toast: ToastService,
-    private holidayService: HolidayService,
-    private sortArray: SortArrayPipe
+    private readonly dialog: MatDialog,
+    private readonly toast: ToastService,
+    private readonly holidayService: HolidayService,
+    private readonly sortArray: SortArrayPipe
   ) {}
 
   holidayDataSubscription!: Subscription;
-  isUpdatedSubscription!: Subscription;
   data!: Holiday[];
 
   ngOnInit() {
+    console.log("onInit Called");
+    
     /**
      * fetch the data from database
      */
@@ -62,17 +63,11 @@ export class HolidaysViewComponent implements OnInit, OnDestroy, AfterViewInit {
         next: (res) => {
           if (res) {
             this.data = res;
-            this.filterHolidayByStatus(this.activeTab);
             this.isLoading = false;
+            this.filterHolidayByStatus(this.activeTab);
           }
         },
-      });
-
-    this.isUpdatedSubscription = this.holidayService.isUpdated$.subscribe(
-      () => {
-        this.holidayService.getAllHolidays();
-      }
-    );
+      })
   }
   ngAfterViewInit() {
     try {
@@ -94,11 +89,13 @@ export class HolidaysViewComponent implements OnInit, OnDestroy, AfterViewInit {
         (holiday) => new Date().getTime() > holiday.date
       );
     }
-    this.dataSource.data = this.sortArray.transform(
-      filteredData,
-      'date',
-      this.activeTab !== 'recent'
-    );
+    if (filteredData.length !== 0)
+      this.dataSource.data = this.sortArray.transform(
+        filteredData,
+        'date',
+        this.activeTab !== 'recent'
+      );
+    else this.dataSource.data = [];
     this.ngAfterViewInit();
   }
 
@@ -135,7 +132,7 @@ export class HolidaysViewComponent implements OnInit, OnDestroy, AfterViewInit {
       if (res) {
         this.holidayService.deleteHoliday(id).subscribe({
           next: () => {
-            this.holidayService.isUpdated$.next(true);
+            this.holidayService.getAllHolidays();
             this.toast.show('Holiday deleted successfuly', 'success');
           },
           error: () =>
@@ -151,6 +148,5 @@ export class HolidaysViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy() {
     this.holidayDataSubscription.unsubscribe();
-    this.isUpdatedSubscription.unsubscribe();
   }
 }

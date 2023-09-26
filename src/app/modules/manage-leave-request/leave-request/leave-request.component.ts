@@ -55,7 +55,6 @@ export class LeaveRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   leaveDataSubscription!: Subscription;
-  isUpdatedSubscription!: Subscription;
   ngOnInit() {
     this.isLoading = true;
     this.leaveService.getAllLeaves();
@@ -64,14 +63,11 @@ export class LeaveRequestComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe((res: Leave[] | null) => {
         if (res) {
           this.data = res;
-          this.filterLeavesByStatus('pending');
           this.isLoading = false;
+          this.filterLeavesByStatus('pending');
         }
       });
-    this.isUpdatedSubscription = this.leaveService.isUpdated$.subscribe(() => {
-      this.isLoading = true;
-      this.leaveService.getAllLeaves();
-    });
+
   }
 
   ngAfterViewInit() {
@@ -86,14 +82,16 @@ export class LeaveRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   filterLeavesByStatus(status: string) {
     this.activeTab = status;
     let filteredData = this.data;
-    if (status == 'pending')
+    if (status === 'pending')
       filteredData = this.data.filter((leave) => leave.status == 'Pending');
     else filteredData = this.data.filter((leave) => leave.status != 'Pending');
-    this.dataSource.data = this.sortArray.transform(
-      filteredData,
-      'fromDate',
-      status == 'pending'
-    );
+    if (filteredData.length !== 0)
+      this.dataSource.data = this.sortArray.transform(
+        filteredData,
+        'fromDate',
+        status == 'pending'
+      );
+    else this.dataSource.data = [];
     this.ngAfterViewInit();
   }
 
@@ -119,7 +117,7 @@ export class LeaveRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     this.leaveService.updateStatus(uid, leaveId, status).subscribe({
       next: () => {
         this.toast.show(`Leave ${status} successfuly`, 'success');
-        this.leaveService.isUpdated$.next(true);
+        this.leaveService.getAllLeaves();
       },
       error: (err) => this.toast.show(err.error.error.message, 'error', true),
     });
@@ -130,6 +128,5 @@ export class LeaveRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   ngOnDestroy() {
     this.leaveDataSubscription.unsubscribe();
-    this.isUpdatedSubscription.unsubscribe();
   }
 }

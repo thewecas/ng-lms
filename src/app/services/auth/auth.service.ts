@@ -7,6 +7,7 @@ import { User } from 'src/app/models/user';
 import { FirebaseService } from '../firebase/firebase.service';
 import { ToastService } from '../toast/toast.service';
 
+
 @Injectable({
   providedIn: 'root',
 })
@@ -22,9 +23,7 @@ export class AuthService {
     private readonly router: Router,
     private readonly firebase: FirebaseService,
     private readonly toast: ToastService
-  ) {
-    console.log('Auth Service Instantiated');
-  }
+  ) {}
 
   /**
    * Login user into the lms webapp
@@ -93,8 +92,6 @@ export class AuthService {
    * @returns observable
    */
   checkIsAuthenticated() {
-    console.log('why its refreahing ?');
-
     this.isLoading$.next(true);
     return new Observable<boolean>((observer) => {
       /**if isAuthenticated is true then user is logged in & session is valid */
@@ -109,8 +106,6 @@ export class AuthService {
         if (refreshToken)
           this.firebase.refreshIdToken(refreshToken).subscribe({
             next: (res: { uid: string; idToken: string }) => {
-              console.log('Refershing, ', res);
-
               this.currentUser = {
                 ...Object(this.currentUser),
                 ...res,

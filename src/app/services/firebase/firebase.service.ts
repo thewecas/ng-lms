@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { map } from 'rxjs/internal/operators/map';
 import { Holiday } from 'src/app/models/holiday';
 import { Leave } from 'src/app/models/leave';
@@ -14,10 +13,7 @@ export class FirebaseService {
   private readonly dbUrl = environment.firebase.databaseURL;
   private readonly apiKey = environment.firebase.apiKey;
 
-  constructor(
-    private readonly http: HttpClient,
-    private readonly snakBar: MatSnackBar
-  ) {}
+  constructor(private readonly http: HttpClient) {}
 
   /**Authentication Related Methods */
   /**
@@ -121,6 +117,8 @@ export class FirebaseService {
    * @param user - updated user data
    */
   updateUser(id: string, user: User) {
+    console.log(id,user);
+    
     return this.http.put(`${this.dbUrl}/users/${id}.json`, user);
   }
 

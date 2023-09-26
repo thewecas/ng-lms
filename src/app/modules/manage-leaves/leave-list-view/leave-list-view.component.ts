@@ -1,4 +1,4 @@
-import {} from '@angular/compiler';
+import { } from '@angular/compiler';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -26,9 +26,7 @@ import { LeaveFormComponent } from '../leave-form/leave-form.component';
   styleUrls: ['./leave-list-view.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LeaveListViewComponent
-  implements OnInit, AfterViewInit, OnDestroy
-{
+export class LeaveListViewComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns: string[] = [
     'fromDate',
     'toDate',
@@ -47,15 +45,14 @@ export class LeaveListViewComponent
   data: Leave[] = [];
 
   constructor(
-    private leaveService: LeaveService,
-    private dialog: MatDialog,
-    private authService: AuthService,
-    private toast: ToastService,
-    private sortArray: SortArrayPipe
+    private readonly leaveService: LeaveService,
+    private readonly dialog: MatDialog,
+    private readonly authService: AuthService,
+    private readonly toast: ToastService,
+    private readonly sortArray: SortArrayPipe
   ) {}
 
   leaveDataSubscription!: Subscription;
-  isUpdatedSubscription!: Subscription;
 
   ngOnInit() {
     this.isLoading = true;
@@ -66,15 +63,12 @@ export class LeaveListViewComponent
         next: (res: Leave[] | null) => {
           if (res) {
             this.data = res;
-            this.filterLeavesByStatus('pending');
             this.isLoading = false;
+            this.filterLeavesByStatus('pending');
           }
         },
       });
-    this.isUpdatedSubscription = this.leaveService.isUpdated$.subscribe(() => {
-      this.isLoading = true;
-      this.leaveService.fetchLeavesByUser(this.uid);
-    });
+
   }
 
   ngAfterViewInit() {
@@ -88,15 +82,17 @@ export class LeaveListViewComponent
 
   filterLeavesByStatus(status: string) {
     this.activeTab = status;
-    let filteredData = this.data;
-    if (status == 'pending')
-      filteredData = this.data.filter((leave) => leave.status == 'Pending');
-    else filteredData = this.data.filter((leave) => leave.status != 'Pending');
-    this.dataSource.data = this.sortArray.transform(
-      filteredData,
-      'fromDate',
-      status == 'pending'
-    );
+    let filteredData;
+    if (status === 'pending')
+      filteredData = this.data.filter((leave) => leave.status === 'Pending');
+    else filteredData = this.data.filter((leave) => leave.status !== 'Pending');
+    if (filteredData.length !== 0)
+      this.dataSource.data = this.sortArray.transform(
+        filteredData,
+        'fromDate',
+        status === 'pending'
+      );
+    else this.dataSource.data = [];
     this.ngAfterViewInit();
   }
 
@@ -111,7 +107,7 @@ export class LeaveListViewComponent
     const totalDays =
       Math.ceil(new Date(to).getTime() - new Date(from).getTime()) /
       (60 * 60 * 24 * 1000);
-    return totalDays ? totalDays : 1;
+    return totalDays || 1;
   }
 
   onApplyLeave() {
@@ -139,19 +135,18 @@ export class LeaveListViewComponent
     dialogRef.afterClosed().subscribe((res) => {
       if (res) {
         this.leaveService.deleteLeave(uid, leaveId).subscribe(() => {
-          this.leaveService.isUpdated$.next(true);
+          this.leaveService.fetchLeavesByUser(uid)
           this.toast.show('Leave withdrawn successfuly', 'success');
         });
       }
     });
   }
 
-  trackById(index: number, item: Leave) {
+  trackById(_index: number, item: Leave) {
     return item.leaveId;
   }
 
   ngOnDestroy() {
     this.leaveDataSubscription.unsubscribe();
-    this.isUpdatedSubscription.unsubscribe();
   }
 }

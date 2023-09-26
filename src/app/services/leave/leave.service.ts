@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
-import { Subject } from 'rxjs/internal/Subject';
 import { skipWhile } from 'rxjs/internal/operators/skipWhile';
 import { Leave } from 'src/app/models/leave';
 import { AuthService } from '../auth/auth.service';
@@ -14,7 +13,6 @@ export class LeaveService {
   private allLeaves: Leave[] | null = null;
   private allLeaves$ = new BehaviorSubject<Leave[] | null>(null);
   private userLeaves$ = new BehaviorSubject<Leave[] | null>(null);
-  isUpdated$ = new Subject<boolean>();
 
   constructor(
     private firebase: FirebaseService,

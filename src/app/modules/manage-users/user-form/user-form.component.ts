@@ -118,7 +118,7 @@ export class UserFormComponent implements OnInit {
         )
         .subscribe({
           next: () => {
-            this.userService.isUpdated$.next(true);
+            this.userService.getAllUsers();
             this.toast.show('User Added Succesfully', 'success');
           },
           error: (err) => {
@@ -128,10 +128,10 @@ export class UserFormComponent implements OnInit {
     else {
       /**Update exiting user */
       this.userService
-        .updateUser(String(this.user.uid), this.userForm.value)
+        .updateUser(String(this.user.uid), {...this.userForm.value,isDeleted: false})
         .subscribe({
           next: () => {
-            this.userService.isUpdated$.next(true);
+            this.userService.getAllUsers();
             this.toast.show('User Updated Succesfully', 'success');
           },
           error: (err) => {

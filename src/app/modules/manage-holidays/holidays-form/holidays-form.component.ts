@@ -67,7 +67,7 @@ export class HolidaysFormComponent implements OnInit {
         })
         .subscribe({
           next: () => {
-            this.holidayService.isUpdated$.next(true);
+            this.holidayService.getAllHolidays();
             this.toast.show('Holiday Added successfuly', 'success');
           },
           error: (err) =>
@@ -83,7 +83,7 @@ export class HolidaysFormComponent implements OnInit {
           })
           .subscribe({
             next: () => {
-              this.holidayService.isUpdated$.next(true);
+              this.holidayService.getAllHolidays();
               this.toast.show('Holiday Updated successfuly', 'success');
             },
             error: (err) => {

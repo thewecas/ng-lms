@@ -64,7 +64,9 @@ export class LeaveFormComponent implements OnInit {
           status: 'Pending',
         })
         .subscribe(() => {
-          this.leaveService.isUpdated$.next(true);
+          this.leaveService.fetchLeavesByUser(this.uid);
+          if(this.authService.getUserRole()=='admin')
+            this.leaveService.getAllLeaves();
           this.toast.show('Leave Applied successfuly', 'success');
         });
     } else {
@@ -75,7 +77,9 @@ export class LeaveFormComponent implements OnInit {
           date: new Date(this.leaveForm.value.date).getTime(),
         })
         .subscribe(() => {
-          this.leaveService.isUpdated$.next(true);
+          this.leaveService.fetchLeavesByUser(this.uid);
+          if(this.authService.getUserRole()=='admin')
+            this.leaveService.getAllLeaves();
           this.toast.show('Leave Updated successfuly', 'success');
         });
     }

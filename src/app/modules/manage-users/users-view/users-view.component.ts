@@ -47,24 +47,19 @@ export class UsersViewComponent implements OnInit, AfterViewInit {
   ) {}
 
   userDataSubscription!: Subscription;
-  isUpdatedSubscription!: Subscription;
   ngOnInit() {
     this.isLoading = true;
     /** get the user data */
     this.userDataSubscription = this.userService
       .getUserData()
       .subscribe((res) => {
-        if (res)
+        if (res && res.length !== 0)
           this.dataSource.data = this.sortArray.transform(res, 'employeeId');
         this.isLoading = false;
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       });
 
-    /**  refetches the data for each value emited by the isUpdated observable */
-    this.isUpdatedSubscription = this.userService.isUpdated$.subscribe(() => {
-      this.userService.getAllUsers();
-    });
   }
 
   ngAfterViewInit() {
@@ -127,7 +122,7 @@ export class UsersViewComponent implements OnInit, AfterViewInit {
       if (res) {
         this.userService.deleteUser(id).subscribe({
           next: () => {
-            this.userService.isUpdated$.next(true);
+            this.userService.getAllUsers();
             this.toast.show('User Deleted Successfully', 'success');
           },
           error: (err) => {
@@ -147,6 +142,5 @@ export class UsersViewComponent implements OnInit, AfterViewInit {
      * unsubscribe from all the subscriptions
      */
     this.userDataSubscription.unsubscribe();
-    this.isUpdatedSubscription.unsubscribe();
   }
 }

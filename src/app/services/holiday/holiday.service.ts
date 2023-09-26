@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
-import { Subject } from 'rxjs/internal/Subject';
 import { skipWhile } from 'rxjs/internal/operators/skipWhile';
 import { Holiday } from 'src/app/models/holiday';
 import { FirebaseService } from '../firebase/firebase.service';
@@ -12,7 +11,6 @@ export class HolidayService {
   private holidays: Holiday[] | null = null;
 
   private holidays$ = new BehaviorSubject<Holiday[] | null>(null);
-  isUpdated$ = new Subject<boolean>();
   constructor(private firebase: FirebaseService) {}
 
   /**

@@ -29,6 +29,7 @@ import { UsersViewComponent } from './users-view/users-view.component';
     MatMenuModule,
     MatChipsModule,
     MatDialogModule,
+    SortArrayPipe,
     MatFormFieldModule,
     MatProgressSpinnerModule,
     MatIconModule,

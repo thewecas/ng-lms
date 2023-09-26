@@ -28,7 +28,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
     ReactiveFormsModule,
     MatSnackBarModule,
     MatToolbarModule,
-    MatProgressSpinnerModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss'],
@@ -37,7 +37,7 @@ export class AuthComponent implements OnInit {
   isPasswordHidden = true;
   signInForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {}
+  constructor(private readonly fb: FormBuilder, private readonly authService: AuthService) {}
 
   /**
    * initlaize the signInForm

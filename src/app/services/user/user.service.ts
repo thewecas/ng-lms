@@ -12,7 +12,6 @@ import { FirebaseService } from '../firebase/firebase.service';
 export class UserService {
   private users!: User[];
   private readonly users$ = new BehaviorSubject<User[] | null>(null);
-  public isUpdated$ = new Subject<boolean>();
 
   constructor(private readonly firebase: FirebaseService) {}
 
