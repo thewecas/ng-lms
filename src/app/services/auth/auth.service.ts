@@ -7,7 +7,6 @@ import { User } from 'src/app/models/user';
 import { FirebaseService } from '../firebase/firebase.service';
 import { ToastService } from '../toast/toast.service';
 
-
 @Injectable({
   providedIn: 'root',
 })
@@ -33,10 +32,10 @@ export class AuthService {
    * Navigate user based on his role
    * @param useCredentials - contains email & password
    */
-  login(useCredentials: { email: string; password: string }) {
+  login(userCredentials: { email: string; password: string }) {
     this.isLoading$.next(true);
 
-    this.firebase.signInUser(useCredentials).subscribe({
+    this.firebase.signInUser(userCredentials).subscribe({
       next: (res: { uid: string; idToken: string; refreshToken: string }) => {
         this.storeUserToLocalStorage(res.refreshToken);
         this.currentUser = {

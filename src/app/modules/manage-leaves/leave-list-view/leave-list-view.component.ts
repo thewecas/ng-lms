@@ -1,4 +1,4 @@
-import { } from '@angular/compiler';
+import {} from '@angular/compiler';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -26,7 +26,9 @@ import { LeaveFormComponent } from '../leave-form/leave-form.component';
   styleUrls: ['./leave-list-view.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LeaveListViewComponent implements OnInit, AfterViewInit, OnDestroy {
+export class LeaveListViewComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   displayedColumns: string[] = [
     'fromDate',
     'toDate',
@@ -68,7 +70,6 @@ export class LeaveListViewComponent implements OnInit, AfterViewInit, OnDestroy 
           }
         },
       });
-
   }
 
   ngAfterViewInit() {
@@ -135,7 +136,7 @@ export class LeaveListViewComponent implements OnInit, AfterViewInit, OnDestroy 
     dialogRef.afterClosed().subscribe((res) => {
       if (res) {
         this.leaveService.deleteLeave(uid, leaveId).subscribe(() => {
-          this.leaveService.fetchLeavesByUser(uid)
+          this.leaveService.fetchLeavesByUser(uid);
           this.toast.show('Leave withdrawn successfuly', 'success');
         });
       }

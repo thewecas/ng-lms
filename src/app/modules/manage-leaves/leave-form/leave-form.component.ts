@@ -19,7 +19,6 @@ import { ToastService } from 'src/app/services/toast/toast.service';
 })
 export class LeaveFormComponent implements OnInit {
   title!: string;
-
   leaveForm!: FormGroup;
   employeeId!: string;
   uid!: string;
@@ -65,7 +64,7 @@ export class LeaveFormComponent implements OnInit {
         })
         .subscribe(() => {
           this.leaveService.fetchLeavesByUser(this.uid);
-          if(this.authService.getUserRole()=='admin')
+          if (this.authService.getUserRole() == 'admin')
             this.leaveService.getAllLeaves();
           this.toast.show('Leave Applied successfuly', 'success');
         });
@@ -74,11 +73,12 @@ export class LeaveFormComponent implements OnInit {
         .editLeave(this.leave.uid, this.leave.leaveId, {
           ...this.leaveForm.value,
           status: 'Pending',
-          date: new Date(this.leaveForm.value.date).getTime(),
         })
-        .subscribe(() => {
+        .subscribe((res) => {
+          console.log(res);
+
           this.leaveService.fetchLeavesByUser(this.uid);
-          if(this.authService.getUserRole()=='admin')
+          if (this.authService.getUserRole() == 'admin')
             this.leaveService.getAllLeaves();
           this.toast.show('Leave Updated successfuly', 'success');
         });

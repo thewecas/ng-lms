@@ -16,13 +16,4 @@ export const isAuthenticatedGuard: CanActivateFn = () => {
       return true;
     })
   );
-
-  /*  return new Observable((subscriber: any) => {
-    authService.isAuthenticated$.pipe(take(1)).subscribe((res) => {
-      if (!res) {
-        subscriber.next(router.navigate(['/login']));
-      }
-      subscriber.next(true);
-    });
-  }); */
 };

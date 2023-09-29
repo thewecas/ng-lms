@@ -67,7 +67,6 @@ export class LeaveRequestComponent implements OnInit, AfterViewInit, OnDestroy {
           this.filterLeavesByStatus('pending');
         }
       });
-
   }
 
   ngAfterViewInit() {

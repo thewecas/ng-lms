@@ -50,9 +50,7 @@ export class HolidaysViewComponent implements OnInit, OnDestroy, AfterViewInit {
   holidayDataSubscription!: Subscription;
   data!: Holiday[];
 
-  ngOnInit() {
-    console.log("onInit Called");
-    
+  ngOnInit() {    
     /**
      * fetch the data from database
      */

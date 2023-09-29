@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { skipWhile } from 'rxjs/internal/operators/skipWhile';
 import { Leave } from 'src/app/models/leave';
-import { AuthService } from '../auth/auth.service';
 import { FirebaseService } from '../firebase/firebase.service';
 
 @Injectable({
@@ -14,10 +13,7 @@ export class LeaveService {
   private allLeaves$ = new BehaviorSubject<Leave[] | null>(null);
   private userLeaves$ = new BehaviorSubject<Leave[] | null>(null);
 
-  constructor(
-    private firebase: FirebaseService,
-    private authService: AuthService
-  ) {}
+  constructor(private firebase: FirebaseService) {}
 
   getLeavesData() {
     if (!this.allLeaves) this.getAllLeaves();

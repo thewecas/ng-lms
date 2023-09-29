@@ -1,11 +1,12 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSidenav } from '@angular/material/sidenav';
+import { MatDrawer } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { Observable } from 'rxjs/internal/Observable';
-import { map, shareReplay } from 'rxjs/operators';
+import { map } from 'rxjs/internal/operators/map';
+import { shareReplay } from 'rxjs/internal/operators/shareReplay';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
@@ -18,15 +19,24 @@ export class NavbarComponent implements OnInit {
   isAdmin$!: BehaviorSubject<boolean>;
   username!: string;
   role!: string;
-  toggleable!: boolean;
+  toggleable = false;
   title!: string;
   date = new Date();
 
   constructor(
-    private authService: AuthService,
-    private dialog: MatDialog,
-    private route: Router
+    private readonly authService: AuthService,
+    private readonly dialog: MatDialog,
+    private readonly route: Router
   ) {}
+
+  @ViewChild('drawer') sidebar!: MatDrawer;
+  private readonly breakpointObserver = inject(BreakpointObserver);
+  isHandset$: Observable<boolean> = this.breakpointObserver
+    .observe(Breakpoints.Handset)
+    .pipe(
+      map((result) => result.matches),
+      shareReplay()
+    );
 
   ngOnInit() {
     this.username = this.authService.getUserName();
@@ -46,15 +56,6 @@ export class NavbarComponent implements OnInit {
       )
       .join(' ');
   }
-
-  @ViewChild('drawer') sidebar!: MatSidenav;
-  private breakpointObserver = inject(BreakpointObserver);
-  isHandset$: Observable<boolean> = this.breakpointObserver
-    .observe(Breakpoints.Handset)
-    .pipe(
-      map((result) => result.matches),
-      shareReplay()
-    );
 
   /**
    * toggle sidebar
