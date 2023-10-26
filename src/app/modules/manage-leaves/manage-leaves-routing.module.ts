@@ -5,13 +5,12 @@ import { LeaveListViewComponent } from './leave-list-view/leave-list-view.compon
 const routes: Routes = [
   {
     path: '',
-    component: LeaveListViewComponent
+    component: LeaveListViewComponent,
   },
-
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class ManageLeavesRoutingModule { }
+export class ManageLeavesRoutingModule {}

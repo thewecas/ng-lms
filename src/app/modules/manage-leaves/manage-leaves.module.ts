@@ -22,13 +22,8 @@ import { LeaveFormComponent } from './leave-form/leave-form.component';
 import { LeaveListViewComponent } from './leave-list-view/leave-list-view.component';
 import { ManageLeavesRoutingModule } from './manage-leaves-routing.module';
 
-
-
 @NgModule({
-  declarations: [
-    LeaveListViewComponent,
-    LeaveFormComponent,
-  ],
+  declarations: [LeaveListViewComponent, LeaveFormComponent],
   imports: [
     CommonModule,
     ManageLeavesRoutingModule,
@@ -51,6 +46,6 @@ import { ManageLeavesRoutingModule } from './manage-leaves-routing.module';
     MatInputModule,
     MatSelectModule,
   ],
-  providers: [SortArrayPipe]
+  providers: [SortArrayPipe],
 })
-export class ManageLeavesModule { }
+export class ManageLeavesModule {}

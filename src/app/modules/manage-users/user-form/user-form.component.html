@@ -10,6 +10,7 @@
           formControlName="employeeId"
           placeholder="PW###"
           [readonly]="!!user"
+          id="employeeId"
         />
         <mat-error *ngIf="userForm.get('employeeId')?.hasError('required')"
           >Id cannot be empty</mat-error

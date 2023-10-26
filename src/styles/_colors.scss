@@ -50,9 +50,12 @@ $custom-accent-pallete: (
   ),
 );
 
+// $primary-palette: mat.define-palette($custom-primary-pallete, 700, 600, 900);
+// $accent-palette: mat.define-palette($custom-accent-pallete);
+// $warn-palette: mat.define-palette(mat.$deep-orange-palette, A400);
+
 $primary-palette: mat.define-palette($custom-primary-pallete, 700, 600, 900);
 $accent-palette: mat.define-palette($custom-accent-pallete);
 $warn-palette: mat.define-palette(mat.$deep-orange-palette, A400);
-
 $background: #1c1c1c;
 $text: rgb(215, 214, 214);

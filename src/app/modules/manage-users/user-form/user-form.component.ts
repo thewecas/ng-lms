@@ -26,9 +26,9 @@ export class UserFormComponent implements OnInit {
 
   userForm!: FormGroup;
   constructor(
-    private fb: FormBuilder,
-    private toast: ToastService,
-    private userService: UserService,
+    private readonly fb: FormBuilder,
+    private readonly toast: ToastService,
+    private readonly userService: UserService,
     @Inject(MAT_DIALOG_DATA) public user: User | null
   ) {}
 
@@ -48,7 +48,7 @@ export class UserFormComponent implements OnInit {
      * else he is trying to add a new user
      */
     if (!this.user) {
-      this.title = 'New User ';
+      this.title = 'New User';
 
       this.userForm.addControl(
         'employeeId',
@@ -128,7 +128,10 @@ export class UserFormComponent implements OnInit {
     else {
       /**Update exiting user */
       this.userService
-        .updateUser(String(this.user.uid), {...this.userForm.value,isDeleted: false})
+        .updateUser(String(this.user.uid), {
+          ...this.userForm.value,
+          isDeleted: false,
+        })
         .subscribe({
           next: () => {
             this.userService.getAllUsers();
@@ -145,31 +148,6 @@ export class UserFormComponent implements OnInit {
    * function to set the pattern for confirm password
    */
   private passwordPattern = '';
-  setPattern(pattern: string) {
-    this.passwordPattern = pattern;
-  }
-
-  /**
-   * Validator Function to check whether the
-   *  PASSWORD and CONFIRMPASSWORD are same ore not
-   * @param control -reference to Abstract control instance
-   *  of conifrm password field
-   * @returns - Vaidator Error if the password does not match
-   */
-  passwordMatch: ValidatorFn = (
-    control: AbstractControl
-  ): ValidationErrors | null => {
-    const confirmPassword = control?.value ?? '';
-    return this.passwordPattern != confirmPassword
-      ? {
-          passwordMatch: {
-            password: this.passwordPattern,
-            confirmPassword: confirmPassword,
-            isMatch: false,
-          },
-        }
-      : null;
-  };
 
   /**
    * Async Validator function to check whether the entered Employee Id
@@ -184,7 +162,7 @@ export class UserFormComponent implements OnInit {
       .checkEmployeeIdTaken(control.value.toLowerCase())
       .pipe(
         map((res) => {
-          if (Object.values(res).length != 0) return { employeeIdTaken: true };
+          if (Object.values(res).length !== 0) return { employeeIdTaken: true };
           else return null;
         })
       );
@@ -201,9 +179,35 @@ export class UserFormComponent implements OnInit {
   ): Observable<ValidationErrors | null> => {
     return this.userService.checkEmailTaken(control.value.toLowerCase()).pipe(
       map((res) => {
-        if (Object.values(res).length != 0) return { emailTaken: true };
+        if (Object.values(res).length !== 0) return { emailTaken: true };
         else return null;
       })
     );
+  };
+
+  setPattern(pattern: string) {
+    this.passwordPattern = pattern;
+  }
+
+  /**
+   * Validator Function to check whether the
+   *  PASSWORD and CONFIRMPASSWORD are same ore not
+   * @param control -reference to Abstract control instance
+   *  of conifrm password field
+   * @returns - Vaidator Error if the password does not match
+   */
+  passwordMatch: ValidatorFn = (
+    control: AbstractControl
+  ): ValidationErrors | null => {
+    const confirmPassword = control?.value ?? '';
+    return this.passwordPattern !== confirmPassword
+      ? {
+          passwordMatch: {
+            password: this.passwordPattern,
+            isMatch: false,
+            confirmPassword,
+          },
+        }
+      : null;
   };
 }

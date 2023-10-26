@@ -14,7 +14,7 @@ import { LeaveService } from 'src/app/services/leave/leave.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { LeaveFormComponent } from './leave-form.component';
 
-fdescribe('LeaveFormComponent', () => {
+describe('LeaveFormComponent', () => {
   let component: LeaveFormComponent;
   let fixture: ComponentFixture<LeaveFormComponent>;
   let service: jasmine.SpyObj<LeaveService>;
