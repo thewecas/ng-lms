@@ -10,6 +10,19 @@
    - Password : `123456`
  
 --- 
+
+## Setup Environmet
+before serving this project ensure to setup environment variables.
+
+```js
+export const environment = {
+  firebase: {
+    databaseURL: <your realtime db url here>,
+    apiKey: <your api key here>,
+  }
+};
+```
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.4.
 
 ## Development server
