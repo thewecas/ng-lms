@@ -17,8 +17,8 @@ before serving this project ensure to setup environment variables.
 ```js
 export const environment = {
   firebase: {
-    databaseURL: <your realtime db url here>,
-    apiKey: <your api key here>,
+    databaseURL: <your_realtime_db_url_here>,
+    apiKey: <your_api_key_here>,
   }
 };
 ```
