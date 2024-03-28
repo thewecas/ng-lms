@@ -84,6 +84,9 @@
           <button mat-stroked-button color="primary" (click)="onEditUser(user)">
             <mat-icon>edit</mat-icon> Edit
           </button>
+          <button mat-stroked-button color="accent" (click)="onResetEmail(user.email)">
+            <mat-icon>key</mat-icon> Reset
+          </button>
           <button
             mat-stroked-button
             color="warn"
@@ -91,6 +94,7 @@
           >
             <mat-icon>delete</mat-icon> Delete
           </button>
+          <br>
         </div>
       </div>
     </ng-container>

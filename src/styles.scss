@@ -41,7 +41,7 @@ h6 {
 
 button:not(.mat-button-toggle-button, .mat-mdc-mini-fab, .mat-mdc-icon-button) {
   border-radius: 2rem !important;
-  height: 2.5rem !important;
+  min-height: 2.5rem !important;
   padding: 0.5rem 1.5rem !important;
 }
 
@@ -338,7 +338,7 @@ tr {
   align-content: start;
   overflow: auto;
   scrollbar-gutter: stable;
-  grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
   gap: 1rem;
   padding-inline: 1rem;
   position: relative;

@@ -44,7 +44,7 @@ export class UsersViewComponent implements OnInit, AfterViewInit {
     private toast: ToastService,
     public dialog: MatDialog,
     private sortArray: SortArrayPipe
-  ) {}
+  ) { }
 
   userDataSubscription!: Subscription;
   ngOnInit() {
@@ -129,6 +129,32 @@ export class UsersViewComponent implements OnInit, AfterViewInit {
             this.toast.show(err.error.error.message, 'error', true);
           },
         });
+      }
+    });
+  }
+
+  onResetEmail(email: string) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'Reset Password',
+        bodyText: `An email will be sent to ${email} that contains link to reset password. Are uou sure?`,
+        primaryAction: 'Confirm',
+        secondaryAction: 'Cancel',
+        btnColor: 'primary',
+      },
+    });
+    dialogRef.afterClosed().subscribe((res) => {
+      if (res) {
+        this.userService.sendResetPasswordEmail(email).subscribe(
+          {
+            next: () => {
+              this.toast.show(`Email is sent to ${email}, for resetting password `, 'success');
+            },
+            error: (err) => {
+              this.toast.show(err.error.error.message, 'error', true);
+            },
+          }
+        );
       }
     });
   }

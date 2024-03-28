@@ -90,6 +90,13 @@ export class FirebaseService {
       );
   }
 
+  sendResetPasswordEmail(email: string) {
+    return this.http.post(`https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${this.apiKey}`, {
+      requestType: 'PASSWORD_RESET',
+      email: email
+    });
+  }
+
   /** User Related Methods */
   /**
    * Fetch all the user data from database

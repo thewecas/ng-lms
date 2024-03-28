@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
-import { Subject } from 'rxjs/internal/Subject';
 import { exhaustMap } from 'rxjs/internal/operators/exhaustMap';
 import { skipWhile } from 'rxjs/internal/operators/skipWhile';
 import { User } from 'src/app/models/user';
@@ -96,5 +95,9 @@ export class UserService {
    */
   checkEmailTaken(email: string) {
     return this.firebase.getUserByEmail(email);
+  }
+
+  sendResetPasswordEmail(email: string) {
+    return this.firebase.sendResetPasswordEmail(email);
   }
 }
